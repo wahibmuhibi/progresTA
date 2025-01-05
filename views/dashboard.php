@@ -53,6 +53,7 @@ if (!defined('BASE_URL')) {
                 <a href="<?php echo BASE_URL; ?>/views/tim_penilai/subjects.php" class="btn btn-primary mb-2">Lihat Subjek Penilaian</a>
                 <a href="<?php echo BASE_URL; ?>/views/tim_penilai/verify_assessment.php" class="btn btn-primary mb-2">Verifikasi Self-Assessment</a>
                 <a href="<?php echo BASE_URL; ?>/views/tim_penilai/rankings.php" class="btn btn-primary mb-2">Lihat Ranking</a>
+                <a href="<?php echo BASE_URL; ?>/views/tim_penilai/create_assessment.php" class="btn btn-primary mb-2">Buat Assessment</a>
             <?php else: ?>
                 <p class="text-center text-danger">Role tidak dikenali.</p>
             <?php endif; ?>

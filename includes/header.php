@@ -32,6 +32,7 @@
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/subjects.php">Subjek Penilaian</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/verify_assessment.php">Verifikasi</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/rankings.php">Ranking</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/create_assessment.php">Buat Assessment</a></li>
                     <?php endif; ?>
                     <li class="nav-item"><a class="nav-link text-danger" href="/tugasakhir/views/logout.php">Logout</a></li>
                 </ul>
