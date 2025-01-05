@@ -9,9 +9,23 @@ $mapping_data = $conn->query("SELECT id, kode_mapping FROM mapping_standard ORDE
 
 // Proses penyimpanan assessment
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $kode_mapping = $_POST['kode_mapping'];
-    $pertanyaan = $conn->real_escape_string($_POST['pertanyaan']);
+    $kode_mapping = isset($_POST['kode_mapping']) ? $conn->real_escape_string($_POST['kode_mapping']) : '';
+    $pertanyaan = isset($_POST['pertanyaan']) ? $conn->real_escape_string($_POST['pertanyaan']) : '';
+
+    // Validasi input
+    if (empty($kode_mapping) || empty($pertanyaan)) {
+        $error = "Kode Mapping dan Pertanyaan tidak boleh kosong.";
+    } else {
+        $query = "INSERT INTO assessment_questions (kode_mapping, pertanyaan) VALUES ('$kode_mapping', '$pertanyaan')";
+
+        if ($conn->query($query)) {
+            $success = "Pertanyaan assessment berhasil disimpan.";
+        } else {
+            $error = "Terjadi kesalahan saat menyimpan pertanyaan: " . $conn->error;
+        }
+    }
 }
+
 // Ambil data lengkap berdasarkan kode mapping
 $mapping_details = [];
 if (isset($_POST['kode_mapping'])) {
@@ -20,6 +34,18 @@ if (isset($_POST['kode_mapping'])) {
     $detail_result = $conn->query($detail_query);
     if ($detail_result && $detail_result->num_rows > 0) {
         $mapping_details = $detail_result->fetch_assoc();
+    }
+}
+
+// Hapus pertanyaan berdasarkan ID
+if (isset($_GET['delete_id'])) {
+    $delete_id = $conn->real_escape_string($_GET['delete_id']);
+    $query = "DELETE FROM assessment_questions WHERE id = '$delete_id'";
+
+    if ($conn->query($query)) {
+        $success = "Pertanyaan assessment berhasil dihapus.";
+    } else {
+        $error = "Terjadi kesalahan saat menghapus pertanyaan: " . $conn->error;
     }
 }
 ?>
@@ -87,19 +113,21 @@ if (isset($_POST['kode_mapping'])) {
             <th>No</th>
             <th>Kode Mapping</th>
             <th>Pertanyaan</th>
-            <th>Waktu Dibuat</th>
+            <th>Aksi</th>
         </tr>
     </thead>
     <tbody>
         <?php
-        $questions = $conn->query("SELECT * FROM assessment_questions ORDER BY created_at DESC");
+        $questions = $conn->query("SELECT * FROM assessment_questions ORDER BY kode_mapping ASC");
         if ($questions && $questions->num_rows > 0): ?>
             <?php $no = 1; while ($row = $questions->fetch_assoc()): ?>
                 <tr>
                     <td><?php echo $no++; ?></td>
                     <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
                     <td><?php echo htmlspecialchars($row['pertanyaan']); ?></td>
-                    <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+                    <td>
+                        <a href="?delete_id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus pertanyaan ini?')">Hapus</a>
+                    </td>
                 </tr>
             <?php endwhile; ?>
         <?php else: ?>
