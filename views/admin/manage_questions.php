@@ -50,9 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_mapping'])) {
     $cobit_process_id = $_POST['cobit_process_id'];
     $cobit_process_name = $_POST['cobit_process_name'];
     $mapping_version = $_POST['mapping_version'];
+    $nomor_audit = $_POST['nomor_audit'];
 
-    $query = "INSERT INTO mapping_standard (mapping_version, itil_version, itil_service_lifecycle, iso_version, iso_annex, iso_control, cobit_version, cobit_process_id, cobit_process_name)
-              VALUES ('$mapping_version', '$itil_version', '$itil_service_lifecycle', '$iso_version', '$iso_annex', '$iso_control', '$cobit_version', '$cobit_process_id', '$cobit_process_name')";
+    // Generate Kode Mapping
+    $kode_mapping = "{$mapping_version}_{$itil_service_lifecycle}_{$nomor_audit}";
+
+    $query = "INSERT INTO mapping_standard (mapping_version, itil_version, itil_service_lifecycle, iso_version, iso_annex, iso_control, cobit_version, cobit_process_id, cobit_process_name, nomor_audit, kode_mapping)
+              VALUES ('$mapping_version', '$itil_version', '$itil_service_lifecycle', '$iso_version', '$iso_annex', '$iso_control', '$cobit_version', '$cobit_process_id', '$cobit_process_name', '$nomor_audit', '$kode_mapping')";
 
     if ($conn->query($query)) {
         $success = "Mapping berhasil disimpan.";
@@ -60,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_mapping'])) {
         $error = "Terjadi kesalahan: " . $conn->error;
     }
 }
+
 
 // Hapus Mapping
 if (isset($_GET['delete_mapping_id'])) {
@@ -176,9 +181,16 @@ if (isset($_GET['delete_mapping_id'])) {
         </div>
     </div>
     <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="nomor_audit" class="form-label">Nomor Audit</label>
+            <input type="number" name="nomor_audit" id="nomor_audit" class="form-control" placeholder="Contoh: 1" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
         <div class="col-md-12">
             <label for="mapping_version" class="form-label">Versi Mapping</label>
-            <input type="text" name="mapping_version" id="mapping_version" class="form-control" placeholder="Contoh: v1.0" required>
+            <input type="text" name="mapping_version" id="mapping_version" class="form-control" placeholder="Contoh: 1" required>
         </div>
     </div>
     <button type="submit" name="save_mapping" class="btn btn-primary">Simpan Mapping</button>
@@ -213,6 +225,8 @@ if (isset($_GET['delete_mapping_id'])) {
             <th>Versi COBIT</th>
             <th>COBIT Process ID</th>
             <th>COBIT Process Name</th>
+            <th>Nomor Audit</th>
+            <th>Kode Mapping</th>
             <th>Aksi</th>
         </tr>
     </thead>
@@ -231,6 +245,8 @@ if (isset($_GET['delete_mapping_id'])) {
                     <td><?php echo htmlspecialchars($row['cobit_version']); ?></td>
                     <td><?php echo htmlspecialchars($row['cobit_process_id']); ?></td>
                     <td><?php echo htmlspecialchars($row['cobit_process_name']); ?></td>
+                    <td><?php echo htmlspecialchars($row['nomor_audit']); ?></td>
+                    <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
                     <td>
                         <a href="?delete_mapping_id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm">Hapus</a>
                     </td>
@@ -238,7 +254,7 @@ if (isset($_GET['delete_mapping_id'])) {
             <?php endwhile; ?>
         <?php else: ?>
             <tr>
-                <td colspan="10" class="text-center">Belum ada mapping.</td>
+                <td colspan="12" class="text-center">Belum ada mapping.</td>
             </tr>
         <?php endif; ?>
     </tbody>
