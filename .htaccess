@@ -1,0 +1,7 @@
+# Aktifkan URL Rewrite
+RewriteEngine On
+
+# Redirect ke index.php jika direktori diakses
+DirectoryIndex index.php
+
+
