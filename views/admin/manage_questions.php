@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../includes/auth.php';
+include '../../includes/functions.php';
 include '../../includes/db.php';
 include '../../includes/header.php';
 
@@ -67,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_mapping'])) {
     }
 }
 
-
 // Hapus Mapping
 if (isset($_GET['delete_mapping_id'])) {
     $id = $_GET['delete_mapping_id'];
@@ -79,6 +78,48 @@ if (isset($_GET['delete_mapping_id'])) {
         $error = "Terjadi kesalahan saat menghapus data: " . $conn->error;
     }
 }
+
+// Ambil halaman saat ini
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = 5; // Jumlah baris per halaman
+$offset = ($page - 1) * $limit;
+
+// Hitung total baris
+$total_rows_query = "SELECT COUNT(*) AS total FROM mapping_standard";
+$total_rows_result = $conn->query($total_rows_query);
+$total_rows = $total_rows_result->fetch_assoc()['total'];
+
+// Hitung total halaman
+$total_pages = ceil($total_rows / $limit);
+
+// Ambil data dengan pagination
+$query = "SELECT * FROM mapping_standard ORDER BY created_at DESC LIMIT $limit OFFSET $offset";
+$result = $conn->query($query);
+
+// Query Pencarian
+$search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+
+if (!empty($search)) {
+    $query = "SELECT * FROM mapping_standard 
+              WHERE mapping_version LIKE '%$search%' 
+                 OR itil_service_lifecycle LIKE '%$search%' 
+                 OR kode_mapping LIKE '%$search%' 
+              ORDER BY created_at DESC LIMIT $limit OFFSET $offset";
+
+    $total_rows_query = "SELECT COUNT(*) AS total FROM mapping_standard 
+                         WHERE mapping_version LIKE '%$search%' 
+                            OR itil_service_lifecycle LIKE '%$search%' 
+                            OR kode_mapping LIKE '%$search%'";
+} else {
+    $query = "SELECT * FROM mapping_standard ORDER BY created_at DESC LIMIT $limit OFFSET $offset";
+    $total_rows_query = "SELECT COUNT(*) AS total FROM mapping_standard";
+}
+
+$total_rows_result = $conn->query($total_rows_query);
+$total_rows = $total_rows_result->fetch_assoc()['total'];
+$total_pages = ceil($total_rows / $limit);
+$result = $conn->query($query);
+
 
 ?>
 
@@ -215,6 +256,12 @@ if (isset($_GET['delete_mapping_id'])) {
 </script>
 
 <h4 class="mt-5">Daftar Mapping</h4>
+<form method="GET" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Cari versi mapping, ITIL Service Lifecycle, atau Kode Mapping" value="<?php echo htmlspecialchars($search); ?>">
+        <button type="submit" class="btn btn-primary">Cari</button>
+    </div>
+</form>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -233,10 +280,8 @@ if (isset($_GET['delete_mapping_id'])) {
         </tr>
     </thead>
     <tbody>
-        <?php
-        $mapping_data = $conn->query("SELECT * FROM mapping_standard ORDER BY created_at DESC");
-        if ($mapping_data && $mapping_data->num_rows > 0): ?>
-            <?php while ($row = $mapping_data->fetch_assoc()): ?>
+        <?php if ($result && $result->num_rows > 0): ?>
+            <?php while ($row = $result->fetch_assoc()): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($row['mapping_version']); ?></td>
                     <td><?php echo htmlspecialchars($row['itil_version']); ?></td>
@@ -256,8 +301,30 @@ if (isset($_GET['delete_mapping_id'])) {
             <?php endwhile; ?>
         <?php else: ?>
             <tr>
-                <td colspan="12" class="text-center">Belum ada mapping.</td>
+                <td colspan="12" class="text-center">Tidak ada data yang ditemukan.</td>
             </tr>
         <?php endif; ?>
     </tbody>
 </table>
+
+<nav>
+    <ul class="pagination justify-content-center">
+        <?php if ($page > 1): ?>
+            <li class="page-item">
+                <a class="page-link" href="?page=<?php echo $page - 1; ?>&search=<?php echo htmlspecialchars($search); ?>">Sebelumnya</a>
+            </li>
+        <?php endif; ?>
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+            <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
+                <a class="page-link" href="?page=<?php echo $i; ?>&search=<?php echo htmlspecialchars($search); ?>"><?php echo $i; ?></a>
+            </li>
+        <?php endfor; ?>
+        <?php if ($page < $total_pages): ?>
+            <li class="page-item">
+                <a class="page-link" href="?page=<?php echo $page + 1; ?>&search=<?php echo htmlspecialchars($search); ?>">Berikutnya</a>
+            </li>
+        <?php endif; ?>
+    </ul>
+</nav>
+
+<?php include '../../includes/footer.php'; ?>
