@@ -4,19 +4,35 @@ include '../../includes/auth.php';
 include '../../includes/db.php';
 include '../../includes/header.php';
 
+// Debugging koneksi database
+if ($conn->connect_error) {
+    die("Koneksi database gagal: " . $conn->connect_error);
+}
+
 // Ambil data untuk masing-masing framework
 $iso_versions = $conn->query("SELECT DISTINCT version FROM iso");
 $itil_versions = $conn->query("SELECT DISTINCT version FROM itil");
 $cobit_versions = $conn->query("SELECT DISTINCT version FROM cobit");
 
-// Ambil data default untuk tabel
-$selected_iso_version = isset($_GET['iso_version']) ? $_GET['iso_version'] : '27001';
-$selected_itil_version = isset($_GET['itil_version']) ? $_GET['itil_version'] : '4';
-$selected_cobit_version = isset($_GET['cobit_version']) ? $_GET['cobit_version'] : '2019';
+// Debug query versi
+if (!$iso_versions || !$itil_versions || !$cobit_versions) {
+    die("Error saat mengambil versi: " . $conn->error);
+}
 
-$iso_data = $conn->query("SELECT annex, control FROM iso WHERE version = '$selected_iso_version'");
-$itil_data = $conn->query("SELECT service_lifecycle FROM itil WHERE version = '$selected_itil_version'");
-$cobit_data = $conn->query("SELECT domain FROM cobit WHERE version = '$selected_cobit_version'");
+// Ambil data berdasarkan input pengguna (tanpa default value)
+$selected_iso_version = isset($_GET['iso_version']) ? $_GET['iso_version'] : null;
+$selected_itil_version = isset($_GET['itil_version']) ? $_GET['itil_version'] : null;
+$selected_cobit_version = isset($_GET['cobit_version']) ? $_GET['cobit_version'] : null;
+
+// Query data berdasarkan versi yang dipilih
+$iso_data = $selected_iso_version ? $conn->query("SELECT annex, control FROM iso WHERE version = '$selected_iso_version'") : null;
+$itil_data = $selected_itil_version ? $conn->query("SELECT service_lifecycle FROM itil WHERE version = '$selected_itil_version'") : null;
+$cobit_data = $selected_cobit_version ? $conn->query("SELECT domain FROM cobit WHERE version = '$selected_cobit_version'") : null;
+
+// Debug query data
+if (($selected_iso_version && !$iso_data) || ($selected_itil_version && !$itil_data) || ($selected_cobit_version && !$cobit_data)) {
+    die("Error saat mengambil data: " . $conn->error);
+}
 ?>
 
 <h3 class="text-center">Manajemen Framework</h3>
@@ -28,9 +44,10 @@ $cobit_data = $conn->query("SELECT domain FROM cobit WHERE version = '$selected_
     <form method="GET" class="mb-3">
         <label for="iso_version" class="form-label">Pilih Versi ISO</label>
         <select name="iso_version" id="iso_version" class="form-select" onchange="this.form.submit()">
+            <option value="">-- Pilih Versi --</option>
             <?php while ($row = $iso_versions->fetch_assoc()): ?>
                 <option value="<?php echo $row['version']; ?>" <?php echo $selected_iso_version === $row['version'] ? 'selected' : ''; ?>>
-                    <?php echo "ISO " . $row['version']; ?>
+                    <?php echo htmlspecialchars($row['version']); ?>
                 </option>
             <?php endwhile; ?>
         </select>
@@ -43,7 +60,7 @@ $cobit_data = $conn->query("SELECT domain FROM cobit WHERE version = '$selected_
             </tr>
         </thead>
         <tbody>
-            <?php if ($iso_data->num_rows > 0): ?>
+            <?php if ($iso_data && $iso_data->num_rows > 0): ?>
                 <?php while ($row = $iso_data->fetch_assoc()): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($row['annex']); ?></td>
@@ -63,9 +80,10 @@ $cobit_data = $conn->query("SELECT domain FROM cobit WHERE version = '$selected_
     <form method="GET" class="mb-3">
         <label for="itil_version" class="form-label">Pilih Versi ITIL</label>
         <select name="itil_version" id="itil_version" class="form-select" onchange="this.form.submit()">
+            <option value="">-- Pilih Versi --</option>
             <?php while ($row = $itil_versions->fetch_assoc()): ?>
                 <option value="<?php echo $row['version']; ?>" <?php echo $selected_itil_version === $row['version'] ? 'selected' : ''; ?>>
-                    <?php echo "ITIL " . $row['version']; ?>
+                    <?php echo htmlspecialchars($row['version']); ?>
                 </option>
             <?php endwhile; ?>
         </select>
@@ -77,7 +95,7 @@ $cobit_data = $conn->query("SELECT domain FROM cobit WHERE version = '$selected_
             </tr>
         </thead>
         <tbody>
-            <?php if ($itil_data->num_rows > 0): ?>
+            <?php if ($itil_data && $itil_data->num_rows > 0): ?>
                 <?php while ($row = $itil_data->fetch_assoc()): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($row['service_lifecycle']); ?></td>
@@ -96,9 +114,10 @@ $cobit_data = $conn->query("SELECT domain FROM cobit WHERE version = '$selected_
     <form method="GET" class="mb-3">
         <label for="cobit_version" class="form-label">Pilih Versi COBIT</label>
         <select name="cobit_version" id="cobit_version" class="form-select" onchange="this.form.submit()">
+            <option value="">-- Pilih Versi --</option>
             <?php while ($row = $cobit_versions->fetch_assoc()): ?>
                 <option value="<?php echo $row['version']; ?>" <?php echo $selected_cobit_version === $row['version'] ? 'selected' : ''; ?>>
-                    <?php echo "COBIT " . $row['version']; ?>
+                    <?php echo htmlspecialchars($row['version']); ?>
                 </option>
             <?php endwhile; ?>
         </select>
@@ -110,7 +129,7 @@ $cobit_data = $conn->query("SELECT domain FROM cobit WHERE version = '$selected_
             </tr>
         </thead>
         <tbody>
-            <?php if ($cobit_data->num_rows > 0): ?>
+            <?php if ($cobit_data && $cobit_data->num_rows > 0): ?>
                 <?php while ($row = $cobit_data->fetch_assoc()): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($row['domain']); ?></td>
@@ -127,3 +146,4 @@ $cobit_data = $conn->query("SELECT domain FROM cobit WHERE version = '$selected_
 </div>
 
 <?php include '../../includes/footer.php'; ?>
+                
