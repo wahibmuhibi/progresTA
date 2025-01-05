@@ -27,7 +27,7 @@ $selected_cobit_version = isset($_GET['cobit_version']) ? $_GET['cobit_version']
 // Query data berdasarkan versi yang dipilih
 $iso_data = $selected_iso_version ? $conn->query("SELECT annex, control FROM iso WHERE version = '$selected_iso_version'") : null;
 $itil_data = $selected_itil_version ? $conn->query("SELECT service_lifecycle FROM itil WHERE version = '$selected_itil_version'") : null;
-$cobit_data = $selected_cobit_version ? $conn->query("SELECT domain FROM cobit WHERE version = '$selected_cobit_version'") : null;
+$cobit_data = $selected_cobit_version ? $conn->query("SELECT process_id, process_name FROM cobit WHERE version = '$selected_cobit_version'") : null;
 
 // Debug query data
 if (($selected_iso_version && !$iso_data) || ($selected_itil_version && !$itil_data) || ($selected_cobit_version && !$cobit_data)) {
@@ -125,19 +125,21 @@ if (($selected_iso_version && !$iso_data) || ($selected_itil_version && !$itil_d
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Domain</th>
+                <th>Process ID</th>
+                <th>Process Name</th>
             </tr>
         </thead>
         <tbody>
             <?php if ($cobit_data && $cobit_data->num_rows > 0): ?>
                 <?php while ($row = $cobit_data->fetch_assoc()): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($row['domain']); ?></td>
+                        <td><?php echo htmlspecialchars($row['process_id']); ?></td>
+                        <td><?php echo htmlspecialchars($row['process_name']); ?></td>
                     </tr>
                 <?php endwhile; ?>
             <?php else: ?>
                 <tr>
-                    <td class="text-center">Tidak ada data.</td>
+                    <td colspan="2" class="text-center">Tidak ada data.</td>
                 </tr>
             <?php endif; ?>
         </tbody>
@@ -146,4 +148,4 @@ if (($selected_iso_version && !$iso_data) || ($selected_itil_version && !$itil_d
 </div>
 
 <?php include '../../includes/footer.php'; ?>
-                
+// Done
