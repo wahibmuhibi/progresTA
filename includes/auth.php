@@ -21,5 +21,4 @@ if ($_SESSION['role'] !== 'Admin' && $current_file === 'manage_users.php') {
     die('Unauthorized Access');
 }
 
-// Tambahkan validasi untuk file lain sesuai kebutuhan
 ?>

@@ -59,6 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_mapping'])) {
               VALUES ('$mapping_version', '$itil_version', '$itil_service_lifecycle', '$iso_version', '$iso_annex', '$iso_control', '$cobit_version', '$cobit_process_id', '$cobit_process_name', '$nomor_audit', '$kode_mapping')";
 
     if ($conn->query($query)) {
+        // Log aktivitas simpan data
+        log_activity($_SESSION['user_id'], "Menyimpan mapping versi: $mapping_version", $conn);
         $success = "Mapping berhasil disimpan.";
     } else {
         $error = "Terjadi kesalahan: " . $conn->error;
