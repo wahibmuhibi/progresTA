@@ -1,6 +1,8 @@
 <?php
 session_start();
 include '../../includes/functions.php';
+include '../../includes/auth.php';
+check_role('Admin');
 include '../../includes/db.php';
 include '../../includes/header.php';
 

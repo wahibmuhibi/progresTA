@@ -36,8 +36,6 @@
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/rankings.php">Ranking</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/create_assessment.php">Buat Assessment</a></li>
                     <?php endif; ?>
-
-                    <!-- Avatar dengan Dropdown -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-fill"></i> <?php echo htmlspecialchars($_SESSION['user']); ?>
