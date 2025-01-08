@@ -8,6 +8,32 @@ include '../../includes/header.php';
 // Inisialisasi variabel
 $questions_query = null;
 
+// Ambil data ITIL Service Lifecycle secara dinamis
+$lifecycle_query = $conn->query("
+    SELECT DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(kode_mapping, '_', 2), '_', -1) AS itil_service_lifecycle 
+    FROM eksternal_audit_question
+    WHERE kode_mapping IS NOT NULL
+    ORDER BY itil_service_lifecycle ASC
+");
+$lifecycle_stages = [];
+if ($lifecycle_query && $lifecycle_query->num_rows > 0) {
+    while ($row = $lifecycle_query->fetch_assoc()) {
+        $lifecycle_stages[] = $row['itil_service_lifecycle'];
+    }
+}
+
+// Ambil pertanyaan berdasarkan ITIL Service Lifecycle
+foreach ($lifecycle_stages as $stage) {
+    $questions_query = $conn->query("
+        SELECT DISTINCT q.id, q.kode_mapping, q.pertanyaan 
+        FROM eksternal_audit_question q
+        JOIN auditee a ON a.periode_audit = q.periode_audit
+        WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(q.kode_mapping, '_', 2), '_', -1) = '$stage' 
+        AND a.user_id = {$_SESSION['user_id']}
+    ");
+    $questions_by_lifecycle[$stage] = $questions_query ? $questions_query->fetch_all(MYSQLI_ASSOC) : [];
+}
+
 // Ambil data kriteria dari tabel Manajemen Kriteria
 $criteria_query = $conn->query("SELECT kondisi, skor FROM criteria ORDER BY skor ASC");
 $criteria = [];
@@ -77,47 +103,61 @@ if (isset($_GET['kode_audit'])) {
 </table>
 
 <!-- Tabel Pertanyaan Berdasarkan Kode Audit -->
-<h4 class="mt-5">Pertanyaan Self-Assessment</h4>
+<h3 class="text-center">Self-Assessment</h3>
+
+<!-- Form Self-Assessment -->
 <form method="POST" action="submit_assessment.php" enctype="multipart/form-data">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Nomor Audit</th>
-                <th>Pertanyaan Audit</th>
-                <th>Jawaban</th>
-                <th>Bukti</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ($questions_query && $questions_query->num_rows > 0): ?>
-                <?php while ($row = $questions_query->fetch_assoc()): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
-                        <td><?php echo htmlspecialchars($row['pertanyaan']); ?></td>
-                        <td>
-                            <select name="answers[<?php echo $row['id']; ?>][jawaban]" class="form-select" required>
-                                <option value="" disabled selected>Pilih Jawaban</option>
-                                <?php foreach ($criteria as $kondisi => $skor): ?>
-                                    <option value="<?php echo htmlspecialchars($kondisi); ?>">
-                                        <?php echo htmlspecialchars($kondisi); ?> (Skor: <?php echo $skor; ?>)
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                        <td>
-                            <input type="file" name="answers[<?php echo $row['id']; ?>][bukti]" class="form-control" accept=".pdf">
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            <?php else: ?>
+
+    <?php foreach ($lifecycle_stages as $stage): ?>
+        <h4 class="mt-4"><?php echo htmlspecialchars($stage); ?></h4>
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                    <td colspan="4" class="text-center">Tidak ada pertanyaan untuk kode audit ini.</td>
+                    <th>Nomor Audit</th>
+                    <th>Pertanyaan Audit</th>
+                    <th>Jawaban</th>
+                    <th>Bukti</th>
                 </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php if (!empty($questions_by_lifecycle[$stage])): ?>
+                    <?php 
+                    $seen_questions = [];
+                    foreach ($questions_by_lifecycle[$stage] as $question): 
+                        if (in_array($question['id'], $seen_questions)) {
+                            continue; // Skip jika pertanyaan sudah ditampilkan
+                        }
+                        $seen_questions[] = $question['id'];
+                    ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($question['kode_mapping']); ?></td>
+                            <td><?php echo htmlspecialchars($question['pertanyaan']); ?></td>
+                            <td>
+                                <select name="answers[<?php echo $question['id']; ?>][jawaban]" class="form-select" required>
+                                    <option value="" disabled selected>Pilih Jawaban</option>
+                                    <?php foreach ($criteria as $kondisi => $skor): ?>
+                                        <option value="<?php echo htmlspecialchars($kondisi); ?>">
+                                            <?php echo htmlspecialchars($kondisi); ?> (Skor: <?php echo $skor; ?>)
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="file" name="answers[<?php echo $question['id']; ?>][bukti]" class="form-control" accept=".pdf">
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="4" class="text-center">Tidak ada pertanyaan untuk tahap ini.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    <?php endforeach; ?>
     <button type="submit" name="submit_assessment" class="btn btn-primary mt-3">Simpan Jawaban</button>
 </form>
+
 
 <!-- Tabel Riwayat Self-Assessment -->
 <h4 class="mt-5">Riwayat Pengisian Self-Assessment</h4>
