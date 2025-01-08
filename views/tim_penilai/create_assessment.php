@@ -12,20 +12,37 @@ $mapping_data = $conn->query("SELECT id, kode_mapping FROM mapping_standard ORDE
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kode_mapping = isset($_POST['kode_mapping']) ? $conn->real_escape_string($_POST['kode_mapping']) : '';
     $pertanyaan = isset($_POST['pertanyaan']) ? $conn->real_escape_string($_POST['pertanyaan']) : '';
+    $periode_audit = isset($_POST['periode_audit']) ? (int)$_POST['periode_audit'] : 0;
 
-    // Validasi input
-    if (empty($kode_mapping) || empty($pertanyaan)) {
-        $error = "Kode Mapping dan Pertanyaan tidak boleh kosong.";
+    if (empty($kode_mapping) || empty($pertanyaan) || empty($periode_audit)) {
+        $error = "Kode Mapping, Periode Audit, dan Pertanyaan tidak boleh kosong.";
     } else {
-        $query = "INSERT INTO assessment_questions (kode_mapping, pertanyaan) VALUES ('$kode_mapping', '$pertanyaan')";
+        $query = "INSERT INTO eksternal_audit_question (kode_mapping, periode_audit, pertanyaan) 
+                  VALUES ('$kode_mapping', $periode_audit, '$pertanyaan')";
 
         if ($conn->query($query)) {
-            $success = "Pertanyaan assessment berhasil disimpan.";
+            $success = "Pertanyaan eksternal audit berhasil disimpan.";
         } else {
             $error = "Terjadi kesalahan saat menyimpan pertanyaan: " . $conn->error;
         }
     }
 }
+
+// Hapus pertanyaan berdasarkan ID
+if (isset($_GET['delete_id'])) {
+    $delete_id = $conn->real_escape_string($_GET['delete_id']);
+    $query = "DELETE FROM eksternal_audit_question WHERE id = '$delete_id'";
+
+    if ($conn->query($query)) {
+        $success = "Pertanyaan eksternal audit berhasil dihapus.";
+    } else {
+        $error = "Terjadi kesalahan saat menghapus pertanyaan: " . $conn->error;
+    }
+}
+
+// Ambil daftar pertanyaan
+$questions = $conn->query("SELECT * FROM eksternal_audit_question ORDER BY periode_audit DESC, kode_mapping ASC");
+
 
 // Ambil data lengkap berdasarkan kode mapping
 $mapping_details = [];
@@ -41,7 +58,7 @@ if (isset($_POST['kode_mapping'])) {
 // Hapus pertanyaan berdasarkan ID
 if (isset($_GET['delete_id'])) {
     $delete_id = $conn->real_escape_string($_GET['delete_id']);
-    $query = "DELETE FROM assessment_questions WHERE id = '$delete_id'";
+    $query = "DELETE FROM eksternal_audit_question WHERE id = '$delete_id'";
 
     if ($conn->query($query)) {
         $success = "Pertanyaan assessment berhasil dihapus.";
@@ -77,9 +94,12 @@ if (isset($_GET['delete_id'])) {
                 <?php endif; ?>
             </select>
         </div>
+        <div class="col-md-6">
+            <label for="periode_audit" class="form-label">Periode Audit</label>
+            <input type="number" name="periode_audit" id="periode_audit" class="form-control" placeholder="Contoh: 2025" min="2000" max="2099" required>
+        </div>
     </div>
 
-    <!-- Tampilkan Kalimat Otomatis -->
     <?php if (!empty($mapping_details)): ?>
         <div class="row mb-3">
             <div class="col-md-12">
@@ -113,18 +133,20 @@ if (isset($_GET['delete_id'])) {
         <tr>
             <th>No</th>
             <th>Kode Mapping</th>
+            <th>Periode Audit</th>
             <th>Pertanyaan</th>
             <th>Aksi</th>
         </tr>
     </thead>
     <tbody>
         <?php
-        $questions = $conn->query("SELECT * FROM assessment_questions ORDER BY kode_mapping ASC");
+        $questions = $conn->query("SELECT * FROM eksternal_audit_question ORDER BY periode_audit DESC, kode_mapping ASC");
         if ($questions && $questions->num_rows > 0): ?>
             <?php $no = 1; while ($row = $questions->fetch_assoc()): ?>
                 <tr>
                     <td><?php echo $no++; ?></td>
                     <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
+                    <td><?php echo htmlspecialchars($row['periode_audit']); ?></td>
                     <td><?php echo htmlspecialchars($row['pertanyaan']); ?></td>
                     <td>
                         <a href="?delete_id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus pertanyaan ini?')">Hapus</a>
@@ -133,7 +155,7 @@ if (isset($_GET['delete_id'])) {
             <?php endwhile; ?>
         <?php else: ?>
             <tr>
-                <td colspan="4" class="text-center">Belum ada pertanyaan assessment.</td>
+                <td colspan="5" class="text-center">Belum ada pertanyaan assessment.</td>
             </tr>
         <?php endif; ?>
     </tbody>
