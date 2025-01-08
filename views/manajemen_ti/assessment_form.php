@@ -8,6 +8,15 @@ include '../../includes/header.php';
 // Inisialisasi variabel
 $questions_query = null;
 
+// Ambil data kriteria dari tabel Manajemen Kriteria
+$criteria_query = $conn->query("SELECT kondisi, skor FROM criteria ORDER BY skor ASC");
+$criteria = [];
+if ($criteria_query && $criteria_query->num_rows > 0) {
+    while ($row = $criteria_query->fetch_assoc()) {
+        $criteria[$row['kondisi']] = $row['skor'];
+    }
+}
+
 // Ambil daftar formulir masuk
 $incoming_forms_query = $conn->query("
     SELECT a.kode_audit, a.periode_audit, a.form_status, COALESCE(q.source, 'Tim Penilai') AS source, COUNT(q.id) AS total_questions
@@ -69,36 +78,46 @@ if (isset($_GET['kode_audit'])) {
 
 <!-- Tabel Pertanyaan Berdasarkan Kode Audit -->
 <h4 class="mt-5">Pertanyaan Self-Assessment</h4>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Nomor Audit</th>
-            <th>Pertanyaan Audit</th>
-            <th>Jawaban</th>
-            <th>Bukti</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if ($questions_query && $questions_query->num_rows > 0): ?>
-            <?php while ($row = $questions_query->fetch_assoc()): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
-                    <td><?php echo htmlspecialchars($row['pertanyaan']); ?></td>
-                    <td>
-                        <textarea name="answers[<?php echo $row['id']; ?>]" class="form-control"></textarea>
-                    </td>
-                    <td>
-                        <input type="file" name="evidence[<?php echo $row['id']; ?>]" class="form-control" accept=".pdf">
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-        <?php else: ?>
+<form method="POST" action="submit_assessment.php" enctype="multipart/form-data">
+    <table class="table table-bordered">
+        <thead>
             <tr>
-                <td colspan="4" class="text-center">Tidak ada pertanyaan untuk kode audit ini.</td>
+                <th>Nomor Audit</th>
+                <th>Pertanyaan Audit</th>
+                <th>Jawaban</th>
+                <th>Bukti</th>
             </tr>
-        <?php endif; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php if ($questions_query && $questions_query->num_rows > 0): ?>
+                <?php while ($row = $questions_query->fetch_assoc()): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
+                        <td><?php echo htmlspecialchars($row['pertanyaan']); ?></td>
+                        <td>
+                            <select name="answers[<?php echo $row['id']; ?>][jawaban]" class="form-select" required>
+                                <option value="" disabled selected>Pilih Jawaban</option>
+                                <?php foreach ($criteria as $kondisi => $skor): ?>
+                                    <option value="<?php echo htmlspecialchars($kondisi); ?>">
+                                        <?php echo htmlspecialchars($kondisi); ?> (Skor: <?php echo $skor; ?>)
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="file" name="answers[<?php echo $row['id']; ?>][bukti]" class="form-control" accept=".pdf">
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="4" class="text-center">Tidak ada pertanyaan untuk kode audit ini.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+    <button type="submit" name="submit_assessment" class="btn btn-primary mt-3">Simpan Jawaban</button>
+</form>
 
 <!-- Tabel Riwayat Self-Assessment -->
 <h4 class="mt-5">Riwayat Pengisian Self-Assessment</h4>
