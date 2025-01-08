@@ -29,29 +29,83 @@ if ($criteria_query && $criteria_query->num_rows > 0) {
     }
 }
 
-// Proses penyimpanan jawaban
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_assessment'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $status = isset($_POST['submit_assessment']) ? 'submitted' : 'draft';
+
     foreach ($_POST['answers'] as $question_id => $data) {
         $question_id = (int)$question_id;
         $jawaban = $conn->real_escape_string($data['kondisi']);
         $skor = isset($criteria[$jawaban]) ? $criteria[$jawaban] : 0;
         $bukti = $_FILES['answers']['name'][$question_id]['bukti'];
 
+        // Debug data sebelum disimpan
+        echo "<pre>";
+        print_r([
+            'question_id' => $question_id,
+            'jawaban' => $jawaban,
+            'skor' => $skor,
+            'bukti' => $bukti,
+            'status' => $status,
+        ]);
+        echo "</pre>";
+
         // Simpan file bukti
         if (!empty($bukti)) {
             $target_dir = "../../uploads/";
             $target_file = $target_dir . basename($_FILES['answers']['name'][$question_id]['bukti']);
-            move_uploaded_file($_FILES['answers']['tmp_name'][$question_id]['bukti'], $target_file);
+            if (!move_uploaded_file($_FILES['answers']['tmp_name'][$question_id]['bukti'], $target_file)) {
+                echo "Gagal mengunggah file bukti untuk pertanyaan ID: $question_id.";
+                exit;
+            }
         }
 
-        $query = "INSERT INTO assessment_answers (user_id, question_id, jawaban, skor, bukti) 
-                  VALUES ({$_SESSION['user_id']}, $question_id, '$jawaban', $skor, '$bukti')
-                  ON DUPLICATE KEY UPDATE jawaban = '$jawaban', skor = $skor, bukti = '$bukti'";
+        // Simpan data ke database
+        $query = "INSERT INTO assessment_answers (user_id, question_id, jawaban, skor, bukti, status) 
+                  VALUES ({$_SESSION['user_id']}, $question_id, '$jawaban', $skor, '$bukti', '$status')
+                  ON DUPLICATE KEY UPDATE jawaban = '$jawaban', skor = $skor, bukti = '$bukti', status = '$status'";
 
-        $conn->query($query);
+        if (!$conn->query($query)) {
+            echo "Query gagal: " . $conn->error;
+            exit;
+        }
     }
-    $success = "Self-assessment berhasil disimpan.";
+
+    if ($status === 'submitted') {
+        $success = "Self-assessment berhasil dikirim.";
+    } else {
+        $success = "Self-assessment berhasil disimpan sebagai draft.";
+    }
 }
+
+
+// Mengambil Data Sebelumnya Jika Status Draft
+$previous_answers_query = $conn->query("
+    SELECT question_id, jawaban, bukti 
+    FROM assessment_answers 
+    WHERE user_id = {$_SESSION['user_id']} AND status = 'draft'
+");
+$previous_answers = [];
+if ($previous_answers_query && $previous_answers_query->num_rows > 0) {
+    while ($row = $previous_answers_query->fetch_assoc()) {
+        $previous_answers[$row['question_id']] = $row;
+    }
+}
+
+// Ambil riwayat pengisian berdasarkan user ID
+$history_query = $conn->query("
+    SELECT DISTINCT created_at, status 
+    FROM assessment_answers 
+    WHERE user_id = {$_SESSION['user_id']}
+    ORDER BY created_at DESC
+");
+$history = [];
+if ($history_query && $history_query->num_rows > 0) {
+    while ($row = $history_query->fetch_assoc()) {
+        $history[] = $row;
+    }
+}
+
+
 ?>
 
 <h3 class="text-center">Self-Assessment</h3>
@@ -59,6 +113,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_assessment']))
 <?php if (isset($success)): ?>
     <div class="alert alert-success"><?php echo $success; ?></div>
 <?php endif; ?>
+
+<!-- Tabel Riwayat Assessment -->
+<h5 class="mt-5">Riwayat Pengisian Self-Assessment</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tanggal</th>
+            <th>Status</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (!empty($history)): ?>
+            <?php foreach ($history as $row): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars(date('d-m-Y H:i:s', strtotime($row['created_at']))); ?></td>
+                    <td>
+                        <span class="badge bg-<?php echo $row['status'] === 'submitted' ? 'success' : 'warning'; ?>">
+                            <?php echo ucfirst($row['status']); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <?php if ($row['status'] === 'draft'): ?>
+                            <a href="assessment_form.php" class="btn btn-sm btn-primary">Lanjutkan</a>
+                        <?php else: ?>
+                            <button class="btn btn-sm btn-secondary" disabled>Sudah Terkirim</button>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="3" class="text-center">Belum ada riwayat pengisian.</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
+
 
 <!-- Form Pilih Asal Assessment -->
 <form method="GET" action="">
@@ -72,6 +164,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_assessment']))
     </div>
     <button type="submit" class="btn btn-primary">Mulai</button>
 </form>
+
+
 
 <!-- Tahapan Assessment -->
 <?php if (isset($_GET['source'])): ?>
@@ -102,10 +196,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_assessment']))
                                 <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
                                 <td><?php echo htmlspecialchars($row['pertanyaan']); ?></td>
                                 <td>
-                                    <select name="answers[<?php echo $row['id']; ?>][kondisi]" class="form-select" required>
-                                        <option value="" disabled selected>Pilih Kondisi</option>
+                                    <select name="answers[<?php echo $row['id']; ?>][kondisi]" class="form-select">
+                                        <option value="" disabled <?php echo !isset($previous_answers[$row['id']]) ? 'selected' : ''; ?>>Pilih Kondisi</option>
                                         <?php foreach ($criteria as $kondisi => $skor): ?>
-                                            <option value="<?php echo htmlspecialchars($kondisi); ?>">
+                                            <option value="<?php echo htmlspecialchars($kondisi); ?>" <?php echo (isset($previous_answers[$row['id']]) && $previous_answers[$row['id']]['jawaban'] === $kondisi) ? 'selected' : ''; ?>>
                                                 <?php echo htmlspecialchars($kondisi); ?> (Skor: <?php echo $skor; ?>)
                                             </option>
                                         <?php endforeach; ?>
@@ -124,6 +218,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_assessment']))
                 </tbody>
             </table>
         <?php endforeach; ?>
-        <button type="submit" name="submit_assessment" class="btn btn-primary mt-3">Simpan Self-Assessment</button>
+
+        <!-- Tombol Simpan Sementara dan Submit -->
+        <button type="submit" name="save_draft" class="btn btn-secondary mt-3">Simpan Sementara</button>
+        <button type="submit" name="submit_assessment" class="btn btn-primary mt-3">Submit</button>
     </form>
 <?php endif; ?>
