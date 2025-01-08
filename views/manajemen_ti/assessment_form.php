@@ -29,8 +29,10 @@ if ($criteria_query && $criteria_query->num_rows > 0) {
     }
 }
 
+// Logika Penyimpanan
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = isset($_POST['submit_assessment']) ? 'submitted' : 'draft';
+    $source = $conn->real_escape_string($_GET['source']);
 
     foreach ($_POST['answers'] as $question_id => $data) {
         $question_id = (int)$question_id;
@@ -38,40 +40,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $skor = isset($criteria[$jawaban]) ? $criteria[$jawaban] : 0;
         $bukti = $_FILES['answers']['name'][$question_id]['bukti'];
 
-        // Debug data sebelum disimpan
-        echo "<pre>";
-        print_r([
-            'question_id' => $question_id,
-            'jawaban' => $jawaban,
-            'skor' => $skor,
-            'bukti' => $bukti,
-            'status' => $status,
-        ]);
-        echo "</pre>";
-
         // Simpan file bukti
         if (!empty($bukti)) {
             $target_dir = "../../uploads/";
             $target_file = $target_dir . basename($_FILES['answers']['name'][$question_id]['bukti']);
-            if (!move_uploaded_file($_FILES['answers']['tmp_name'][$question_id]['bukti'], $target_file)) {
-                echo "Gagal mengunggah file bukti untuk pertanyaan ID: $question_id.";
-                exit;
-            }
+            move_uploaded_file($_FILES['answers']['tmp_name'][$question_id]['bukti'], $target_file);
         }
 
-        // Simpan data ke database
-        $query = "INSERT INTO assessment_answers (user_id, question_id, jawaban, skor, bukti, status) 
-                  VALUES ({$_SESSION['user_id']}, $question_id, '$jawaban', $skor, '$bukti', '$status')
-                  ON DUPLICATE KEY UPDATE jawaban = '$jawaban', skor = $skor, bukti = '$bukti', status = '$status'";
+        // Simpan atau perbarui data
+        $query = "INSERT INTO assessment_answers (user_id, question_id, jawaban, skor, bukti, status, source) 
+                  VALUES ({$_SESSION['user_id']}, $question_id, '$jawaban', $skor, '$bukti', '$status', '$source')
+                  ON DUPLICATE KEY UPDATE jawaban = '$jawaban', skor = $skor, bukti = '$bukti', status = '$status', source = '$source'";
 
-        if (!$conn->query($query)) {
-            echo "Query gagal: " . $conn->error;
-            exit;
-        }
+        $conn->query($query);
     }
 
     if ($status === 'submitted') {
-        $success = "Self-assessment berhasil dikirim.";
+        $success = "Self-assessment berhasil dikirim."; 
     } else {
         $success = "Self-assessment berhasil disimpan sebagai draft.";
     }
@@ -91,11 +76,12 @@ if ($previous_answers_query && $previous_answers_query->num_rows > 0) {
     }
 }
 
-// Ambil riwayat pengisian berdasarkan user ID
+// Query untuk Menampilkan Riwayat
 $history_query = $conn->query("
-    SELECT DISTINCT created_at, status 
+    SELECT DISTINCT source, MAX(created_at) AS created_at, status 
     FROM assessment_answers 
     WHERE user_id = {$_SESSION['user_id']}
+    GROUP BY source
     ORDER BY created_at DESC
 ");
 $history = [];
@@ -104,6 +90,18 @@ if ($history_query && $history_query->num_rows > 0) {
         $history[] = $row;
     }
 }
+
+if (isset($_GET['delete_source'])) {
+    $delete_source = $conn->real_escape_string($_GET['delete_source']);
+    $query = "DELETE FROM assessment_answers WHERE user_id = {$_SESSION['user_id']} AND source = '$delete_source'";
+    
+    if ($conn->query($query) && $conn->affected_rows > 0) {
+        $success = "Riwayat pengisian berhasil dihapus.";
+    } else {
+        $error = "Riwayat pengisian tidak ditemukan atau gagal dihapus.";
+    }
+}
+
 
 
 ?>
@@ -120,6 +118,7 @@ if ($history_query && $history_query->num_rows > 0) {
     <thead>
         <tr>
             <th>Tanggal</th>
+            <th>Asal Assessment</th>
             <th>Status</th>
             <th>Aksi</th>
         </tr>
@@ -129,6 +128,7 @@ if ($history_query && $history_query->num_rows > 0) {
             <?php foreach ($history as $row): ?>
                 <tr>
                     <td><?php echo htmlspecialchars(date('d-m-Y H:i:s', strtotime($row['created_at']))); ?></td>
+                    <td><?php echo htmlspecialchars($row['source']); ?></td>
                     <td>
                         <span class="badge bg-<?php echo $row['status'] === 'submitted' ? 'success' : 'warning'; ?>">
                             <?php echo ucfirst($row['status']); ?>
@@ -136,20 +136,22 @@ if ($history_query && $history_query->num_rows > 0) {
                     </td>
                     <td>
                         <?php if ($row['status'] === 'draft'): ?>
-                            <a href="assessment_form.php" class="btn btn-sm btn-primary">Lanjutkan</a>
+                            <a href="assessment_form.php?source=<?php echo urlencode($row['source']); ?>" class="btn btn-sm btn-primary">Lanjutkan</a>
                         <?php else: ?>
                             <button class="btn btn-sm btn-secondary" disabled>Sudah Terkirim</button>
                         <?php endif; ?>
+                        <a href="?delete_source=<?php echo urlencode($row['source']); ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus riwayat ini?')">Hapus</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
             <tr>
-                <td colspan="3" class="text-center">Belum ada riwayat pengisian.</td>
+                <td colspan="4" class="text-center">Belum ada riwayat pengisian.</td>
             </tr>
         <?php endif; ?>
     </tbody>
 </table>
+
 
 
 <!-- Form Pilih Asal Assessment -->
