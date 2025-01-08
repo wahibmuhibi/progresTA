@@ -36,8 +36,63 @@ if (isset($_GET['delete_id'])) {
     }
 }
 
+
+// Tambah pasangan Kode Mapping dengan Jenis Kriteria
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['map_criteria'])) {
+    $kode_mapping = $conn->real_escape_string($_POST['kode_mapping']);
+    $jenis_kriteria = $conn->real_escape_string($_POST['jenis_kriteria']);
+
+    // Periksa apakah pasangan sudah ada
+    $check_query = "SELECT * FROM mapping_criteria WHERE kode_mapping = '$kode_mapping' AND jenis_kriteria = '$jenis_kriteria'";
+    $check_result = $conn->query($check_query);
+
+    if ($check_result->num_rows > 0) {
+        $error = "Kode Mapping '$kode_mapping' sudah dipasangkan dengan Kriteria '$jenis_kriteria'.";
+    } else {
+        // Simpan pasangan baru jika belum ada
+        $query = "INSERT INTO mapping_criteria (kode_mapping, jenis_kriteria) VALUES ('$kode_mapping', '$jenis_kriteria')";
+
+        if ($conn->query($query)) {
+            $success = "Kode Mapping berhasil dipasangkan dengan Jenis Kriteria.";
+        } else {
+            $error = "Terjadi kesalahan saat menyimpan data: " . $conn->error;
+        }
+    }
+}
+
+
+// Hapus data berdasarkan ID
+if (isset($_GET['delete_mapping_id'])) {
+    $delete_id = $conn->real_escape_string($_GET['delete_mapping_id']);
+    $query = "DELETE FROM mapping_criteria WHERE id = '$delete_id'";
+
+    if ($conn->query($query)) {
+        $success = "Mapping berhasil dihapus.";
+    } else {
+        $error = "Terjadi kesalahan saat menghapus data: " . $conn->error;
+    }
+}
+
+
 // Ambil data dari tabel
 $criteria_data = $conn->query("SELECT * FROM criteria ORDER BY skor ASC");
+$mapping_data = $conn->query("SELECT kode_mapping FROM mapping_standard ORDER BY kode_mapping ASC");
+$mapped_data = $conn->query("SELECT mc.*, ms.kode_mapping, c.jenis 
+                             FROM mapping_criteria mc 
+                             JOIN mapping_standard ms ON mc.kode_mapping = ms.kode_mapping 
+                             JOIN criteria c ON mc.jenis_kriteria = c.jenis 
+                             ORDER BY mc.created_at DESC");
+
+// Ambil data dari database
+$mapped_data_result = $conn->query("SELECT DISTINCT mc.id, mc.kode_mapping, c.jenis AS jenis_kriteria 
+                                    FROM mapping_criteria mc 
+                                    JOIN mapping_standard ms ON mc.kode_mapping = ms.kode_mapping 
+                                    JOIN criteria c ON mc.jenis_kriteria = c.jenis 
+                                    ORDER BY mc.created_at DESC");
+
+// Simpan hasil query dalam array
+$mapped_data = $mapped_data_result ? $mapped_data_result->fetch_all(MYSQLI_ASSOC) : [];
+
 ?>
 
 <h3 class="text-center">Manajemen Kriteria</h3>
@@ -100,3 +155,70 @@ $criteria_data = $conn->query("SELECT * FROM criteria ORDER BY skor ASC");
     </tbody>
 </table>
 
+<!-- Form Pasang Kode Mapping dengan Jenis Kriteria -->
+<form method="POST" action="">
+    <h4 class="mt-4">Pasangkan Kode Mapping dengan Jenis Kriteria</h4>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="kode_mapping" class="form-label">Kode Mapping</label>
+            <select name="kode_mapping" id="kode_mapping" class="form-select" required>
+                <option value="" disabled selected>Pilih Kode Mapping</option>
+                <?php while ($row = $mapping_data->fetch_assoc()): ?>
+                    <option value="<?php echo htmlspecialchars($row['kode_mapping']); ?>">
+                        <?php echo htmlspecialchars($row['kode_mapping']); ?>
+                    </option>
+                <?php endwhile; ?>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label for="jenis_kriteria" class="form-label">Jenis Kriteria</label>
+            <?php 
+                // Ambil ulang data criteria untuk dropdown
+                $criteria_data_dropdown = $conn->query("SELECT DISTINCT jenis FROM criteria ORDER BY jenis ASC");
+            ?>
+            <select name="jenis_kriteria" id="jenis_kriteria" class="form-select" required>
+                <option value="" disabled selected>Pilih Jenis Kriteria</option>
+                <?php while ($row = $criteria_data_dropdown->fetch_assoc()): ?>
+                    <option value="<?php echo htmlspecialchars($row['jenis']); ?>">
+                        <?php echo htmlspecialchars($row['jenis']); ?>
+                    </option>
+                <?php endwhile; ?>
+            </select>
+        </div>
+    </div>
+    <button type="submit" name="map_criteria" class="btn btn-primary">Pasangkan</button>
+</form>
+
+
+<!-- Tabel Daftar Mapping ke Kriteria -->
+<h4 class="mt-5">Daftar Mapping ke Kriteria</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Kode Mapping</th>
+            <th>Jenis Kriteria</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (!empty($mapped_data)): ?>
+            <?php 
+            // Gunakan array unik untuk menghilangkan duplikasi
+            $unique_data = array_unique($mapped_data, SORT_REGULAR);
+            foreach ($unique_data as $row): 
+            ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
+                    <td><?php echo htmlspecialchars($row['jenis_kriteria']); ?></td>
+                    <td>
+                        <a href="?delete_mapping_id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="3" class="text-center">Belum ada data yang terhubung.</td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
