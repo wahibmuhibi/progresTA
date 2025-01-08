@@ -31,14 +31,22 @@ if ($criteria_query && $criteria_query->num_rows > 0) {
 
 // Proses penyimpanan jawaban
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_assessment'])) {
-    foreach ($_POST['answers'] as $question_id => $kondisi) {
+    foreach ($_POST['answers'] as $question_id => $data) {
         $question_id = (int)$question_id;
-        $jawaban = $conn->real_escape_string($kondisi);
-        $skor = isset($criteria[$kondisi]) ? $criteria[$kondisi] : 0;
+        $jawaban = $conn->real_escape_string($data['kondisi']);
+        $skor = isset($criteria[$jawaban]) ? $criteria[$jawaban] : 0;
+        $bukti = $_FILES['answers']['name'][$question_id]['bukti'];
 
-        $query = "INSERT INTO assessment_answers (user_id, question_id, jawaban, skor) 
-                  VALUES ({$_SESSION['user_id']}, $question_id, '$jawaban', $skor)
-                  ON DUPLICATE KEY UPDATE jawaban = '$jawaban', skor = $skor";
+        // Simpan file bukti
+        if (!empty($bukti)) {
+            $target_dir = "../../uploads/";
+            $target_file = $target_dir . basename($_FILES['answers']['name'][$question_id]['bukti']);
+            move_uploaded_file($_FILES['answers']['tmp_name'][$question_id]['bukti'], $target_file);
+        }
+
+        $query = "INSERT INTO assessment_answers (user_id, question_id, jawaban, skor, bukti) 
+                  VALUES ({$_SESSION['user_id']}, $question_id, '$jawaban', $skor, '$bukti')
+                  ON DUPLICATE KEY UPDATE jawaban = '$jawaban', skor = $skor, bukti = '$bukti'";
 
         $conn->query($query);
     }
@@ -68,48 +76,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_assessment']))
 <!-- Tahapan Assessment -->
 <?php if (isset($_GET['source'])): ?>
     <h4 class="mt-4">Asal Assessment: <?php echo htmlspecialchars($_GET['source']); ?></h4>
-    <ul class="nav nav-tabs" id="selfAssessmentTabs" role="tablist">
+    <form method="POST" action="" enctype="multipart/form-data">
         <?php foreach ($lifecycle_stages as $index => $stage): ?>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link <?php echo $index === 0 ? 'active' : ''; ?>" id="<?php echo strtolower(str_replace(' ', '-', $stage)); ?>-tab" data-bs-toggle="tab" data-bs-target="#<?php echo strtolower(str_replace(' ', '-', $stage)); ?>" type="button" role="tab" aria-controls="<?php echo strtolower(str_replace(' ', '-', $stage)); ?>" aria-selected="<?php echo $index === 0 ? 'true' : 'false'; ?>">
-                    <?php echo htmlspecialchars($stage); ?>
-                </button>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-
-    <form method="POST" action="">
-        <div class="tab-content" id="selfAssessmentTabsContent">
-            <?php foreach ($lifecycle_stages as $index => $stage): ?>
-                <div class="tab-pane fade <?php echo $index === 0 ? 'show active' : ''; ?>" id="<?php echo strtolower(str_replace(' ', '-', $stage)); ?>" role="tabpanel" aria-labelledby="<?php echo strtolower(str_replace(' ', '-', $stage)); ?>-tab">
-                    <h4 class="mt-3"><?php echo htmlspecialchars($stage); ?></h4>
+            <h5 class="mt-4"><?php echo htmlspecialchars($stage); ?></h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nomor Audit</th>
+                        <th>Pertanyaan Audit</th>
+                        <th>Skor dari Maturity</th>
+                        <th>Bukti (Upload PDF)</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <?php
                     $questions_query = $conn->query("
-                        SELECT id, pertanyaan 
+                        SELECT id, kode_mapping, pertanyaan 
                         FROM assessment_questions 
                         WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(kode_mapping, '_', 2), '_', -1) = '$stage'
                     ");
                     ?>
                     <?php if ($questions_query && $questions_query->num_rows > 0): ?>
                         <?php while ($row = $questions_query->fetch_assoc()): ?>
-                            <div class="mb-3">
-                                <label for="question_<?php echo $row['id']; ?>" class="form-label"><?php echo htmlspecialchars($row['pertanyaan']); ?></label>
-                                <select name="answers[<?php echo $row['id']; ?>]" id="question_<?php echo $row['id']; ?>" class="form-select" required>
-                                    <option value="" disabled selected>Pilih Kondisi</option>
-                                    <?php foreach ($criteria as $kondisi => $skor): ?>
-                                        <option value="<?php echo htmlspecialchars($kondisi); ?>">
-                                            <?php echo htmlspecialchars($kondisi); ?> (Skor: <?php echo $skor; ?>)
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
+                            <tr>
+                                <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
+                                <td><?php echo htmlspecialchars($row['pertanyaan']); ?></td>
+                                <td>
+                                    <select name="answers[<?php echo $row['id']; ?>][kondisi]" class="form-select" required>
+                                        <option value="" disabled selected>Pilih Kondisi</option>
+                                        <?php foreach ($criteria as $kondisi => $skor): ?>
+                                            <option value="<?php echo htmlspecialchars($kondisi); ?>">
+                                                <?php echo htmlspecialchars($kondisi); ?> (Skor: <?php echo $skor; ?>)
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="file" name="answers[<?php echo $row['id']; ?>][bukti]" accept=".pdf" class="form-control">
+                                </td>
+                            </tr>
                         <?php endwhile; ?>
                     <?php else: ?>
-                        <p class="text-muted">Tidak ada pertanyaan untuk tahap ini.</p>
+                        <tr>
+                            <td colspan="4" class="text-center">Tidak ada pertanyaan untuk tahap ini.</td>
+                        </tr>
                     <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
-        </div>
+                </tbody>
+            </table>
+        <?php endforeach; ?>
         <button type="submit" name="submit_assessment" class="btn btn-primary mt-3">Simpan Self-Assessment</button>
     </form>
 <?php endif; ?>
