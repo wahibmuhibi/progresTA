@@ -6,16 +6,26 @@ include '../../includes/db.php';
 include '../../includes/header.php';
 
 // Fungsi untuk konversi status.
-function mapStatusToLabel($status)
+function mapFormStatusToLabel($status, $role)
 {
     $status_map = [
-        0 => 'Belum Dikirim',
-        1 => 'Dikirim',
-        2 => 'Dibaca',
-        3 => 'Self-Assessment Diterima'
+        'Manajemen TI' => [
+            0 => 'Belum Diterima',
+            1 => 'Diterima',
+            2 => 'Draf',
+            3 => 'Terkirim'
+        ],
+        'Tim Penilai' => [
+            0 => 'Belum Dikirim',
+            1 => 'Dikirim',
+            2 => 'Dibaca',
+            3 => 'Self-Assessment Diterima'
+        ]
     ];
-
-    return isset($status_map[$status]) ? $status_map[$status] : 'Tidak Diketahui';
+    if (isset($status_map[$role]) && isset($status_map[$role][$status])) {
+        return $status_map[$role][$status];
+    }
+    return 'Tidak Diketahui';
 }
 
 // Ambil daftar periode audit
@@ -75,7 +85,7 @@ if (isset($_GET['send_to_auditee_id'])) {
 
     $query = "
         UPDATE auditee 
-        SET form_status = 1, is_read = 1 
+        SET form_status = 1
         WHERE id = $send_to_auditee_id
     ";
 
@@ -122,8 +132,14 @@ if (isset($_GET['send_to_auditee_id'])) {
                     <td><?php echo htmlspecialchars($row['periode_audit']); ?></td>
                     <td><?php echo htmlspecialchars($row['kode_audit']); ?></td>
                     <td>
-                        <span class="badge bg-<?php echo $row['form_status'] == 3 ? 'success' : ($row['form_status'] == 2 ? 'warning' : 'secondary'); ?>">
-                            <?php echo mapStatusToLabel($row['form_status']); ?>
+                        <?php 
+                        $status_label = mapFormStatusToLabel($row['form_status'], 'Tim Penilai');
+                        $badge_class = $row['form_status'] == 3 ? 'success' :
+                                    ($row['form_status'] == 2 ? 'warning' : 
+                                    ($row['form_status'] == 1 ? 'primary' : 'secondary'));
+                        ?>
+                        <span class="badge bg-<?php echo $badge_class; ?>">
+                            <?php echo htmlspecialchars($status_label); ?>
                         </span>
                     </td>
                     <td>

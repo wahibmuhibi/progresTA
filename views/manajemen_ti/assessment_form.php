@@ -5,6 +5,30 @@ check_roles(['Manajemen TI']);
 include '../../includes/db.php';
 include '../../includes/header.php';
 
+
+// Mapping Status
+function mapFormStatusToLabel($status, $role)
+{
+    $status_map = [
+        'Manajemen TI' => [
+            0 => 'Belum Diterima',
+            1 => 'Diterima',
+            2 => 'Draf',
+            3 => 'Terkirim'
+        ],
+        'Tim Penilai' => [
+            0 => 'Belum Dikirim',
+            1 => 'Dikirim',
+            2 => 'Dibaca',
+            3 => 'Self-Assessment Diterima'
+        ]
+    ];
+    if (isset($status_map[$role]) && isset($status_map[$role][$status])) {
+        return $status_map[$role][$status];
+    }
+    return 'Tidak Diketahui';
+}
+
 // Inisialisasi variabel
 $questions_query = null;
 
@@ -45,18 +69,22 @@ if ($criteria_query && $criteria_query->num_rows > 0) {
 
 // Proses penyimpanan jawaban
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $status = isset($_POST['submit_assessment']) ? 3 : 2; // 3: terkirim, 2: draf
+    $status = isset($_POST['submit_assessment']) ? 3 : 2; // 3: Terkirim, 2: Draf
+    $kode_audit = $conn->real_escape_string($_GET['kode_audit']);
 
     foreach ($_POST['answers'] as $question_id => $data) {
         $jawaban = $conn->real_escape_string($data['jawaban']);
-        $bukti_path = isset($_FILES['answers']['name'][$question_id]['bukti']) && !empty($_FILES['answers']['name'][$question_id]['bukti'])
-            ? "../../uploads/" . basename($_FILES['answers']['name'][$question_id]['bukti'])
-            : '';
+        $bukti = isset($_FILES['answers']['name'][$question_id]['bukti']) ? $_FILES['answers']['name'][$question_id]['bukti'] : '';
 
-        if (!empty($bukti_path)) {
+        // Simpan file bukti
+        $bukti_path = '';
+        if (!empty($bukti)) {
+            $target_dir = "../../uploads/";
+            $bukti_path = $target_dir . basename($bukti);
             move_uploaded_file($_FILES['answers']['tmp_name'][$question_id]['bukti'], $bukti_path);
         }
 
+        // Simpan atau perbarui jawaban
         $query = "
             INSERT INTO assessment_answers (user_id, question_id, kode_audit, jawaban, bukti, status, periode_audit)
             VALUES ({$_SESSION['user_id']}, $question_id, '$kode_audit', '$jawaban', '$bukti_path', $status, '$periode_audit')
@@ -65,15 +93,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn->query($query);
     }
 
+    // Update status formulir di tabel auditee
     $conn->query("UPDATE auditee SET form_status = $status WHERE kode_audit = '$kode_audit' AND user_id = {$_SESSION['user_id']}");
 }
 
-
-
-
 // Ambil daftar formulir masuk
 $incoming_forms_query = $conn->query("
-    SELECT a.kode_audit, a.periode_audit, COALESCE(a.form_status, 'not_started') AS form_status, COALESCE(q.source, 'Tim Penilai') AS source, COUNT(q.id) AS total_questions
+    SELECT a.kode_audit, a.periode_audit, a.form_status, COALESCE(q.source, 'Tim Penilai') AS source, COUNT(q.id) AS total_questions
     FROM auditee a
     JOIN eksternal_audit_question q ON a.periode_audit = q.periode_audit
     WHERE a.user_id = {$_SESSION['user_id']}
@@ -90,9 +116,6 @@ if (isset($_GET['kode_audit'])) {
         JOIN auditee a ON a.periode_audit = q.periode_audit
         WHERE a.kode_audit = '$kode_audit' AND a.user_id = {$_SESSION['user_id']}
     ");
-
-    // Tandai formulir sebagai dibaca
-    $conn->query("UPDATE auditee SET is_read = TRUE WHERE kode_audit = '$kode_audit'");
 }
 ?>
 <?php if (isset($success)): ?>
@@ -125,15 +148,23 @@ if (isset($_GET['kode_audit'])) {
                     <td><?php echo htmlspecialchars($row['kode_audit']); ?></td>
                     <td><?php echo htmlspecialchars($row['total_questions']); ?></td>
                     <td>
-                        <span class="badge bg-<?php echo $row['form_status'] === 'submitted' ? 'success' : ($row['form_status'] === 'in_progress' ? 'warning' : 'secondary'); ?>">
-                            <?php echo ucfirst(str_replace('_', ' ', $row['form_status'])); ?>
+                        <?php 
+                        $status_label = mapFormStatusToLabel($row['form_status'], 'Manajemen TI');
+                        $badge_class = $row['form_status'] == 3 ? 'success' :
+                                    ($row['form_status'] == 2 ? 'warning' : 
+                                    ($row['form_status'] == 1 ? 'primary' : 'secondary'));
+                        ?>
+                        <span class="badge bg-<?php echo $badge_class; ?>">
+                            <?php echo htmlspecialchars($status_label); ?>
                         </span>
                     </td>
                     <td>
-                        <?php if ($row['form_status'] === 'submitted'): ?>
+                        <?php if ((int)$row['form_status'] === 3): ?>
                             <button class="btn btn-sm btn-secondary" disabled>Sudah Terkirim</button>
                         <?php else: ?>
-                            <a href="assessment_form.php?kode_audit=<?php echo urlencode($row['kode_audit']); ?>" class="btn btn-sm btn-primary">Mulai Mengisi</a>
+                            <a href="assessment_form.php?kode_audit=<?php echo urlencode($row['kode_audit']); ?>" class="btn btn-sm btn-primary">
+                                <?php echo (int)$row['form_status'] === 2 ? 'Lanjutkan' : 'Mulai Mengisi'; ?>
+                            </a>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -145,6 +176,7 @@ if (isset($_GET['kode_audit'])) {
         <?php endif; ?>
     </tbody>
 </table>
+
 
 <!-- Form Self-Assessment -->
 <form method="POST" action="assessment_form.php?kode_audit=<?php echo isset($_GET['kode_audit']) ? htmlspecialchars($_GET['kode_audit']) : ''; ?>" enctype="multipart/form-data">
