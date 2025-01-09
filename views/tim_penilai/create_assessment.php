@@ -13,12 +13,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kode_mapping = isset($_POST['kode_mapping']) ? $conn->real_escape_string($_POST['kode_mapping']) : '';
     $pertanyaan = isset($_POST['pertanyaan']) ? $conn->real_escape_string($_POST['pertanyaan']) : '';
     $periode_audit = isset($_POST['periode_audit']) ? (int)$_POST['periode_audit'] : 0;
+    $source = $_SESSION['user']; // Menggunakan username dari sesi sebagai pembuat
 
+    // Validasi input
     if (empty($kode_mapping) || empty($pertanyaan) || empty($periode_audit)) {
         $error = "Kode Mapping, Periode Audit, dan Pertanyaan tidak boleh kosong.";
     } else {
-        $query = "INSERT INTO eksternal_audit_question (kode_mapping, periode_audit, pertanyaan) 
-                  VALUES ('$kode_mapping', $periode_audit, '$pertanyaan')";
+        $query = "
+            INSERT INTO eksternal_audit_question (kode_mapping, periode_audit, pertanyaan, source) 
+            VALUES ('$kode_mapping', $periode_audit, '$pertanyaan', '$source')
+        ";
 
         if ($conn->query($query)) {
             $success = "Pertanyaan eksternal audit berhasil disimpan.";
@@ -43,7 +47,6 @@ if (isset($_GET['delete_id'])) {
 // Ambil daftar pertanyaan
 $questions = $conn->query("SELECT * FROM eksternal_audit_question ORDER BY periode_audit DESC, kode_mapping ASC");
 
-
 // Ambil data lengkap berdasarkan kode mapping
 $mapping_details = [];
 if (isset($_POST['kode_mapping'])) {
@@ -52,18 +55,6 @@ if (isset($_POST['kode_mapping'])) {
     $detail_result = $conn->query($detail_query);
     if ($detail_result && $detail_result->num_rows > 0) {
         $mapping_details = $detail_result->fetch_assoc();
-    }
-}
-
-// Hapus pertanyaan berdasarkan ID
-if (isset($_GET['delete_id'])) {
-    $delete_id = $conn->real_escape_string($_GET['delete_id']);
-    $query = "DELETE FROM eksternal_audit_question WHERE id = '$delete_id'";
-
-    if ($conn->query($query)) {
-        $success = "Pertanyaan assessment berhasil dihapus.";
-    } else {
-        $error = "Terjadi kesalahan saat menghapus pertanyaan: " . $conn->error;
     }
 }
 ?>
@@ -77,6 +68,7 @@ if (isset($_GET['delete_id'])) {
     <div class="alert alert-danger"><?php echo $error; ?></div>
 <?php endif; ?>
 
+<!-- Form Tambah Pertanyaan -->
 <form method="POST" action="">
     <div class="row mb-3">
         <div class="col-md-6">
@@ -127,6 +119,7 @@ if (isset($_GET['delete_id'])) {
     <button type="submit" class="btn btn-primary">Simpan Pertanyaan</button>
 </form>
 
+<!-- Tabel Daftar Pertanyaan -->
 <h4 class="mt-5">Daftar Pertanyaan Assessment</h4>
 <table class="table table-bordered">
     <thead>
@@ -135,19 +128,19 @@ if (isset($_GET['delete_id'])) {
             <th>Kode Mapping</th>
             <th>Periode Audit</th>
             <th>Pertanyaan</th>
+            <th>Source</th>
             <th>Aksi</th>
         </tr>
     </thead>
     <tbody>
-        <?php
-        $questions = $conn->query("SELECT * FROM eksternal_audit_question ORDER BY periode_audit DESC, kode_mapping ASC");
-        if ($questions && $questions->num_rows > 0): ?>
+        <?php if ($questions && $questions->num_rows > 0): ?>
             <?php $no = 1; while ($row = $questions->fetch_assoc()): ?>
                 <tr>
                     <td><?php echo $no++; ?></td>
                     <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
                     <td><?php echo htmlspecialchars($row['periode_audit']); ?></td>
                     <td><?php echo htmlspecialchars($row['pertanyaan']); ?></td>
+                    <td><?php echo htmlspecialchars($row['source']); ?></td>
                     <td>
                         <a href="?delete_id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus pertanyaan ini?')">Hapus</a>
                     </td>
@@ -155,7 +148,7 @@ if (isset($_GET['delete_id'])) {
             <?php endwhile; ?>
         <?php else: ?>
             <tr>
-                <td colspan="5" class="text-center">Belum ada pertanyaan assessment.</td>
+                <td colspan="6" class="text-center">Belum ada pertanyaan assessment.</td>
             </tr>
         <?php endif; ?>
     </tbody>

@@ -5,7 +5,20 @@ check_roles(['Tim Penilai']);
 include '../../includes/db.php';
 include '../../includes/header.php';
 
-// Ambil daftar periode audit dan simpan ke array
+// Fungsi untuk konversi status.
+function mapStatusToLabel($status)
+{
+    $status_map = [
+        0 => 'Belum Dikirim',
+        1 => 'Dikirim',
+        2 => 'Dibaca',
+        3 => 'Self-Assessment Diterima'
+    ];
+
+    return isset($status_map[$status]) ? $status_map[$status] : 'Tidak Diketahui';
+}
+
+// Ambil daftar periode audit
 $periode_query = $conn->query("SELECT DISTINCT periode_audit FROM eksternal_audit_question ORDER BY periode_audit DESC");
 $periode_audit_list = [];
 if ($periode_query && $periode_query->num_rows > 0) {
@@ -14,16 +27,15 @@ if ($periode_query && $periode_query->num_rows > 0) {
     }
 }
 
-// Ambil daftar subjek penilaian (auditee) berdasarkan periode audit
+// Ambil daftar subjek penilaian berdasarkan periode audit
 $selected_periode = isset($_GET['periode_audit']) ? (int)$_GET['periode_audit'] : null;
 $auditee_query = $conn->query("
-    SELECT a.id AS auditee_id, a.kode_audit, u.username, u.company, a.periode_audit, a.form_status, a.is_read 
+    SELECT a.id AS auditee_id, a.kode_audit, u.username, u.company, a.periode_audit, a.form_status 
     FROM auditee a 
     JOIN users u ON a.user_id = u.id 
     " . ($selected_periode ? "WHERE a.periode_audit = $selected_periode" : "") . " 
     ORDER BY a.created_at DESC
 ");
-
 
 // Ambil daftar Manajemen TI untuk form tambah auditee
 $manajemen_ti_query = $conn->query("SELECT id, username, company FROM users WHERE role = 'Manajemen TI' ORDER BY username ASC");
@@ -32,9 +44,8 @@ $manajemen_ti_query = $conn->query("SELECT id, username, company FROM users WHER
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_auditee'])) {
     $user_id = (int)$_POST['user_id'];
     $periode_audit = (int)$_POST['periode_audit'];
-    $kode_audit = strtoupper(uniqid("AUDIT-")); // Generate kode audit unik
+    $kode_audit = strtoupper(uniqid("AUDIT-"));
 
-    // Validasi input
     if (empty($user_id) || empty($periode_audit)) {
         $error = "Akun Manajemen TI dan Periode Audit harus dipilih.";
     } else {
@@ -47,12 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_auditee'])) {
     }
 }
 
-
 // Hapus Auditee
 if (isset($_GET['delete_auditee_id'])) {
     $delete_auditee_id = (int)$_GET['delete_auditee_id'];
     $query = "DELETE FROM auditee WHERE id = $delete_auditee_id";
-
     if ($conn->query($query)) {
         $success = "Auditee berhasil dihapus.";
     } else {
@@ -63,14 +72,24 @@ if (isset($_GET['delete_auditee_id'])) {
 // Kirim ke Auditee
 if (isset($_GET['send_to_auditee_id'])) {
     $send_to_auditee_id = (int)$_GET['send_to_auditee_id'];
-    $query = "UPDATE auditee SET is_read = TRUE WHERE id = $send_to_auditee_id";
+
+    $query = "
+        UPDATE auditee 
+        SET form_status = 1, is_read = 1 
+        WHERE id = $send_to_auditee_id
+    ";
 
     if ($conn->query($query)) {
         $success = "Formulir berhasil dikirim ke auditee.";
+        // Debugging perubahan
+        $updated_status_query = $conn->query("SELECT form_status FROM auditee WHERE id = $send_to_auditee_id");
+        $updated_status = $updated_status_query->fetch_assoc();
+        error_log("Status setelah dikirim: " . $updated_status['form_status']);
     } else {
         $error = "Terjadi kesalahan saat mengirim formulir: " . $conn->error;
     }
 }
+
 ?>
 
 <h3 class="text-center">Subjek Penilaian</h3>
@@ -82,25 +101,7 @@ if (isset($_GET['send_to_auditee_id'])) {
     <div class="alert alert-danger"><?php echo $error; ?></div>
 <?php endif; ?>
 
-<!-- Form Pilih Periode Audit -->
-<form method="GET" action="" class="mb-4">
-    <div class="row">
-        <div class="col-md-6">
-            <label for="periode_audit" class="form-label">Pilih Periode Audit</label>
-            <select name="periode_audit" id="periode_audit" class="form-select" onchange="this.form.submit()">
-                <option value="">Semua Periode Audit</option>
-                <?php foreach ($periode_audit_list as $periode): ?>
-                    <option value="<?php echo $periode; ?>" <?php echo ($selected_periode === (int)$periode) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($periode); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-    </div>
-</form>
-
 <!-- Tabel Auditee -->
-<h4>Daftar Auditee</h4>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -121,18 +122,12 @@ if (isset($_GET['send_to_auditee_id'])) {
                     <td><?php echo htmlspecialchars($row['periode_audit']); ?></td>
                     <td><?php echo htmlspecialchars($row['kode_audit']); ?></td>
                     <td>
-                        <?php 
-                        if ($row['form_status'] === 'submitted') {
-                            echo '<span class="badge bg-success">Self-Assessment Diterima</span>';
-                        } elseif ($row['is_read']) {
-                            echo '<span class="badge bg-warning">Dilihat</span>';
-                        } else {
-                            echo '<span class="badge bg-secondary">Dikirim</span>';
-                        }
-                        ?>
+                        <span class="badge bg-<?php echo $row['form_status'] == 3 ? 'success' : ($row['form_status'] == 2 ? 'warning' : 'secondary'); ?>">
+                            <?php echo mapStatusToLabel($row['form_status']); ?>
+                        </span>
                     </td>
                     <td>
-                        <?php if ($row['form_status'] === 'submitted'): ?>
+                        <?php if ($row['form_status'] == 3): ?>
                             <a href="verify_assessment.php?auditee_id=<?php echo $row['auditee_id']; ?>" class="btn btn-sm btn-primary">Verifikasi</a>
                         <?php else: ?>
                             <a href="?send_to_auditee_id=<?php echo $row['auditee_id']; ?>" class="btn btn-sm btn-primary">Kirim</a>

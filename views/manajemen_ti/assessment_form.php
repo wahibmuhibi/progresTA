@@ -43,9 +43,37 @@ if ($criteria_query && $criteria_query->num_rows > 0) {
     }
 }
 
+// Proses penyimpanan jawaban
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $status = isset($_POST['submit_assessment']) ? 3 : 2; // 3: terkirim, 2: draf
+
+    foreach ($_POST['answers'] as $question_id => $data) {
+        $jawaban = $conn->real_escape_string($data['jawaban']);
+        $bukti_path = isset($_FILES['answers']['name'][$question_id]['bukti']) && !empty($_FILES['answers']['name'][$question_id]['bukti'])
+            ? "../../uploads/" . basename($_FILES['answers']['name'][$question_id]['bukti'])
+            : '';
+
+        if (!empty($bukti_path)) {
+            move_uploaded_file($_FILES['answers']['tmp_name'][$question_id]['bukti'], $bukti_path);
+        }
+
+        $query = "
+            INSERT INTO assessment_answers (user_id, question_id, kode_audit, jawaban, bukti, status, periode_audit)
+            VALUES ({$_SESSION['user_id']}, $question_id, '$kode_audit', '$jawaban', '$bukti_path', $status, '$periode_audit')
+            ON DUPLICATE KEY UPDATE jawaban = '$jawaban', bukti = '$bukti_path', status = $status
+        ";
+        $conn->query($query);
+    }
+
+    $conn->query("UPDATE auditee SET form_status = $status WHERE kode_audit = '$kode_audit' AND user_id = {$_SESSION['user_id']}");
+}
+
+
+
+
 // Ambil daftar formulir masuk
 $incoming_forms_query = $conn->query("
-    SELECT a.kode_audit, a.periode_audit, a.form_status, COALESCE(q.source, 'Tim Penilai') AS source, COUNT(q.id) AS total_questions
+    SELECT a.kode_audit, a.periode_audit, COALESCE(a.form_status, 'not_started') AS form_status, COALESCE(q.source, 'Tim Penilai') AS source, COUNT(q.id) AS total_questions
     FROM auditee a
     JOIN eksternal_audit_question q ON a.periode_audit = q.periode_audit
     WHERE a.user_id = {$_SESSION['user_id']}
@@ -67,10 +95,16 @@ if (isset($_GET['kode_audit'])) {
     $conn->query("UPDATE auditee SET is_read = TRUE WHERE kode_audit = '$kode_audit'");
 }
 ?>
+<?php if (isset($success)): ?>
+    <div class="alert alert-success"><?php echo $success; ?></div>
+<?php endif; ?>
+<?php if (isset($error)): ?>
+    <div class="alert alert-danger"><?php echo $error; ?></div>
+<?php endif; ?>
 
-<h3 class="text-center">Formulir Masuk</h3>
+<h3 class="text-center">Formulir Self-Assessment</h3>
 
-<!-- Tabel Formulir Masuk -->
+<!-- Tabel Formulir Masuk dan Riwayat -->
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -78,6 +112,7 @@ if (isset($_GET['kode_audit'])) {
             <th>Sumber</th>
             <th>Kode Audit</th>
             <th>Jumlah Pertanyaan</th>
+            <th>Status</th>
             <th>Aksi</th>
         </tr>
     </thead>
@@ -90,24 +125,29 @@ if (isset($_GET['kode_audit'])) {
                     <td><?php echo htmlspecialchars($row['kode_audit']); ?></td>
                     <td><?php echo htmlspecialchars($row['total_questions']); ?></td>
                     <td>
-                        <a href="assessment_form.php?kode_audit=<?php echo urlencode($row['kode_audit']); ?>" class="btn btn-sm btn-primary">Mulai Mengisi</a>
+                        <span class="badge bg-<?php echo $row['form_status'] === 'submitted' ? 'success' : ($row['form_status'] === 'in_progress' ? 'warning' : 'secondary'); ?>">
+                            <?php echo ucfirst(str_replace('_', ' ', $row['form_status'])); ?>
+                        </span>
+                    </td>
+                    <td>
+                        <?php if ($row['form_status'] === 'submitted'): ?>
+                            <button class="btn btn-sm btn-secondary" disabled>Sudah Terkirim</button>
+                        <?php else: ?>
+                            <a href="assessment_form.php?kode_audit=<?php echo urlencode($row['kode_audit']); ?>" class="btn btn-sm btn-primary">Mulai Mengisi</a>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php endwhile; ?>
         <?php else: ?>
             <tr>
-                <td colspan="5" class="text-center">Tidak ada formulir masuk.</td>
+                <td colspan="6" class="text-center">Tidak ada formulir masuk atau riwayat pengisian.</td>
             </tr>
         <?php endif; ?>
     </tbody>
 </table>
 
-<!-- Tabel Pertanyaan Berdasarkan Kode Audit -->
-<h3 class="text-center">Self-Assessment</h3>
-
 <!-- Form Self-Assessment -->
-<form method="POST" action="submit_assessment.php" enctype="multipart/form-data">
-
+<form method="POST" action="assessment_form.php?kode_audit=<?php echo isset($_GET['kode_audit']) ? htmlspecialchars($_GET['kode_audit']) : ''; ?>" enctype="multipart/form-data">
     <?php foreach ($lifecycle_stages as $stage): ?>
         <h4 class="mt-4"><?php echo htmlspecialchars($stage); ?></h4>
         <table class="table table-bordered">
@@ -121,14 +161,7 @@ if (isset($_GET['kode_audit'])) {
             </thead>
             <tbody>
                 <?php if (!empty($questions_by_lifecycle[$stage])): ?>
-                    <?php 
-                    $seen_questions = [];
-                    foreach ($questions_by_lifecycle[$stage] as $question): 
-                        if (in_array($question['id'], $seen_questions)) {
-                            continue; // Skip jika pertanyaan sudah ditampilkan
-                        }
-                        $seen_questions[] = $question['id'];
-                    ?>
+                    <?php foreach ($questions_by_lifecycle[$stage] as $question): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($question['kode_mapping']); ?></td>
                             <td><?php echo htmlspecialchars($question['pertanyaan']); ?></td>
@@ -155,56 +188,6 @@ if (isset($_GET['kode_audit'])) {
             </tbody>
         </table>
     <?php endforeach; ?>
-    <button type="submit" name="submit_assessment" class="btn btn-primary mt-3">Simpan Jawaban</button>
+    <button type="submit" name="save_draft" class="btn btn-secondary mt-3">Simpan Sebagai Draf</button>
+    <button type="submit" name="submit_assessment" class="btn btn-primary mt-3">Kirim</button>
 </form>
-
-
-<!-- Tabel Riwayat Self-Assessment -->
-<h4 class="mt-5">Riwayat Pengisian Self-Assessment</h4>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Periode Audit</th>
-            <th>Sumber</th>
-            <th>Status</th>
-            <th>Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        $history_query = $conn->query("
-            SELECT DISTINCT a.periode_audit, COALESCE(q.source, 'Tim Penilai') AS source, MAX(aa.created_at) AS created_at, a.form_status 
-            FROM assessment_answers aa
-            JOIN auditee a ON aa.user_id = a.user_id
-            JOIN eksternal_audit_question q ON aa.question_id = q.id
-            WHERE aa.user_id = {$_SESSION['user_id']}
-            GROUP BY a.periode_audit, q.source
-            ORDER BY created_at DESC
-        ");
-
-        if ($history_query && $history_query->num_rows > 0): ?>
-            <?php while ($row = $history_query->fetch_assoc()): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($row['periode_audit']); ?></td>
-                    <td><?php echo htmlspecialchars($row['source']); ?></td>
-                    <td>
-                        <span class="badge bg-<?php echo $row['form_status'] === 'submitted' ? 'success' : 'warning'; ?>">
-                            <?php echo ucfirst(str_replace('_', ' ', $row['form_status'])); ?>
-                        </span>
-                    </td>
-                    <td>
-                        <?php if ($row['form_status'] === 'draft'): ?>
-                            <a href="self_assessment_form.php?periode_audit=<?php echo $row['periode_audit']; ?>&source=<?php echo urlencode($row['source']); ?>" class="btn btn-sm btn-primary">Lanjutkan</a>
-                        <?php else: ?>
-                            <button class="btn btn-sm btn-secondary" disabled>Sudah Terkirim</button>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="4" class="text-center">Belum ada riwayat pengisian.</td>
-            </tr>
-        <?php endif; ?>
-    </tbody>
-</table>
