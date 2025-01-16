@@ -64,6 +64,19 @@ if ($criteria_query && $criteria_query->num_rows > 0) {
     }
 }
 
+// Logika untuk mengambil jawaban yang sudah tersimpan
+$existing_answers_query = $conn->query("
+    SELECT question_id, jawaban, skor 
+    FROM assessment_answers 
+    WHERE kode_audit = '$kode_audit' AND user_id = {$_SESSION['user_id']}
+");
+$existing_answers = [];
+if ($existing_answers_query && $existing_answers_query->num_rows > 0) {
+    while ($row = $existing_answers_query->fetch_assoc()) {
+        $existing_answers[$row['question_id']] = $row;
+    }
+}
+
 // Proses penyimpanan jawaban
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$kode_audit) {
@@ -76,48 +89,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$periode_audit) {
             $error = "Periode audit tidak ditemukan untuk kode audit: $kode_audit.";
         } else {
+            // Generate score_session_id baru
+            $score_session_id = time(); // Gunakan timestamp sebagai ID sesi unik
+
             foreach ($_POST['answers'] as $question_id => $data) {
                 $question_id = (int)$question_id;
                 $jawaban = isset($data['jawaban']) ? $conn->real_escape_string($data['jawaban']) : '';
                 $skor = isset($criteria[$jawaban]) ? $criteria[$jawaban] : 0;
 
-                // Simpan file bukti (jika ada)
-                $bukti_path = '';
-                if (
-                    isset($_FILES['answers']['tmp_name'][$question_id]) &&
-                    is_string($_FILES['answers']['tmp_name'][$question_id]) &&
-                    !empty($_FILES['answers']['tmp_name'][$question_id])
-                ) {
-                    $bukti = $_FILES['answers']['name'][$question_id];
-                    $target_dir = "../../uploads/";
-                    $bukti_path = $target_dir . basename($bukti);
-
-                    if (!move_uploaded_file($_FILES['answers']['tmp_name'][$question_id], $bukti_path)) {
-                        $bukti_path = ''; // Reset jika gagal upload
-                    }
-                }
-
-                // Simpan data ke database
+                // Simpan atau perbarui data ke database
                 $query = "
-                    INSERT INTO assessment_answers (user_id, question_id, kode_audit, jawaban, skor, bukti, periode_audit) 
-                    VALUES ({$_SESSION['user_id']}, $question_id, '$kode_audit', '$jawaban', $skor, '$bukti_path', '$periode_audit')
-                    ON DUPLICATE KEY UPDATE jawaban = '$jawaban', skor = $skor, bukti = IF('$bukti_path' != '', '$bukti_path', bukti)
+                    INSERT INTO assessment_answers (user_id, question_id, kode_audit, jawaban, skor, periode_audit, score_session_id) 
+                    VALUES ({$_SESSION['user_id']}, $question_id, '$kode_audit', '$jawaban', $skor, '$periode_audit', $score_session_id)
+                    ON DUPLICATE KEY UPDATE jawaban = '$jawaban', skor = $skor, score_session_id = $score_session_id
                 ";
-
                 if (!$conn->query($query)) {
-                    $error = "Gagal menyimpan jawaban untuk pertanyaan ID: $question_id. Kesalahan: " . $conn->error;
+                    $error = "Query gagal untuk pertanyaan ID: $question_id. Kesalahan: " . $conn->error;
                 }
             }
 
-            // Perbarui status formulir di tabel auditee
-            $update_status_query = "UPDATE auditee SET form_status = 3 WHERE kode_audit = '$kode_audit'";
-            if (!$conn->query($update_status_query)) {
-                $error = "Gagal memperbarui status formulir. Kesalahan: " . $conn->error;
-            } else {
-                // Redirect ke halaman skor
-                header("Location: score_view.php?kode_audit=$kode_audit");
-                exit;
-            }
+            // Redirect ke halaman skor
+            header("Location: score_view.php?kode_audit=$kode_audit&score_session_id=$score_session_id");
+            exit;
         }
     }
 }
@@ -132,7 +125,6 @@ $incoming_forms_query = $conn->query("
     ORDER BY a.periode_audit DESC
 ");
 ?>
-
 
 <!-- Tampilkan Notifikasi -->
 <?php if (isset($error)): ?>
@@ -191,7 +183,7 @@ $incoming_forms_query = $conn->query("
 </table>
 
 <!-- Form Self-Assessment -->
-<form method="POST" action="assessment_form.php?kode_audit=<?php echo htmlspecialchars($kode_audit); ?>" enctype="multipart/form-data">
+<form method="POST" action="assessment_form.php?kode_audit=<?php echo htmlspecialchars($kode_audit); ?>">
     <?php foreach ($lifecycle_stages as $stage): ?>
         <h4><?php echo htmlspecialchars($stage); ?></h4>
         <table class="table">
@@ -200,7 +192,6 @@ $incoming_forms_query = $conn->query("
                     <th>Nomor Audit</th>
                     <th>Pertanyaan</th>
                     <th>Jawaban</th>
-                    <th>Bukti</th>
                 </tr>
             </thead>
             <tbody>
@@ -213,18 +204,18 @@ $incoming_forms_query = $conn->query("
                                 <select name="answers[<?php echo $question['id']; ?>][jawaban]" class="form-select" required>
                                     <option value="">Pilih Jawaban</option>
                                     <?php foreach ($criteria as $kondisi => $skor): ?>
-                                        <option value="<?php echo htmlspecialchars($kondisi); ?>">
+                                        <option value="<?php echo htmlspecialchars($kondisi); ?>"
+                                            <?php echo isset($existing_answers[$question['id']]['jawaban']) && $existing_answers[$question['id']]['jawaban'] === $kondisi ? 'selected' : ''; ?>>
                                             <?php echo htmlspecialchars($kondisi); ?> (Skor: <?php echo $skor; ?>)
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
                             </td>
-                            <td><input type="file" name="answers[<?php echo $question['id']; ?>][bukti]" class="form-control"></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="4">Tidak ada pertanyaan.</td>
+                        <td colspan="3">Tidak ada pertanyaan.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
