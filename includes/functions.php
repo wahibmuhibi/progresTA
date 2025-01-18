@@ -1,18 +1,18 @@
 <?php
-// Fungsi Log Activity
+// Fungsi Log Aktivitas
 
-function log_activity($user_id, $activity, $conn) {
+function log_activity($user_id, $aktivitas, $conn) {
     // Escape input untuk mencegah SQL Injection
     $user_id = $conn->real_escape_string($user_id);
-    $activity = $conn->real_escape_string($activity);
+    $aktivitas = $conn->real_escape_string($aktivitas);
 
     // Query untuk menyimpan log aktivitas
-    $query = "INSERT INTO log_aktivitas (user_id, activity) VALUES ('$user_id', '$activity')";
+    $query = "INSERT INTO log_aktivitas (user_id, aktivitas) VALUES ('$user_id', '$aktivitas')";
 
     // Eksekusi query
     if (!$conn->query($query)) {
         // Debugging jika terjadi error
-        error_log("Error logging activity: " . $conn->error);
+        error_log("Error logging aktivitas: " . $conn->error);
     }
 }
 

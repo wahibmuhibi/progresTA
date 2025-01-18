@@ -5,7 +5,7 @@ check_role('Admin');
 include '../../includes/db.php';
 include '../../includes/header.php';
 
-$query = "SELECT a.id, u.username, a.activity, a.timestamp 
+$query = "SELECT a.id, u.username, a.aktivitas, a.timestamp 
           FROM log_aktivitas a 
           JOIN users u ON a.user_id = u.id 
           ORDER BY a.timestamp DESC";
@@ -29,7 +29,7 @@ $result = $conn->query($query);
             <tr>
                 <td><?php echo $no++; ?></td>
                 <td><?php echo $row['username']; ?></td>
-                <td><?php echo $row['activity']; ?></td>
+                <td><?php echo $row['aktivitas']; ?></td>
                 <td><?php echo $row['timestamp']; ?></td>
             </tr>
         <?php endwhile; else: ?>
