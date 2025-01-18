@@ -26,15 +26,12 @@
                     <?php elseif ($_SESSION['role'] === 'Manajemen TI'): ?>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/assessment_form.php">Self-Assessment</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/score_view.php">Skor</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/audit_history.php">Riwayat Audit</a></li>
-                    <?php elseif ($_SESSION['role'] === 'IT Auditor'): ?>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/auditor/audit_view.php">Lihat Audit</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/auditor/recommendations.php">Rekomendasi</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/assessment_history.php">Riwayat Asesmen</a></li>
                     <?php elseif ($_SESSION['role'] === 'Tim Penilai'): ?>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/subjects.php">Subjek Penilaian</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/verify_assessment.php">Verifikasi</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/rankings.php">Ranking</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/create_assessment.php">Buat Assessment</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/create_assessment.php">Buat Asesmen</a></li>
                     <?php endif; ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
