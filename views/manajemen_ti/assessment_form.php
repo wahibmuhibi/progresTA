@@ -99,12 +99,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Simpan atau perbarui data ke database
                 $query = "
-                    INSERT INTO assessment_answers (user_id, question_id, asesmen_kode, jawaban, skor, asesmen_periode, score_session_id) 
+                    INSERT INTO assessment_answers (user_id, question_id, asesmen_kode, jawaban, skor, periode_audit, score_session_id) 
                     VALUES ({$_SESSION['user_id']}, $question_id, '$asesmen_kode', '$jawaban', $skor, '$asesmen_periode', $score_session_id)
                     ON DUPLICATE KEY UPDATE jawaban = '$jawaban', skor = $skor, score_session_id = $score_session_id
                 ";
+
                 if (!$conn->query($query)) {
                     $error = "Query gagal untuk pertanyaan ID: $question_id. Kesalahan: " . $conn->error;
+                    echo "<pre>Query Debug: $query</pre>";
                 }
             }
 
