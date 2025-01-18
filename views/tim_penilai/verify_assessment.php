@@ -9,7 +9,7 @@ include '../../includes/header.php';
 $asesmen_kode = isset($_GET['asesmen_kode']) ? $conn->real_escape_string($_GET['asesmen_kode']) : null;
 $score_session_id = isset($_GET['score_session_id']) ? (int)$_GET['score_session_id'] : null;
 
-// Ambil daftar assessment yang tersedia untuk verifikasi
+// Ambil daftar Asesmen yang tersedia untuk verifikasi
 $available_assessments = $conn->query("
     SELECT DISTINCT asesmen_kode, score_session_id, created_at 
     FROM assessment_results 
@@ -18,12 +18,12 @@ $available_assessments = $conn->query("
 ");
 
 if (!$available_assessments || $available_assessments->num_rows === 0) {
-    echo "<div class='alert alert-warning'>Tidak ada assessment yang tersedia untuk diverifikasi.</div>";
+    echo "<div class='alert alert-warning'>Tidak ada Asesmen yang tersedia untuk diverifikasi.</div>";
     include '../../includes/footer.php';
     exit;
 }
 
-// Ambil data hasil assessment jika parameter URL ada
+// Ambil data hasil Asesmen jika parameter URL ada
 $results_query = null;
 if ($asesmen_kode && $score_session_id) {
     $results_query = $conn->query("
@@ -46,7 +46,7 @@ if ($asesmen_kode && $score_session_id) {
 }
 ?>
 
-<h3 class="text-center">Daftar Assessment Tersedia untuk Verifikasi</h3>
+<h3 class="text-center">Daftar Asesmen Tersedia untuk Verifikasi</h3>
 
 <!-- Tabel Daftar Kode Asesmen dan Score Session ID -->
 <table class="table table-bordered">
@@ -76,9 +76,9 @@ if ($asesmen_kode && $score_session_id) {
 </table>
 
 <?php if ($asesmen_kode && $score_session_id): ?>
-    <h3 class="text-center mt-5">Detail Assessment untuk Verifikasi</h3>
+    <h3 class="text-center mt-5">Detail Asesmen untuk Verifikasi</h3>
 
-    <!-- Tabel Rata-Rata Hasil Assessment -->
+    <!-- Tabel Rata-Rata Hasil Asesmen -->
     <?php if ($results_query && $results_query->num_rows > 0): ?>
         <table class="table table-bordered">
             <thead>
@@ -145,9 +145,9 @@ if ($asesmen_kode && $score_session_id) {
                 WHERE asesmen_kode = '$asesmen_kode' AND score_session_id = $score_session_id
             ";
             if ($conn->query($update_query)) {
-                echo "<div class='alert alert-success mt-4'>Assessment berhasil diverifikasi. Kode Verifikasi: $verification_code</div>";
+                echo "<div class='alert alert-success mt-4'>Asesmen berhasil diverifikasi. Kode Verifikasi: $verification_code</div>";
             } else {
-                echo "<div class='alert alert-danger mt-4'>Gagal memverifikasi assessment. Kesalahan: " . $conn->error . "</div>";
+                echo "<div class='alert alert-danger mt-4'>Gagal memverifikasi Asesmen. Kesalahan: " . $conn->error . "</div>";
             }
         }
         ?>

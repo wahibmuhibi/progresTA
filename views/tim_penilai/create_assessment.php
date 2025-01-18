@@ -8,7 +8,7 @@ include '../../includes/header.php';
 // Ambil data mapping dari tabel mapping_standard
 $mapping_data = $conn->query("SELECT id, kode_mapping FROM mapping_standard ORDER BY kode_mapping ASC");
 
-// Proses penyimpanan assessment
+// Proses penyimpanan asesmen
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kode_mapping = isset($_POST['kode_mapping']) ? $conn->real_escape_string($_POST['kode_mapping']) : '';
     $pertanyaan = isset($_POST['pertanyaan']) ? $conn->real_escape_string($_POST['pertanyaan']) : '';
@@ -59,7 +59,7 @@ if (isset($_POST['kode_mapping'])) {
 }
 ?>
 
-<h3 class="text-center">Buat Pertanyaan Assessment</h3>
+<h3 class="text-center">Buat Pertanyaan Asesmen</h3>
 
 <?php if (isset($success)): ?>
     <div class="alert alert-success"><?php echo $success; ?></div>
@@ -113,14 +113,14 @@ if (isset($_POST['kode_mapping'])) {
     <div class="row mb-3">
         <div class="col-md-12">
             <label for="pertanyaan" class="form-label">Pertanyaan</label>
-            <textarea name="pertanyaan" id="pertanyaan" class="form-control" rows="4" placeholder="Masukkan pertanyaan assessment" required></textarea>
+            <textarea name="pertanyaan" id="pertanyaan" class="form-control" rows="4" placeholder="Masukkan pertanyaan asesmen" required></textarea>
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Simpan Pertanyaan</button>
 </form>
 
 <!-- Tabel Daftar Pertanyaan -->
-<h4 class="mt-5">Daftar Pertanyaan Assessment</h4>
+<h4 class="mt-5">Daftar Pertanyaan Asesmen</h4>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -148,7 +148,7 @@ if (isset($_POST['kode_mapping'])) {
             <?php endwhile; ?>
         <?php else: ?>
             <tr>
-                <td colspan="6" class="text-center">Belum ada pertanyaan assessment.</td>
+                <td colspan="6" class="text-center">Belum ada pertanyaan asesmen.</td>
             </tr>
         <?php endif; ?>
     </tbody>

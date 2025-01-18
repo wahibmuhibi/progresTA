@@ -5,7 +5,7 @@ check_roles(['Manajemen TI']);
 include '../../includes/db.php';
 include '../../includes/header.php';
 
-// Ambil daftar assessment yang telah diverifikasi untuk user
+// Ambil daftar Asesmen yang telah diverifikasi untuk user
 $user_id = $_SESSION['user_id'];
 
 $query = "
@@ -21,7 +21,7 @@ $assessment_history = $conn->query($query);
 
 ?>
 
-<h3 class="text-center">Riwayat Assessment</h3>
+<h3 class="text-center">Riwayat Asesmen</h3>
 
 <?php if ($assessment_history && $assessment_history->num_rows > 0): ?>
     <table class="table table-bordered">
@@ -48,7 +48,7 @@ $assessment_history = $conn->query($query);
         </tbody>
     </table>
 <?php else: ?>
-    <div class="alert alert-warning text-center">Belum ada riwayat assessment yang diverifikasi.</div>
+    <div class="alert alert-warning text-center">Belum ada riwayat Asesmen yang diverifikasi.</div>
 <?php endif; ?>
 
 <?php include '../../includes/footer.php'; ?>
