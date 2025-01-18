@@ -29,21 +29,21 @@ function mapFormStatusToLabel($status, $role)
 }
 
 // Ambil daftar periode audit
-$periode_query = $conn->query("SELECT DISTINCT periode_audit FROM asesmen_pertanyaan ORDER BY periode_audit DESC");
-$periode_audit_list = [];
+$periode_query = $conn->query("SELECT DISTINCT asesmen_periode FROM asesmen_pertanyaan ORDER BY asesmen_periode DESC");
+$asesmen_periode_list = [];
 if ($periode_query && $periode_query->num_rows > 0) {
     while ($row = $periode_query->fetch_assoc()) {
-        $periode_audit_list[] = $row['periode_audit'];
+        $asesmen_periode_list[] = $row['asesmen_periode'];
     }
 }
 
 // Ambil daftar subjek penilaian berdasarkan periode audit
-$selected_periode = isset($_GET['periode_audit']) ? (int)$_GET['periode_audit'] : null;
+$selected_periode = isset($_GET['asesmen_periode']) ? (int)$_GET['asesmen_periode'] : null;
 $auditee_query = $conn->query("
-    SELECT a.id AS auditee_id, a.kode_audit, u.username, u.company, a.periode_audit, a.form_status 
+    SELECT a.id AS auditee_id, a.kode_audit, u.username, u.company, a.asesmen_periode, a.form_status 
     FROM auditee a 
     JOIN users u ON a.user_id = u.id 
-    " . ($selected_periode ? "WHERE a.periode_audit = $selected_periode" : "") . " 
+    " . ($selected_periode ? "WHERE a.asesmen_periode = $selected_periode" : "") . " 
     ORDER BY a.created_at DESC
 ");
 
@@ -53,13 +53,13 @@ $manajemen_ti_query = $conn->query("SELECT id, username, company FROM users WHER
 // Tambah Auditee
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_auditee'])) {
     $user_id = (int)$_POST['user_id'];
-    $periode_audit = (int)$_POST['periode_audit'];
+    $asesmen_periode = (int)$_POST['asesmen_periode'];
     $kode_audit = strtoupper(uniqid("AUDIT-"));
 
-    if (empty($user_id) || empty($periode_audit)) {
+    if (empty($user_id) || empty($asesmen_periode)) {
         $error = "Akun Manajemen TI dan Periode Audit harus dipilih.";
     } else {
-        $query = "INSERT INTO auditee (user_id, periode_audit, kode_audit) VALUES ($user_id, $periode_audit, '$kode_audit')";
+        $query = "INSERT INTO auditee (user_id, asesmen_periode, kode_audit) VALUES ($user_id, $asesmen_periode, '$kode_audit')";
         if ($conn->query($query)) {
             $success = "Auditee berhasil ditambahkan dengan kode audit: $kode_audit.";
         } else {
@@ -129,7 +129,7 @@ if (isset($_GET['send_to_auditee_id'])) {
                 <tr>
                     <td><?php echo htmlspecialchars($row['username']); ?></td>
                     <td><?php echo htmlspecialchars($row['company']); ?></td>
-                    <td><?php echo htmlspecialchars($row['periode_audit']); ?></td>
+                    <td><?php echo htmlspecialchars($row['asesmen_periode']); ?></td>
                     <td><?php echo htmlspecialchars($row['kode_audit']); ?></td>
                     <td>
                         <?php 
@@ -176,10 +176,10 @@ if (isset($_GET['send_to_auditee_id'])) {
             </select>
         </div>
         <div class="col-md-6">
-            <label for="periode_audit" class="form-label">Periode Audit</label>
-            <select name="periode_audit" id="periode_audit" class="form-select" required>
+            <label for="asesmen_periode" class="form-label">Periode Audit</label>
+            <select name="asesmen_periode" id="asesmen_periode" class="form-select" required>
                 <option value="" disabled selected>Pilih Periode</option>
-                <?php foreach ($periode_audit_list as $periode): ?>
+                <?php foreach ($asesmen_periode_list as $periode): ?>
                     <option value="<?php echo $periode; ?>">
                         <?php echo htmlspecialchars($periode); ?>
                     </option>

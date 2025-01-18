@@ -12,16 +12,16 @@ $mapping_data = $conn->query("SELECT id, kode_mapping FROM mapping_standard ORDE
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kode_mapping = isset($_POST['kode_mapping']) ? $conn->real_escape_string($_POST['kode_mapping']) : '';
     $pertanyaan = isset($_POST['pertanyaan']) ? $conn->real_escape_string($_POST['pertanyaan']) : '';
-    $periode_audit = isset($_POST['periode_audit']) ? (int)$_POST['periode_audit'] : 0;
+    $asesmen_periode = isset($_POST['asesmen_periode']) ? (int)$_POST['asesmen_periode'] : 0;
     $source = $_SESSION['user']; // Menggunakan username dari sesi sebagai pembuat
 
     // Validasi input
-    if (empty($kode_mapping) || empty($pertanyaan) || empty($periode_audit)) {
+    if (empty($kode_mapping) || empty($pertanyaan) || empty($asesmen_periode)) {
         $error = "Kode Mapping, Periode Audit, dan Pertanyaan tidak boleh kosong.";
     } else {
         $query = "
-            INSERT INTO asesmen_pertanyaan (kode_mapping, periode_audit, pertanyaan, source) 
-            VALUES ('$kode_mapping', $periode_audit, '$pertanyaan', '$source')
+            INSERT INTO asesmen_pertanyaan (kode_mapping, asesmen_periode, pertanyaan, source) 
+            VALUES ('$kode_mapping', $asesmen_periode, '$pertanyaan', '$source')
         ";
 
         if ($conn->query($query)) {
@@ -45,7 +45,7 @@ if (isset($_GET['delete_id'])) {
 }
 
 // Ambil daftar pertanyaan
-$questions = $conn->query("SELECT * FROM asesmen_pertanyaan ORDER BY periode_audit DESC, kode_mapping ASC");
+$questions = $conn->query("SELECT * FROM asesmen_pertanyaan ORDER BY asesmen_periode DESC, kode_mapping ASC");
 
 // Ambil data lengkap berdasarkan kode mapping
 $mapping_details = [];
@@ -87,8 +87,8 @@ if (isset($_POST['kode_mapping'])) {
             </select>
         </div>
         <div class="col-md-6">
-            <label for="periode_audit" class="form-label">Periode Audit</label>
-            <input type="number" name="periode_audit" id="periode_audit" class="form-control" placeholder="Contoh: 2025" min="2000" max="2099" required>
+            <label for="asesmen_periode" class="form-label">Periode Audit</label>
+            <input type="number" name="asesmen_periode" id="asesmen_periode" class="form-control" placeholder="Contoh: 2025" min="2000" max="2099" required>
         </div>
     </div>
 
@@ -138,7 +138,7 @@ if (isset($_POST['kode_mapping'])) {
                 <tr>
                     <td><?php echo $no++; ?></td>
                     <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
-                    <td><?php echo htmlspecialchars($row['periode_audit']); ?></td>
+                    <td><?php echo htmlspecialchars($row['asesmen_periode']); ?></td>
                     <td><?php echo htmlspecialchars($row['pertanyaan']); ?></td>
                     <td><?php echo htmlspecialchars($row['source']); ?></td>
                     <td>

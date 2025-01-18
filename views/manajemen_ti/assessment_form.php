@@ -47,7 +47,7 @@ if ($kode_audit) {
         $questions_query = $conn->query("
             SELECT DISTINCT q.id, q.kode_mapping, q.pertanyaan 
             FROM asesmen_pertanyaan q
-            JOIN auditee a ON a.periode_audit = q.periode_audit
+            JOIN auditee a ON a.asesmen_periode = q.asesmen_periode
             WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(q.kode_mapping, '_', 2), '_', -1) = '$stage'
             AND a.kode_audit = '$kode_audit'
         ");
@@ -83,10 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Kode audit tidak ditemukan.";
     } else {
         // Ambil periode audit berdasarkan kode audit
-        $periode_query = $conn->query("SELECT periode_audit FROM auditee WHERE kode_audit = '$kode_audit'");
-        $periode_audit = $periode_query && $periode_query->num_rows > 0 ? $periode_query->fetch_assoc()['periode_audit'] : null;
+        $periode_query = $conn->query("SELECT asesmen_periode FROM auditee WHERE kode_audit = '$kode_audit'");
+        $asesmen_periode = $periode_query && $periode_query->num_rows > 0 ? $periode_query->fetch_assoc()['asesmen_periode'] : null;
 
-        if (!$periode_audit) {
+        if (!$asesmen_periode) {
             $error = "Periode audit tidak ditemukan untuk kode audit: $kode_audit.";
         } else {
             // Generate score_session_id baru
@@ -99,8 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Simpan atau perbarui data ke database
                 $query = "
-                    INSERT INTO assessment_answers (user_id, question_id, kode_audit, jawaban, skor, periode_audit, score_session_id) 
-                    VALUES ({$_SESSION['user_id']}, $question_id, '$kode_audit', '$jawaban', $skor, '$periode_audit', $score_session_id)
+                    INSERT INTO assessment_answers (user_id, question_id, kode_audit, jawaban, skor, asesmen_periode, score_session_id) 
+                    VALUES ({$_SESSION['user_id']}, $question_id, '$kode_audit', '$jawaban', $skor, '$asesmen_periode', $score_session_id)
                     ON DUPLICATE KEY UPDATE jawaban = '$jawaban', skor = $skor, score_session_id = $score_session_id
                 ";
                 if (!$conn->query($query)) {
@@ -117,12 +117,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Ambil daftar formulir masuk
 $incoming_forms_query = $conn->query("
-    SELECT a.kode_audit, a.periode_audit, a.form_status, COALESCE(q.source, 'Tim Penilai') AS source, COUNT(q.id) AS total_questions
+    SELECT a.kode_audit, a.asesmen_periode, a.form_status, COALESCE(q.source, 'Tim Penilai') AS source, COUNT(q.id) AS total_questions
     FROM auditee a
-    JOIN asesmen_pertanyaan q ON a.periode_audit = q.periode_audit
+    JOIN asesmen_pertanyaan q ON a.asesmen_periode = q.asesmen_periode
     WHERE a.user_id = {$_SESSION['user_id']}
-    GROUP BY a.kode_audit, a.periode_audit, q.source
-    ORDER BY a.periode_audit DESC
+    GROUP BY a.kode_audit, a.asesmen_periode, q.source
+    ORDER BY a.asesmen_periode DESC
 ");
 ?>
 
@@ -152,7 +152,7 @@ $incoming_forms_query = $conn->query("
             <?php if ($incoming_forms_query && $incoming_forms_query->num_rows > 0): ?>
                 <?php while ($row = $incoming_forms_query->fetch_assoc()): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($row['periode_audit']); ?></td>
+                        <td><?php echo htmlspecialchars($row['asesmen_periode']); ?></td>
                         <td><?php echo htmlspecialchars($row['source']); ?></td>
                         <td><?php echo htmlspecialchars($row['kode_audit']); ?></td>
                         <td><?php echo htmlspecialchars($row['total_questions']); ?></td>
@@ -204,7 +204,7 @@ $incoming_forms_query = $conn->query("
                         $questions_query = $conn->query("
                             SELECT DISTINCT q.id, q.kode_mapping, q.pertanyaan 
                             FROM asesmen_pertanyaan q
-                            JOIN auditee a ON a.periode_audit = q.periode_audit
+                            JOIN auditee a ON a.asesmen_periode = q.asesmen_periode
                             WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(q.kode_mapping, '_', 2), '_', -1) = '$stage'
                             AND a.kode_audit = '$kode_audit'
                         ");
