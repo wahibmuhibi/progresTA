@@ -9,7 +9,7 @@ include '../../includes/header.php';
 $user_id = $_SESSION['user_id'];
 
 $query = "
-    SELECT DISTINCT r.asesmen_kode, r.verification_code, r.verified_at, AVG(r.average_score) AS overall_score
+    SELECT DISTINCT r.asesmen_kode, r.verification_code, r.verified_at, AVG(r.skor_rata_rata) AS overall_score
     FROM asesmen_hasil r
     JOIN asesi a ON r.asesmen_kode = a.asesmen_kode
     WHERE r.verification_code IS NOT NULL AND a.user_id = $user_id

@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_verification']
 
 // Ambil data ranking berdasarkan rata-rata skor yang telah diverifikasi
 $rankings_query = $conn->query("
-    SELECT r.asesmen_kode, r.verification_code, u.username AS asesi_name, AVG(r.average_score) AS overall_average, r.verified_at
+    SELECT r.asesmen_kode, r.verification_code, u.username AS asesi_name, AVG(r.skor_rata_rata) AS overall_average, r.verified_at
     FROM asesmen_hasil r
     JOIN asesi a ON r.asesmen_kode = a.asesmen_kode
     JOIN users u ON a.user_id = u.id

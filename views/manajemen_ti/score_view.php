@@ -73,13 +73,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_to_asesor'])) {
     $score_session_id = (int) $_POST['score_session_id'];
     $categories = json_decode($_POST['categories'], true);
 
-    foreach ($categories as $aspek => $average_score) {
+    foreach ($categories as $aspek => $skor_rata_rata) {
         $aspek = $conn->real_escape_string($aspek);
-        $average_score = (float) $average_score;
+        $skor_rata_rata = (float) $skor_rata_rata;
 
         $insert_query = "
-            INSERT INTO asesmen_hasil (asesmen_kode, score_session_id, aspek, average_score)
-            VALUES ('$asesmen_kode', $score_session_id, '$aspek', $average_score)
+            INSERT INTO asesmen_hasil (asesmen_kode, score_session_id, aspek, skor_rata_rata)
+            VALUES ('$asesmen_kode', $score_session_id, '$aspek', $skor_rata_rata)
         ";
 
         if (!$conn->query($insert_query)) {
