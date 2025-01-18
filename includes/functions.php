@@ -7,7 +7,7 @@ function log_activity($user_id, $activity, $conn) {
     $activity = $conn->real_escape_string($activity);
 
     // Query untuk menyimpan log aktivitas
-    $query = "INSERT INTO activity_logs (user_id, activity) VALUES ('$user_id', '$activity')";
+    $query = "INSERT INTO log_aktivitas (user_id, activity) VALUES ('$user_id', '$activity')";
 
     // Eksekusi query
     if (!$conn->query($query)) {

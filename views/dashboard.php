@@ -42,7 +42,7 @@ if (!defined('BASE_URL')) {
                 <a href="<?php echo BASE_URL; ?>/views/admin/manage_questions.php" class="btn btn-primary mb-2">Manajemen Pertanyaan</a>
                 <a href="<?php echo BASE_URL; ?>/views/admin/manage_standard.php" class="btn btn-primary mb-2">Manajemen Standard</a>
                 <a href="<?php echo BASE_URL; ?>/views/admin/manage_criteria.php" class="btn btn-primary mb-2">Manajemen Kriteria</a>
-                <a href="<?php echo BASE_URL; ?>/views/admin/activity_logs.php" class="btn btn-primary mb-2">Log Aktivitas</a>
+                <a href="<?php echo BASE_URL; ?>/views/admin/log_aktivitas.php" class="btn btn-primary mb-2">Log Aktivitas</a>
             <?php elseif ($role === 'Manajemen TI'): ?>
                 <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/assessment_form.php" class="btn btn-primary mb-2">Isi Self-Assessment</a>
                 <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/score_view.php" class="btn btn-primary mb-2">Lihat Skor</a>

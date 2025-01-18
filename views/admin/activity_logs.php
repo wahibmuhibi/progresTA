@@ -6,7 +6,7 @@ include '../../includes/db.php';
 include '../../includes/header.php';
 
 $query = "SELECT a.id, u.username, a.activity, a.timestamp 
-          FROM activity_logs a 
+          FROM log_aktivitas a 
           JOIN users u ON a.user_id = u.id 
           ORDER BY a.timestamp DESC";
 $result = $conn->query($query);
