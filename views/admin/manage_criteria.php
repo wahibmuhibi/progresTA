@@ -6,7 +6,7 @@ include '../../includes/db.php';
 include '../../includes/header.php';
 
 // Tambah data baru
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_criteria'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_maturity'])) {
     $jenis = $conn->real_escape_string($_POST['jenis']);
     $kondisi = $conn->real_escape_string($_POST['kondisi']);
     $skor = (int)$_POST['skor'];
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_criteria'])) {
     if (empty($jenis) || empty($kondisi)) {
         $error = "Jenis dan Kondisi tidak boleh kosong.";
     } else {
-        $query = "INSERT INTO criteria (jenis, kondisi, skor) VALUES ('$jenis', '$kondisi', $skor)";
+        $query = "INSERT INTO maturity (jenis, kondisi, skor) VALUES ('$jenis', '$kondisi', $skor)";
 
         if ($conn->query($query)) {
             $success = "Data berhasil ditambahkan.";
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_criteria'])) {
 // Hapus data berdasarkan ID
 if (isset($_GET['delete_id'])) {
     $delete_id = $conn->real_escape_string($_GET['delete_id']);
-    $query = "DELETE FROM criteria WHERE id = '$delete_id'";
+    $query = "DELETE FROM maturity WHERE id = '$delete_id'";
 
     if ($conn->query($query)) {
         $success = "Data berhasil dihapus.";
@@ -37,23 +37,23 @@ if (isset($_GET['delete_id'])) {
 }
 
 
-// Tambah pasangan Kode Mapping dengan Jenis Kriteria
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['map_criteria'])) {
+// Tambah pasangan Kode Mapping dengan Jenis Maturity
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['map_maturity'])) {
     $kode_mapping = $conn->real_escape_string($_POST['kode_mapping']);
     $jenis_kriteria = $conn->real_escape_string($_POST['jenis_kriteria']);
 
     // Periksa apakah pasangan sudah ada
-    $check_query = "SELECT * FROM mapping_criteria WHERE kode_mapping = '$kode_mapping' AND jenis_kriteria = '$jenis_kriteria'";
+    $check_query = "SELECT * FROM mapping_maturity WHERE kode_mapping = '$kode_mapping' AND jenis_kriteria = '$jenis_kriteria'";
     $check_result = $conn->query($check_query);
 
     if ($check_result->num_rows > 0) {
-        $error = "Kode Mapping '$kode_mapping' sudah dipasangkan dengan Kriteria '$jenis_kriteria'.";
+        $error = "Kode Mapping '$kode_mapping' sudah dipasangkan dengan Maturity '$jenis_kriteria'.";
     } else {
         // Simpan pasangan baru jika belum ada
-        $query = "INSERT INTO mapping_criteria (kode_mapping, jenis_kriteria) VALUES ('$kode_mapping', '$jenis_kriteria')";
+        $query = "INSERT INTO mapping_maturity (kode_mapping, jenis_kriteria) VALUES ('$kode_mapping', '$jenis_kriteria')";
 
         if ($conn->query($query)) {
-            $success = "Kode Mapping berhasil dipasangkan dengan Jenis Kriteria.";
+            $success = "Kode Mapping berhasil dipasangkan dengan Jenis Maturity.";
         } else {
             $error = "Terjadi kesalahan saat menyimpan data: " . $conn->error;
         }
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['map_criteria'])) {
 // Hapus data berdasarkan ID
 if (isset($_GET['delete_mapping_id'])) {
     $delete_id = $conn->real_escape_string($_GET['delete_mapping_id']);
-    $query = "DELETE FROM mapping_criteria WHERE id = '$delete_id'";
+    $query = "DELETE FROM mapping_maturity WHERE id = '$delete_id'";
 
     if ($conn->query($query)) {
         $success = "Mapping berhasil dihapus.";
@@ -75,19 +75,19 @@ if (isset($_GET['delete_mapping_id'])) {
 
 
 // Ambil data dari tabel
-$criteria_data = $conn->query("SELECT * FROM criteria ORDER BY skor ASC");
+$maturity_data = $conn->query("SELECT * FROM maturity ORDER BY skor ASC");
 $mapping_data = $conn->query("SELECT kode_mapping FROM mapping_standard ORDER BY kode_mapping ASC");
 $mapped_data = $conn->query("SELECT mc.*, ms.kode_mapping, c.jenis 
-                             FROM mapping_criteria mc 
+                             FROM mapping_maturity mc 
                              JOIN mapping_standard ms ON mc.kode_mapping = ms.kode_mapping 
-                             JOIN criteria c ON mc.jenis_kriteria = c.jenis 
+                             JOIN maturity c ON mc.jenis_kriteria = c.jenis 
                              ORDER BY mc.created_at DESC");
 
 // Ambil data dari database
 $mapped_data_result = $conn->query("SELECT DISTINCT mc.id, mc.kode_mapping, c.jenis AS jenis_kriteria 
-                                    FROM mapping_criteria mc 
+                                    FROM mapping_maturity mc 
                                     JOIN mapping_standard ms ON mc.kode_mapping = ms.kode_mapping 
-                                    JOIN criteria c ON mc.jenis_kriteria = c.jenis 
+                                    JOIN maturity c ON mc.jenis_kriteria = c.jenis 
                                     ORDER BY mc.created_at DESC");
 
 // Simpan hasil query dalam array
@@ -95,7 +95,7 @@ $mapped_data = $mapped_data_result ? $mapped_data_result->fetch_all(MYSQLI_ASSOC
 
 ?>
 
-<h3 class="text-center">Manajemen Kriteria</h3>
+<h3 class="text-center">Manajemen Maturity</h3>
 
 <?php if (isset($success)): ?>
     <div class="alert alert-success"><?php echo $success; ?></div>
@@ -121,11 +121,11 @@ $mapped_data = $mapped_data_result ? $mapped_data_result->fetch_all(MYSQLI_ASSOC
             <input type="number" name="skor" id="skor" class="form-control" placeholder="Contoh: 0" required>
         </div>
     </div>
-    <button type="submit" name="add_criteria" class="btn btn-primary">Tambah Data</button>
+    <button type="submit" name="add_maturity" class="btn btn-primary">Tambah Data</button>
 </form>
 
 <!-- Tabel Daftar Data -->
-<h4 class="mt-5">Daftar Kriteria</h4>
+<h4 class="mt-5">Daftar Maturity</h4>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -136,8 +136,8 @@ $mapped_data = $mapped_data_result ? $mapped_data_result->fetch_all(MYSQLI_ASSOC
         </tr>
     </thead>
     <tbody>
-        <?php if ($criteria_data && $criteria_data->num_rows > 0): ?>
-            <?php while ($row = $criteria_data->fetch_assoc()): ?>
+        <?php if ($maturity_data && $maturity_data->num_rows > 0): ?>
+            <?php while ($row = $maturity_data->fetch_assoc()): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($row['jenis']); ?></td>
                     <td><?php echo htmlspecialchars($row['kondisi']); ?></td>
@@ -155,9 +155,9 @@ $mapped_data = $mapped_data_result ? $mapped_data_result->fetch_all(MYSQLI_ASSOC
     </tbody>
 </table>
 
-<!-- Form Pasang Kode Mapping dengan Jenis Kriteria -->
+<!-- Form Pasang Kode Mapping dengan Jenis Maturity -->
 <form method="POST" action="">
-    <h4 class="mt-4">Pasangkan Kode Mapping dengan Jenis Kriteria</h4>
+    <h4 class="mt-4">Pasangkan Kode Mapping dengan Jenis Maturity</h4>
     <div class="row mb-3">
         <div class="col-md-6">
             <label for="kode_mapping" class="form-label">Kode Mapping</label>
@@ -171,14 +171,14 @@ $mapped_data = $mapped_data_result ? $mapped_data_result->fetch_all(MYSQLI_ASSOC
             </select>
         </div>
         <div class="col-md-6">
-            <label for="jenis_kriteria" class="form-label">Jenis Kriteria</label>
+            <label for="jenis_kriteria" class="form-label">Jenis Maturity</label>
             <?php 
-                // Ambil ulang data criteria untuk dropdown
-                $criteria_data_dropdown = $conn->query("SELECT DISTINCT jenis FROM criteria ORDER BY jenis ASC");
+                // Ambil ulang data maturity untuk dropdown
+                $maturity_data_dropdown = $conn->query("SELECT DISTINCT jenis FROM maturity ORDER BY jenis ASC");
             ?>
             <select name="jenis_kriteria" id="jenis_kriteria" class="form-select" required>
-                <option value="" disabled selected>Pilih Jenis Kriteria</option>
-                <?php while ($row = $criteria_data_dropdown->fetch_assoc()): ?>
+                <option value="" disabled selected>Pilih Jenis Maturity</option>
+                <?php while ($row = $maturity_data_dropdown->fetch_assoc()): ?>
                     <option value="<?php echo htmlspecialchars($row['jenis']); ?>">
                         <?php echo htmlspecialchars($row['jenis']); ?>
                     </option>
@@ -186,17 +186,17 @@ $mapped_data = $mapped_data_result ? $mapped_data_result->fetch_all(MYSQLI_ASSOC
             </select>
         </div>
     </div>
-    <button type="submit" name="map_criteria" class="btn btn-primary">Pasangkan</button>
+    <button type="submit" name="map_maturity" class="btn btn-primary">Pasangkan</button>
 </form>
 
 
-<!-- Tabel Daftar Mapping ke Kriteria -->
-<h4 class="mt-5">Daftar Mapping ke Kriteria</h4>
+<!-- Tabel Daftar Mapping ke Maturity -->
+<h4 class="mt-5">Daftar Mapping ke Maturity</h4>
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>Kode Mapping</th>
-            <th>Jenis Kriteria</th>
+            <th>Jenis Maturity</th>
             <th>Aksi</th>
         </tr>
     </thead>

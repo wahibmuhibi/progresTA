@@ -56,11 +56,11 @@ if ($asesmen_kode) {
 }
 
 // Ambil data kriteria dari tabel Manajemen Kriteria
-$criteria_query = $conn->query("SELECT kondisi, skor FROM criteria ORDER BY skor ASC");
-$criteria = [];
-if ($criteria_query && $criteria_query->num_rows > 0) {
-    while ($row = $criteria_query->fetch_assoc()) {
-        $criteria[$row['kondisi']] = $row['skor'];
+$maturity_query = $conn->query("SELECT kondisi, skor FROM maturity ORDER BY skor ASC");
+$maturity = [];
+if ($maturity_query && $maturity_query->num_rows > 0) {
+    while ($row = $maturity_query->fetch_assoc()) {
+        $maturity[$row['kondisi']] = $row['skor'];
     }
 }
 
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach ($_POST['answers'] as $question_id => $data) {
                 $question_id = (int)$question_id;
                 $jawaban = isset($data['jawaban']) ? $conn->real_escape_string($data['jawaban']) : '';
-                $skor = isset($criteria[$jawaban]) ? $criteria[$jawaban] : 0;
+                $skor = isset($maturity[$jawaban]) ? $maturity[$jawaban] : 0;
 
                 // Simpan atau perbarui data ke database
                 $query = "
@@ -220,7 +220,7 @@ $incoming_forms_query = $conn->query("
                                     <td>
                                         <select name="answers[<?php echo $question['id']; ?>][jawaban]" class="form-select" required>
                                             <option value="">Pilih Jawaban</option>
-                                            <?php foreach ($criteria as $kondisi => $skor): ?>
+                                            <?php foreach ($maturity as $kondisi => $skor): ?>
                                                 <option value="<?php echo htmlspecialchars($kondisi); ?>"
                                                     <?php echo isset($existing_answers[$question['id']]['jawaban']) && $existing_answers[$question['id']]['jawaban'] === $kondisi ? 'selected' : ''; ?>>
                                                     <?php echo htmlspecialchars($kondisi); ?> (Skor: <?php echo $skor; ?>)
