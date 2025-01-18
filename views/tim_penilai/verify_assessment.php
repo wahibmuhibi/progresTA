@@ -13,6 +13,7 @@ $score_session_id = isset($_GET['score_session_id']) ? (int)$_GET['score_session
 $available_assessments = $conn->query("
     SELECT DISTINCT kode_audit, score_session_id, created_at 
     FROM assessment_results 
+    WHERE verification_code IS NULL
     ORDER BY created_at DESC
 ");
 

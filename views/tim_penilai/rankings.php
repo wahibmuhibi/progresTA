@@ -5,6 +5,24 @@ check_roles(['Tim Penilai']);
 include '../../includes/db.php';
 include '../../includes/header.php';
 
+// Proses pembatalan verifikasi
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_verification'])) {
+    $kode_audit = $conn->real_escape_string($_POST['kode_audit']);
+
+    // Hapus kode verifikasi dan tanggal verifikasi
+    $delete_query = "
+        UPDATE assessment_results 
+        SET verification_code = NULL, verified_at = NULL 
+        WHERE kode_audit = '$kode_audit'
+    ";
+
+    if ($conn->query($delete_query)) {
+        echo "<div class='alert alert-success'>Verifikasi untuk kode audit $kode_audit telah dibatalkan.</div>";
+    } else {
+        echo "<div class='alert alert-danger'>Gagal membatalkan verifikasi. Kesalahan: {$conn->error}</div>";
+    }
+}
+
 // Ambil data ranking berdasarkan rata-rata skor yang telah diverifikasi
 $rankings_query = $conn->query("
     SELECT r.kode_audit, r.verification_code, u.username AS asesi_name, AVG(r.average_score) AS overall_average, r.verified_at
@@ -30,6 +48,7 @@ $rankings_query = $conn->query("
                 <th>Kode Verifikasi</th>
                 <th>Rata-Rata Skor</th>
                 <th>Tanggal Verifikasi</th>
+                <th>Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -43,6 +62,12 @@ $rankings_query = $conn->query("
                     <td><?php echo htmlspecialchars($row['verification_code']); ?></td>
                     <td><?php echo htmlspecialchars(round($row['overall_average'], 2)); ?></td>
                     <td><?php echo htmlspecialchars($row['verified_at']); ?></td>
+                    <td>
+                        <form method="POST" action="" onsubmit="return confirm('Yakin ingin membatalkan verifikasi untuk kode audit ini?');">
+                            <input type="hidden" name="kode_audit" value="<?php echo htmlspecialchars($row['kode_audit']); ?>">
+                            <button type="submit" name="cancel_verification" class="btn btn-danger btn-sm">Batalkan</button>
+                        </form>
+                    </td>
                 </tr>
             <?php endwhile; ?>
         </tbody>
