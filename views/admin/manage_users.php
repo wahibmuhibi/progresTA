@@ -9,9 +9,9 @@ include '../../includes/header.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
     $username = $conn->real_escape_string($_POST['username']);
     $role = $conn->real_escape_string($_POST['role']);
-    $company = $conn->real_escape_string($_POST['company']);
+    $institusi = $conn->real_escape_string($_POST['institusi']);
 
-    $query = "UPDATE users SET role = '$role', company = '$company' WHERE username = '$username'";
+    $query = "UPDATE users SET role = '$role', institusi = '$institusi' WHERE username = '$username'";
     if ($conn->query($query)) {
         $success = "Data pengguna berhasil diperbarui.";
     } else {
@@ -72,8 +72,8 @@ if (isset($_GET['edit_username'])) {
                 </select>
             </div>
             <div class="col-md-4">
-                <label for="company" class="form-label">Company</label>
-                <input type="text" name="company" id="company" class="form-control" value="<?php echo htmlspecialchars($edit_user['company']); ?>" required>
+                <label for="institusi" class="form-label">institusi</label>
+                <input type="text" name="institusi" id="institusi" class="form-control" value="<?php echo htmlspecialchars($edit_user['institusi']); ?>" required>
             </div>
         </div>
         <button type="submit" name="update_user" class="btn btn-success">Simpan Perubahan</button>
@@ -88,7 +88,7 @@ if (isset($_GET['edit_username'])) {
         <tr>
             <th>Username</th>
             <th>Role</th>
-            <th>Company</th>
+            <th>Institusi</th>
             <th>Aksi</th>
         </tr>
     </thead>
@@ -97,7 +97,7 @@ if (isset($_GET['edit_username'])) {
             <tr>
                 <td><?php echo htmlspecialchars($row['username']); ?></td>
                 <td><?php echo htmlspecialchars($row['role']); ?></td>
-                <td><?php echo htmlspecialchars($row['company']); ?></td>
+                <td><?php echo htmlspecialchars($row['institusi']); ?></td>
                 <td>
                     <a href="?edit_username=<?php echo $row['username']; ?>" class="btn btn-warning btn-sm">Edit</a>
                     <a href="?delete_username=<?php echo $row['username']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus pengguna ini?')">Hapus</a>

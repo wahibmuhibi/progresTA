@@ -40,7 +40,7 @@ if ($periode_query && $periode_query->num_rows > 0) {
 // Ambil daftar subjek penilaian berdasarkan periode Asesmen
 $selected_periode = isset($_GET['asesmen_periode']) ? (int)$_GET['asesmen_periode'] : null;
 $asesi_query = $conn->query("
-    SELECT a.id AS asesi_id, a.asesmen_kode, u.username, u.company, a.asesmen_periode, a.form_status 
+    SELECT a.id AS asesi_id, a.asesmen_kode, u.username, u.institusi, a.asesmen_periode, a.form_status 
     FROM asesi a 
     JOIN users u ON a.user_id = u.id 
     " . ($selected_periode ? "WHERE a.asesmen_periode = $selected_periode" : "") . " 
@@ -48,7 +48,7 @@ $asesi_query = $conn->query("
 ");
 
 // Ambil daftar Manajemen TI untuk form tambah Asesi
-$manajemen_ti_query = $conn->query("SELECT id, username, company FROM users WHERE role = 'Manajemen TI' ORDER BY username ASC");
+$manajemen_ti_query = $conn->query("SELECT id, username, institusi FROM users WHERE role = 'Manajemen TI' ORDER BY username ASC");
 
 // Tambah Asesi
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_asesi'])) {
@@ -116,7 +116,7 @@ if (isset($_GET['send_to_asesi_id'])) {
     <thead>
         <tr>
             <th>Username</th>
-            <th>Company</th>
+            <th>Institusi</th>
             <th>Periode Asesmen</th>
             <th>Kode Asesmen</th>
             <th>Status</th>
@@ -128,7 +128,7 @@ if (isset($_GET['send_to_asesi_id'])) {
             <?php while ($row = $asesi_query->fetch_assoc()): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($row['username']); ?></td>
-                    <td><?php echo htmlspecialchars($row['company']); ?></td>
+                    <td><?php echo htmlspecialchars($row['institusi']); ?></td>
                     <td><?php echo htmlspecialchars($row['asesmen_periode']); ?></td>
                     <td><?php echo htmlspecialchars($row['asesmen_kode']); ?></td>
                     <td>
@@ -170,7 +170,7 @@ if (isset($_GET['send_to_asesi_id'])) {
                 <option value="" disabled selected>Pilih Akun</option>
                 <?php while ($row = $manajemen_ti_query->fetch_assoc()): ?>
                     <option value="<?php echo $row['id']; ?>">
-                        <?php echo htmlspecialchars($row['username'] . ' (' . $row['company'] . ')'); ?>
+                        <?php echo htmlspecialchars($row['username'] . ' (' . $row['institusi'] . ')'); ?>
                     </option>
                 <?php endwhile; ?>
             </select>
