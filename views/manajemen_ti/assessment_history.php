@@ -9,14 +9,14 @@ $query = "SELECT * FROM audit_history WHERE user_id = '$user_id'";
 $result = $conn->query($query);
 ?>
 
-<h3 class="text-center">Riwayat Audit</h3>
+<h3 class="text-center">Riwayat Asesmen</h3>
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>No</th>
-            <th>Deskripsi Audit</th>
+            <th>Deskripsi Asesmen</th>
             <th>Hasil</th>
-            <th>Tanggal Audit</th>
+            <th>Tanggal Asesmen</th>
         </tr>
     </thead>
     <tbody>
