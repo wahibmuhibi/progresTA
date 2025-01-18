@@ -9,11 +9,11 @@ include '../../includes/header.php';
 $user_id = $_SESSION['user_id'];
 
 $query = "
-    SELECT DISTINCT r.asesmen_kode, r.verification_code, r.verified_at, AVG(r.skor_rata_rata) AS overall_score
+    SELECT DISTINCT r.asesmen_kode, r.verification_code, r.verified_at, AVG(r.skor_rata_rata) AS overall_score, r.rekomendasi
     FROM asesmen_hasil r
     JOIN asesi a ON r.asesmen_kode = a.asesmen_kode
     WHERE r.verification_code IS NOT NULL AND a.user_id = $user_id
-    GROUP BY r.asesmen_kode, r.verification_code, r.verified_at
+    GROUP BY r.asesmen_kode, r.verification_code, r.verified_at, r.rekomendasi
     ORDER BY r.verified_at DESC
 ";
 
@@ -32,6 +32,7 @@ $assessment_history = $conn->query($query);
                 <th>Kode Verifikasi</th>
                 <th>Rata-Rata Skor</th>
                 <th>Tanggal Verifikasi</th>
+                <th>Rekomendasi</th>
             </tr>
         </thead>
         <tbody>
@@ -43,6 +44,7 @@ $assessment_history = $conn->query($query);
                     <td><?php echo htmlspecialchars($row['verification_code']); ?></td>
                     <td><?php echo htmlspecialchars(round($row['overall_score'], 2)); ?></td>
                     <td><?php echo htmlspecialchars($row['verified_at']); ?></td>
+                    <td><?php echo htmlspecialchars($row['rekomendasi']); ?></td>
                 </tr>
             <?php endwhile; ?>
         </tbody>

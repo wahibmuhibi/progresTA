@@ -5,29 +5,28 @@ check_roles(['Tim Penilai']);
 include '../../includes/db.php';
 include '../../includes/header.php';
 
-// Tangkap kode asesmen dan score session ID dari URL
+// Tangkap kode audit dan score session ID dari URL
 $asesmen_kode = isset($_GET['asesmen_kode']) ? $conn->real_escape_string($_GET['asesmen_kode']) : null;
 $score_session_id = isset($_GET['score_session_id']) ? (int)$_GET['score_session_id'] : null;
 
-// Ambil daftar Asesmen yang tersedia untuk verifikasi
+// Ambil daftar assessment yang tersedia untuk verifikasi
 $available_assessments = $conn->query("
     SELECT DISTINCT asesmen_kode, score_session_id, created_at 
     FROM asesmen_hasil 
-    WHERE verification_code IS NULL
     ORDER BY created_at DESC
 ");
 
 if (!$available_assessments || $available_assessments->num_rows === 0) {
-    echo "<div class='alert alert-warning'>Tidak ada Asesmen yang tersedia untuk diverifikasi.</div>";
+    echo "<div class='alert alert-warning'>Tidak ada assessment yang tersedia untuk diverifikasi.</div>";
     include '../../includes/footer.php';
     exit;
 }
 
-// Ambil data hasil Asesmen jika parameter URL ada
+// Ambil data hasil assessment jika parameter URL ada
 $results_query = null;
 if ($asesmen_kode && $score_session_id) {
     $results_query = $conn->query("
-        SELECT DISTINCT aspek, AVG(skor_rata_rata) AS skor_rata_rata
+        SELECT DISTINCT aspek, skor_rata_rata
         FROM asesmen_hasil
         WHERE asesmen_kode = '$asesmen_kode' AND score_session_id = $score_session_id
         GROUP BY aspek
@@ -44,11 +43,30 @@ if ($asesmen_kode && $score_session_id) {
         WHERE a.asesmen_kode = '$asesmen_kode' AND a.score_session_id = $score_session_id
     ");
 }
+
+// Proses verifikasi dengan rekomendasi
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify'])) {
+    $rekomendasi = isset($_POST['rekomendasi']) ? $conn->real_escape_string($_POST['rekomendasi']) : null;
+    $verification_code = strtoupper(uniqid('VERIFY-'));
+    $verified_at = date('Y-m-d H:i:s');
+
+    $update_query = "
+        UPDATE asesmen_hasil
+        SET verification_code = '$verification_code', verified_at = '$verified_at', rekomendasi = '$rekomendasi'
+        WHERE asesmen_kode = '$asesmen_kode' AND score_session_id = $score_session_id
+    ";
+
+    if ($conn->query($update_query)) {
+        echo "<div class='alert alert-success mt-4'>Assessment berhasil diverifikasi. Kode Verifikasi: $verification_code</div>";
+    } else {
+        echo "<div class='alert alert-danger mt-4'>Gagal memverifikasi assessment. Kesalahan: " . $conn->error . "</div>";
+    }
+}
 ?>
 
-<h3 class="text-center">Daftar Asesmen Tersedia untuk Verifikasi</h3>
+<h3 class="text-center">Daftar Assessment Tersedia untuk Verifikasi</h3>
 
-<!-- Tabel Daftar Kode Asesmen dan Score Session ID -->
+<!-- Tabel Daftar Kode Audit dan Score Session ID -->
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -76,14 +94,14 @@ if ($asesmen_kode && $score_session_id) {
 </table>
 
 <?php if ($asesmen_kode && $score_session_id): ?>
-    <h3 class="text-center mt-5">Detail Asesmen untuk Verifikasi</h3>
+    <h3 class="text-center mt-5">Detail Assessment untuk Verifikasi</h3>
 
-    <!-- Tabel Rata-Rata Hasil Asesmen -->
+    <!-- Tabel Rata-Rata Hasil Assessment -->
     <?php if ($results_query && $results_query->num_rows > 0): ?>
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Kategori</th>
+                    <th>Aspek</th>
                     <th>Rata-Rata Skor</th>
                 </tr>
             </thead>
@@ -123,34 +141,18 @@ if ($asesmen_kode && $score_session_id) {
                 <?php endwhile; ?>
             </tbody>
         </table>
-
-        <!-- Tombol Verifikasi -->
+        <!-- Form Rekomendasi dan Tombol Verifikasi -->
         <div class="text-center mt-4">
             <form method="POST" action="">
+                <div class="mb-3">
+                    <label for="rekomendasi" class="form-label">Rekomendasi</label>
+                    <textarea name="rekomendasi" id="rekomendasi" class="form-control" rows="4" placeholder="Masukkan rekomendasi untuk asesmen ini" required></textarea>
+                </div>
                 <input type="hidden" name="asesmen_kode" value="<?php echo htmlspecialchars($asesmen_kode); ?>">
                 <input type="hidden" name="score_session_id" value="<?php echo htmlspecialchars($score_session_id); ?>">
                 <button type="submit" name="verify" class="btn btn-success">Verifikasi</button>
             </form>
         </div>
-
-        <?php
-        // Proses verifikasi
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify'])) {
-            $verification_code = strtoupper(uniqid('VERIFY-'));
-            $verified_at = date('Y-m-d H:i:s');
-
-            $update_query = "
-                UPDATE asesmen_hasil
-                SET verification_code = '$verification_code', verified_at = '$verified_at'
-                WHERE asesmen_kode = '$asesmen_kode' AND score_session_id = $score_session_id
-            ";
-            if ($conn->query($update_query)) {
-                echo "<div class='alert alert-success mt-4'>Asesmen berhasil diverifikasi. Kode Verifikasi: $verification_code</div>";
-            } else {
-                echo "<div class='alert alert-danger mt-4'>Gagal memverifikasi Asesmen. Kesalahan: " . $conn->error . "</div>";
-            }
-        }
-        ?>
     <?php endif; ?>
 <?php endif; ?>
 
