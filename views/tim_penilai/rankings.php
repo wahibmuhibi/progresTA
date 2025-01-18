@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_verification']
 
     // Hapus kode verifikasi dan tanggal verifikasi
     $delete_query = "
-        UPDATE assessment_results 
+        UPDATE asesmen_hasil 
         SET verification_code = NULL, verified_at = NULL 
         WHERE asesmen_kode = '$asesmen_kode'
     ";
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_verification']
 // Ambil data ranking berdasarkan rata-rata skor yang telah diverifikasi
 $rankings_query = $conn->query("
     SELECT r.asesmen_kode, r.verification_code, u.username AS asesi_name, AVG(r.average_score) AS overall_average, r.verified_at
-    FROM assessment_results r
+    FROM asesmen_hasil r
     JOIN asesi a ON r.asesmen_kode = a.asesmen_kode
     JOIN users u ON a.user_id = u.id
     WHERE r.verification_code IS NOT NULL

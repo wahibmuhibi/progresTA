@@ -12,7 +12,7 @@ $score_session_id = isset($_GET['score_session_id']) ? (int)$_GET['score_session
 // Ambil daftar Asesmen yang tersedia untuk verifikasi
 $available_assessments = $conn->query("
     SELECT DISTINCT asesmen_kode, score_session_id, created_at 
-    FROM assessment_results 
+    FROM asesmen_hasil 
     WHERE verification_code IS NULL
     ORDER BY created_at DESC
 ");
@@ -28,7 +28,7 @@ $results_query = null;
 if ($asesmen_kode && $score_session_id) {
     $results_query = $conn->query("
         SELECT DISTINCT category, AVG(average_score) AS average_score
-        FROM assessment_results
+        FROM asesmen_hasil
         WHERE asesmen_kode = '$asesmen_kode' AND score_session_id = $score_session_id
         GROUP BY category
     ");
@@ -140,7 +140,7 @@ if ($asesmen_kode && $score_session_id) {
             $verified_at = date('Y-m-d H:i:s');
 
             $update_query = "
-                UPDATE assessment_results
+                UPDATE asesmen_hasil
                 SET verification_code = '$verification_code', verified_at = '$verified_at'
                 WHERE asesmen_kode = '$asesmen_kode' AND score_session_id = $score_session_id
             ";

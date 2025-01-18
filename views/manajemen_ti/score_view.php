@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_to_asesor'])) {
         $average_score = (float) $average_score;
 
         $insert_query = "
-            INSERT INTO assessment_results (asesmen_kode, score_session_id, category, average_score)
+            INSERT INTO asesmen_hasil (asesmen_kode, score_session_id, category, average_score)
             VALUES ('$asesmen_kode', $score_session_id, '$category', $average_score)
         ";
 
