@@ -34,12 +34,12 @@ if ($asesmen_kode && $score_session_id) {
     ");
 }
 
-// Ambil data detail dari assessment_answers
+// Ambil data detail dari asesmen_jawaban
 $details_query = null;
 if ($asesmen_kode && $score_session_id) {
     $details_query = $conn->query("
         SELECT q.kode_mapping, q.pertanyaan, a.jawaban, a.skor 
-        FROM assessment_answers a
+        FROM asesmen_jawaban a
         JOIN asesmen_pertanyaan q ON a.question_id = q.id
         WHERE a.asesmen_kode = '$asesmen_kode' AND a.score_session_id = $score_session_id
     ");

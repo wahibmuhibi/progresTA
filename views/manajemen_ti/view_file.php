@@ -12,7 +12,7 @@ $user_id = $_SESSION['user_id'];
 
 $query = "
     SELECT bukti 
-    FROM assessment_answers 
+    FROM asesmen_jawaban 
     WHERE question_id = $question_id AND user_id = $user_id
 ";
 $result = $conn->query($query);

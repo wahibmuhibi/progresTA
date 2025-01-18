@@ -10,7 +10,7 @@ $user_id = $_SESSION['user_id'];
 // Ambil semua sesi skor untuk user
 $audit_query = $conn->query("
     SELECT DISTINCT asesmen_kode, score_session_id, created_at 
-    FROM assessment_answers 
+    FROM asesmen_jawaban 
     WHERE user_id = $user_id 
     ORDER BY created_at DESC
 ");
@@ -44,7 +44,7 @@ $overall_average = 0;
 
 if ($asesmen_kode && $score_session_id) {
     // Ambil data skor berdasarkan kode asesmen dan score session ID
-    $query = "SELECT q.kode_mapping, q.pertanyaan, a.jawaban, a.skor FROM assessment_answers a JOIN asesmen_pertanyaan q ON a.question_id = q.id WHERE a.asesmen_kode = '$asesmen_kode' AND a.score_session_id = $score_session_id AND a.user_id = $user_id";
+    $query = "SELECT q.kode_mapping, q.pertanyaan, a.jawaban, a.skor FROM asesmen_jawaban a JOIN asesmen_pertanyaan q ON a.question_id = q.id WHERE a.asesmen_kode = '$asesmen_kode' AND a.score_session_id = $score_session_id AND a.user_id = $user_id";
     $result = $conn->query($query);
 
     // Hitung rata-rata skor untuk kategori ITIL Service Lifecycle

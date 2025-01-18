@@ -67,7 +67,7 @@ if ($criteria_query && $criteria_query->num_rows > 0) {
 // Logika untuk mengambil jawaban yang sudah tersimpan
 $existing_answers_query = $conn->query("
     SELECT question_id, jawaban, skor 
-    FROM assessment_answers 
+    FROM asesmen_jawaban 
     WHERE asesmen_kode = '$asesmen_kode' AND user_id = {$_SESSION['user_id']}
 ");
 $existing_answers = [];
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Simpan atau perbarui data ke database
                 $query = "
-                    INSERT INTO assessment_answers (user_id, question_id, asesmen_kode, jawaban, skor, periode_audit, score_session_id) 
+                    INSERT INTO asesmen_jawaban (user_id, question_id, asesmen_kode, jawaban, skor, periode_audit, score_session_id) 
                     VALUES ({$_SESSION['user_id']}, $question_id, '$asesmen_kode', '$jawaban', $skor, '$asesmen_periode', $score_session_id)
                     ON DUPLICATE KEY UPDATE jawaban = '$jawaban', skor = $skor, score_session_id = $score_session_id
                 ";
