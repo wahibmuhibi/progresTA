@@ -27,10 +27,10 @@ if (!$available_assessments || $available_assessments->num_rows === 0) {
 $results_query = null;
 if ($asesmen_kode && $score_session_id) {
     $results_query = $conn->query("
-        SELECT DISTINCT category, AVG(average_score) AS average_score
+        SELECT DISTINCT aspek, AVG(average_score) AS average_score
         FROM asesmen_hasil
         WHERE asesmen_kode = '$asesmen_kode' AND score_session_id = $score_session_id
-        GROUP BY category
+        GROUP BY aspek
     ");
 }
 
@@ -90,7 +90,7 @@ if ($asesmen_kode && $score_session_id) {
             <tbody>
                 <?php while ($row = $results_query->fetch_assoc()): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($row['category']); ?></td>
+                        <td><?php echo htmlspecialchars($row['aspek']); ?></td>
                         <td><?php echo htmlspecialchars(round($row['average_score'], 2)); ?></td>
                     </tr>
                 <?php endwhile; ?>

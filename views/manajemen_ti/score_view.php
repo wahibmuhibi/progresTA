@@ -50,16 +50,16 @@ if ($asesmen_kode && $score_session_id) {
     // Hitung rata-rata skor untuk kategori ITIL Service Lifecycle
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $category = explode('_', $row['kode_mapping'])[1]; // Ambil kategori dari kode_mapping
-            if (isset($categories[$category])) {
-                $categories[$category] += $row['skor'];
-                $counts[$category]++;
+            $aspek = explode('_', $row['kode_mapping'])[1]; // Ambil kategori dari kode_mapping
+            if (isset($categories[$aspek])) {
+                $categories[$aspek] += $row['skor'];
+                $counts[$aspek]++;
             }
         }
 
         // Hitung rata-rata skor setiap kategori
-        foreach ($categories as $category => $total_score) {
-            $categories[$category] = $counts[$category] > 0 ? $total_score / $counts[$category] : 0;
+        foreach ($categories as $aspek => $total_score) {
+            $categories[$aspek] = $counts[$aspek] > 0 ? $total_score / $counts[$aspek] : 0;
         }
 
         // Hitung rata-rata keseluruhan dengan formula (*18)
@@ -73,17 +73,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_to_asesor'])) {
     $score_session_id = (int) $_POST['score_session_id'];
     $categories = json_decode($_POST['categories'], true);
 
-    foreach ($categories as $category => $average_score) {
-        $category = $conn->real_escape_string($category);
+    foreach ($categories as $aspek => $average_score) {
+        $aspek = $conn->real_escape_string($aspek);
         $average_score = (float) $average_score;
 
         $insert_query = "
-            INSERT INTO asesmen_hasil (asesmen_kode, score_session_id, category, average_score)
-            VALUES ('$asesmen_kode', $score_session_id, '$category', $average_score)
+            INSERT INTO asesmen_hasil (asesmen_kode, score_session_id, aspek, average_score)
+            VALUES ('$asesmen_kode', $score_session_id, '$aspek', $average_score)
         ";
 
         if (!$conn->query($insert_query)) {
-            echo "<div class='alert alert-danger'>Gagal menyimpan hasil untuk kategori $category. Kesalahan: {$conn->error}</div>";
+            echo "<div class='alert alert-danger'>Gagal menyimpan hasil untuk kategori $aspek. Kesalahan: {$conn->error}</div>";
         }
     }
 
@@ -156,9 +156,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_to_asesor'])) {
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($categories as $category => $average): ?>
+                <?php foreach ($categories as $aspek => $average): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($category); ?></td>
+                        <td><?php echo htmlspecialchars($aspek); ?></td>
                         <td><?php echo round($average, 2); ?></td>
                     </tr>
                 <?php endforeach; ?>
