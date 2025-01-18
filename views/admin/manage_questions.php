@@ -12,9 +12,9 @@ if ($conn->connect_error) {
 }
 
 // Ambil data versi ITIL, ISO, dan COBIT
-$itil_versions = $conn->query("SELECT DISTINCT version FROM itil");
-$iso_versions = $conn->query("SELECT DISTINCT version FROM iso");
-$cobit_versions = $conn->query("SELECT DISTINCT version FROM cobit");
+$itil_versions = $conn->query("SELECT DISTINCT versi FROM itil");
+$iso_versions = $conn->query("SELECT DISTINCT versi FROM iso");
+$cobit_versions = $conn->query("SELECT DISTINCT versi FROM cobit");
 
 // Ambil pilihan pengguna
 $selected_itil_version = isset($_POST['itil_version']) ? $_POST['itil_version'] : null;
@@ -22,9 +22,9 @@ $selected_iso_version = isset($_POST['iso_version']) ? $_POST['iso_version'] : n
 $selected_cobit_version = isset($_POST['cobit_version']) ? $_POST['cobit_version'] : null;
 
 // Ambil data dinamis berdasarkan versi yang dipilih
-$itil_data = $selected_itil_version ? $conn->query("SELECT service_lifecycle FROM itil WHERE version = '$selected_itil_version'") : null;
-$iso_data = $selected_iso_version ? $conn->query("SELECT annex, control FROM iso WHERE version = '$selected_iso_version'") : null;
-$cobit_data = $selected_cobit_version ? $conn->query("SELECT process_id, process_name FROM cobit WHERE version = '$selected_cobit_version'") : null;
+$itil_data = $selected_itil_version ? $conn->query("SELECT service_lifecycle FROM itil WHERE versi = '$selected_itil_version'") : null;
+$iso_data = $selected_iso_version ? $conn->query("SELECT annex, control FROM iso WHERE versi = '$selected_iso_version'") : null;
+$cobit_data = $selected_cobit_version ? $conn->query("SELECT process_id, process_name FROM cobit WHERE versi = '$selected_cobit_version'") : null;
 
 // Simpan data dinamis ke array untuk digunakan di JavaScript
 $iso_controls = [];
@@ -143,8 +143,8 @@ $result = $conn->query($query);
             <select name="itil_version" id="itil_version" class="form-select" onchange="this.form.submit()" required>
                 <option value="" disabled selected>Pilih VersiITIL</option>
                 <?php while ($row = $itil_versions->fetch_assoc()): ?>
-                    <option value="<?php echo htmlspecialchars($row['version']); ?>" <?php echo $selected_itil_version === $row['version'] ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($row['version']); ?>
+                    <option value="<?php echo htmlspecialchars($row['versi']); ?>" <?php echo $selected_itil_version === $row['versi'] ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($row['versi']); ?>
                     </option>
                 <?php endwhile; ?>
             </select>
@@ -170,8 +170,8 @@ $result = $conn->query($query);
             <select name="iso_version" id="iso_version" class="form-select" onchange="this.form.submit()" required>
                 <option value="" disabled selected>Pilih Versi ISO</option>
                 <?php while ($row = $iso_versions->fetch_assoc()): ?>
-                    <option value="<?php echo htmlspecialchars($row['version']); ?>" <?php echo $selected_iso_version === $row['version'] ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($row['version']); ?>
+                    <option value="<?php echo htmlspecialchars($row['versi']); ?>" <?php echo $selected_iso_version === $row['versi'] ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($row['versi']); ?>
                     </option>
                 <?php endwhile; ?>
             </select>
@@ -201,8 +201,8 @@ $result = $conn->query($query);
             <select name="cobit_version" id="cobit_version" class="form-select" onchange="this.form.submit()" required>
                 <option value="" disabled selected>Pilih Versi COBIT</option>
                 <?php while ($row = $cobit_versions->fetch_assoc()): ?>
-                    <option value="<?php echo htmlspecialchars($row['version']); ?>" <?php echo $selected_cobit_version === $row['version'] ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($row['version']); ?>
+                    <option value="<?php echo htmlspecialchars($row['versi']); ?>" <?php echo $selected_cobit_version === $row['versi'] ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($row['versi']); ?>
                     </option>
                 <?php endwhile; ?>
             </select>
