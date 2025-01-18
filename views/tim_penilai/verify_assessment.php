@@ -135,13 +135,16 @@ if ($kode_audit && $score_session_id) {
         <?php
         // Proses verifikasi
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify'])) {
+            $verification_code = strtoupper(uniqid('VERIFY-'));
+            $verified_at = date('Y-m-d H:i:s');
+
             $update_query = "
-                UPDATE assessment_answers
-                SET status = 'verified'
+                UPDATE assessment_results
+                SET verification_code = '$verification_code', verified_at = '$verified_at'
                 WHERE kode_audit = '$kode_audit' AND score_session_id = $score_session_id
             ";
             if ($conn->query($update_query)) {
-                echo "<div class='alert alert-success mt-4'>Assessment berhasil diverifikasi.</div>";
+                echo "<div class='alert alert-success mt-4'>Assessment berhasil diverifikasi. Kode Verifikasi: $verification_code</div>";
             } else {
                 echo "<div class='alert alert-danger mt-4'>Gagal memverifikasi assessment. Kesalahan: " . $conn->error . "</div>";
             }
