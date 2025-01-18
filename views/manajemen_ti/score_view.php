@@ -134,11 +134,45 @@ if ($kode_audit && $score_session_id) {
     <canvas id="radarChart" width="400" height="400"></canvas>
 </div>
 
+<!-- Tabel Output Dashboard -->
+<h3 class="text-center mt-5">Output Dashboard Kinerja</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Kategori</th>
+            <th>Rata-Rata Skor</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($categories as $category => $average): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($category); ?></td>
+                <td><?php echo round($average, 2); ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
 <!-- Dashboard Speedometer -->
 <h3 class="text-center mt-5">Dashboard Tingkat Kesiapan Keamanan</h3>
 <div class="text-center">
     <canvas id="speedometerChart" width="400" height="200"></canvas>
 </div>
+
+<!-- Tabel Output Tingkat Kesiapan Keamanan -->
+<h3 class="text-center mt-5">Output Tingkat Kesiapan Keamanan</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Rata-Rata Keseluruhan</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?php echo round($overall_average, 2); ?></td>
+        </tr>
+    </tbody>
+</table>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
@@ -220,5 +254,17 @@ if ($kode_audit && $score_session_id) {
         }
     });
 </script>
+
+<?php if ($result && $result->num_rows > 0): ?>
+    <!-- Tombol Kirim ke Asessor -->
+    <div class="text-center mt-4">
+        <a href="../tim_penilai/verify_assessment.php?kode_audit=<?php echo urlencode($kode_audit); ?>&score_session_id=<?php echo urlencode($score_session_id); ?>"
+           class="btn btn-primary">
+           Kirim ke Asessor
+        </a>
+    </div>
+<?php elseif ($kode_audit && $score_session_id): ?>
+    <div class="alert alert-warning">Data tidak ditemukan untuk kombinasi kode audit dan ID sesi skor yang dipilih.</div>
+<?php endif; ?>
 
 <?php include '../../includes/footer.php'; ?>
