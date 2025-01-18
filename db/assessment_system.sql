@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Waktu pembuatan: 10 Jan 2025 pada 09.04
--- Versi server: 10.1.38-MariaDB
--- Versi PHP: 5.6.40
+-- Host: localhost
+-- Generation Time: Jan 18, 2025 at 02:26 PM
+-- Server version: 10.1.37-MariaDB
+-- PHP Version: 5.6.40
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -25,241 +25,582 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `activity_logs`
+-- Table structure for table `asesi`
 --
 
-CREATE TABLE `activity_logs` (
+CREATE TABLE `asesi` (
   `id` int(11) NOT NULL,
+  `asesmen_kode` varchar(50) DEFAULT NULL,
   `user_id` int(11) NOT NULL,
-  `activity` text NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `asesmen_periode` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `form_status` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `activity_logs`
+-- Dumping data for table `asesi`
 --
 
-INSERT INTO `activity_logs` (`id`, `user_id`, `activity`, `timestamp`) VALUES
-(1, 1, 'Login ke sistem', '2025-01-05 21:26:23'),
-(2, 1, 'Login ke sistem', '2025-01-05 21:36:37'),
-(3, 1, 'Login ke sistem', '2025-01-05 21:36:48'),
-(4, 1, 'Logout dari sistem', '2025-01-05 21:39:16'),
-(5, 1, 'Login ke sistem', '2025-01-05 21:39:20'),
-(6, 1, 'Logout dari sistem', '2025-01-05 21:39:51'),
-(13, 1, 'Login ke sistem', '2025-01-05 21:56:30'),
-(15, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:03:30'),
-(16, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:05:03'),
-(17, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:06:12'),
-(18, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:07:58'),
-(19, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:10:27'),
-(20, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:12:47'),
-(21, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:13:34'),
-(22, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:15:05'),
-(23, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:16:37'),
-(24, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:27:08'),
-(25, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:27:57'),
-(26, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:28:48'),
-(27, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:30:00'),
-(28, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:32:13'),
-(29, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:32:45'),
-(30, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:33:54'),
-(31, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:34:54'),
-(32, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:35:32'),
-(33, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:36:04'),
-(34, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:40:09'),
-(35, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:43:02'),
-(36, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:43:28'),
-(37, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:44:14'),
-(38, 1, 'Login ke sistem', '2025-01-06 01:52:57'),
-(39, 1, 'Logout dari sistem', '2025-01-06 06:37:46'),
-(41, 1, 'Login ke sistem', '2025-01-07 12:50:34'),
-(42, 1, 'Logout dari sistem', '2025-01-07 12:52:38'),
-(43, 1, 'Login ke sistem', '2025-01-07 12:52:57'),
-(44, 1, 'Logout dari sistem', '2025-01-07 14:22:30'),
-(46, 1, 'Login ke sistem', '2025-01-07 14:23:20'),
-(52, 1, 'Login ke sistem', '2025-01-07 15:54:50'),
-(53, 1, 'Logout dari sistem', '2025-01-07 16:04:49'),
-(54, 1, 'Login ke sistem', '2025-01-07 16:05:16'),
-(55, 1, 'Logout dari sistem', '2025-01-07 16:34:20'),
-(56, 1, 'Login ke sistem', '2025-01-07 16:36:43'),
-(57, 1, 'Logout dari sistem', '2025-01-07 16:36:53'),
-(58, 1, 'Login ke sistem', '2025-01-07 16:38:00'),
-(59, 1, 'Logout dari sistem', '2025-01-07 16:38:09'),
-(60, 6, 'Login ke sistem', '2025-01-07 16:39:00'),
-(61, 6, 'Logout dari sistem', '2025-01-07 16:39:05'),
-(62, 1, 'Login ke sistem', '2025-01-07 16:39:33'),
-(63, 1, 'Logout dari sistem', '2025-01-07 17:09:15'),
-(64, 1, 'Login ke sistem', '2025-01-07 17:56:37'),
-(65, 1, 'Logout dari sistem', '2025-01-07 17:56:45'),
-(66, 6, 'Login ke sistem', '2025-01-07 17:59:31'),
-(67, 1, 'Login ke sistem', '2025-01-07 18:34:43'),
-(68, 6, 'Logout dari sistem', '2025-01-08 03:13:47'),
-(69, 8, 'Login ke sistem', '2025-01-08 03:14:00'),
-(70, 8, 'Logout dari sistem', '2025-01-08 03:20:28'),
-(71, 6, 'Login ke sistem', '2025-01-08 03:20:43'),
-(72, 6, 'Logout dari sistem', '2025-01-08 03:40:54'),
-(73, 1, 'Login ke sistem', '2025-01-08 03:41:40'),
-(74, 1, 'Logout dari sistem', '2025-01-08 05:05:50'),
-(75, 6, 'Login ke sistem', '2025-01-08 05:06:01'),
-(76, 1, 'Login ke sistem', '2025-01-08 05:09:28'),
-(77, 1, 'Logout dari sistem', '2025-01-08 05:13:25'),
-(78, 6, 'Login ke sistem', '2025-01-08 05:13:39'),
-(79, 6, 'Logout dari sistem', '2025-01-08 10:04:44'),
-(80, 8, 'Login ke sistem', '2025-01-08 10:04:53'),
-(81, 8, 'Logout dari sistem', '2025-01-08 11:51:22'),
-(82, 8, 'Login ke sistem', '2025-01-08 11:51:49'),
-(83, 8, 'Logout dari sistem', '2025-01-08 12:36:55'),
-(84, 6, 'Login ke sistem', '2025-01-08 12:37:03'),
-(85, 6, 'Logout dari sistem', '2025-01-08 12:53:37'),
-(86, 8, 'Login ke sistem', '2025-01-08 12:53:41'),
-(87, 1, 'Logout dari sistem', '2025-01-08 13:08:30'),
-(88, 8, 'Login ke sistem', '2025-01-08 13:08:38'),
-(89, 8, 'Logout dari sistem', '2025-01-08 13:08:48'),
-(90, 6, 'Login ke sistem', '2025-01-08 13:08:59'),
-(91, 8, 'Logout dari sistem', '2025-01-08 17:57:55'),
-(92, 1, 'Login ke sistem', '2025-01-08 17:58:00'),
-(93, 1, 'Logout dari sistem', '2025-01-08 18:00:59'),
-(94, 6, 'Login ke sistem', '2025-01-08 18:01:11'),
-(95, 6, 'Logout dari sistem', '2025-01-08 18:04:35'),
-(96, 1, 'Login ke sistem', '2025-01-08 18:04:41'),
-(97, 1, 'Logout dari sistem', '2025-01-08 18:46:33'),
-(98, 8, 'Login ke sistem', '2025-01-08 18:46:41'),
-(99, 1, 'Login ke sistem', '2025-01-08 19:34:05'),
-(100, 1, 'Logout dari sistem', '2025-01-08 19:34:28'),
-(101, 8, 'Login ke sistem', '2025-01-08 19:34:33'),
-(102, 8, 'Logout dari sistem', '2025-01-08 19:34:43'),
-(103, 6, 'Login ke sistem', '2025-01-08 19:34:54'),
-(104, 6, 'Logout dari sistem', '2025-01-08 19:35:30'),
-(105, 8, 'Login ke sistem', '2025-01-08 19:35:33'),
-(106, 6, 'Logout dari sistem', '2025-01-09 14:49:26'),
-(107, 1, 'Login ke sistem', '2025-01-09 14:49:32');
+INSERT INTO `asesi` (`id`, `asesmen_kode`, `user_id`, `asesmen_periode`, `created_at`, `form_status`) VALUES
+(27, 'AUDIT-67895A8F32211', 6, 2025, '2025-01-16 19:14:23', 1),
+(28, 'AUDIT-678B58BED30CD', 6, 2025, '2025-01-18 07:31:10', 1),
+(31, 'AUDIT-678B8E207D7A0', 6, 2025, '2025-01-18 11:18:56', 0),
+(32, 'AUDIT-678B8FE23D23B', 6, 2025, '2025-01-18 11:26:26', 0),
+(33, 'AUDIT-678B9156A2267', 6, 2025, '2025-01-18 11:32:38', 0),
+(34, 'ASESMEN-678B919B15AA9', 6, 2025, '2025-01-18 11:33:47', 0),
+(35, 'ASESMEN-678B91E2C1D49', 6, 2025, '2025-01-18 11:34:58', 1);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `assessment_answers`
+-- Table structure for table `asesmen_hasil`
 --
 
-CREATE TABLE `assessment_answers` (
+CREATE TABLE `asesmen_hasil` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `question_id` int(11) NOT NULL,
-  `kode_audit` varchar(50) NOT NULL,
-  `jawaban` text,
-  `skor` int(11) DEFAULT NULL,
-  `bukti` varchar(255) DEFAULT NULL,
-  `status` enum('draft','submitted') DEFAULT 'draft',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `source` varchar(50) DEFAULT NULL,
-  `periode_audit` year(4) NOT NULL
+  `asesmen_kode` varchar(50) DEFAULT NULL,
+  `score_session_id` int(11) NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `average_score` decimal(5,2) NOT NULL,
+  `verification_code` varchar(50) DEFAULT NULL,
+  `verified_at` datetime DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `assessment_answers`
+-- Dumping data for table `asesmen_hasil`
 --
 
-INSERT INTO `assessment_answers` (`id`, `user_id`, `question_id`, `kode_audit`, `jawaban`, `skor`, `bukti`, `status`, `created_at`, `source`, `periode_audit`) VALUES
-(248, 6, 38, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:24:32', NULL, 0000),
-(249, 6, 39, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:24:32', NULL, 0000),
-(250, 6, 40, '', 'Sudah Ada, dan terdokumentasikan', NULL, '', 'submitted', '2025-01-09 07:24:32', NULL, 0000),
-(251, 6, 41, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:24:32', NULL, 0000),
-(252, 6, 42, '', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 07:24:32', NULL, 0000),
-(253, 6, 43, '', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 07:24:32', NULL, 0000),
-(254, 6, 44, '', 'Sudah Ada, dan terdokumentasikan', NULL, '', 'submitted', '2025-01-09 07:24:32', NULL, 0000),
-(255, 6, 45, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:24:32', NULL, 0000),
-(256, 6, 46, '', 'Sudah Ada, tanpa dokumentasi', NULL, '', 'submitted', '2025-01-09 07:24:32', NULL, 0000),
-(257, 6, 47, '', 'Sudah Ada, tanpa dokumentasi', NULL, '', 'submitted', '2025-01-09 07:24:33', NULL, 0000),
-(258, 6, 48, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:24:33', NULL, 0000),
-(259, 6, 49, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:24:33', NULL, 0000),
-(260, 6, 50, '', 'Sudah Ada, tanpa dokumentasi', NULL, '', 'submitted', '2025-01-09 07:24:33', NULL, 0000),
-(261, 6, 52, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:24:33', NULL, 0000),
-(262, 6, 53, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:24:33', NULL, 0000),
-(263, 6, 54, '', 'Sudah Ada, terdokumentasi dan termonitoring', NULL, '', 'submitted', '2025-01-09 07:24:33', NULL, 0000),
-(264, 6, 55, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:24:33', NULL, 0000),
-(265, 6, 56, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:24:33', NULL, 0000),
-(266, 6, 57, '', 'Sudah Ada, terdokumentasi dan termonitoring', NULL, '', 'submitted', '2025-01-09 07:24:33', NULL, 0000),
-(267, 6, 38, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(268, 6, 39, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(269, 6, 40, '', 'Sudah Ada, tanpa dokumentasi', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(270, 6, 41, '', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(271, 6, 42, '', 'Sudah Ada, tanpa dokumentasi', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(272, 6, 43, '', 'Sudah Ada, dan terdokumentasikan', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(273, 6, 44, '', 'Sudah Ada, dan terdokumentasikan', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(274, 6, 45, '', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(275, 6, 46, '', 'Sudah Ada, dan terdokumentasikan', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(276, 6, 47, '', 'Sudah Ada, tanpa dokumentasi', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(277, 6, 48, '', 'Sudah Ada, tanpa dokumentasi', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(278, 6, 49, '', 'Sudah Ada, tanpa dokumentasi', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(279, 6, 50, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(280, 6, 52, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(281, 6, 53, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(282, 6, 54, '', 'Sudah Ada, tanpa dokumentasi', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(283, 6, 55, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(284, 6, 56, '', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(285, 6, 57, '', 'Sudah Ada, dan terdokumentasikan', NULL, '', 'submitted', '2025-01-09 07:37:12', NULL, 0000),
-(286, 6, 38, '', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(287, 6, 39, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(288, 6, 40, '', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(289, 6, 41, '', 'Sudah Ada, tanpa dokumentasi', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(290, 6, 42, '', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(291, 6, 43, '', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(292, 6, 44, '', 'Sudah Ada, dan terdokumentasikan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(293, 6, 45, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(294, 6, 46, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(295, 6, 47, '', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(296, 6, 48, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(297, 6, 49, '', 'Sudah Ada, dan terdokumentasikan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(298, 6, 50, '', 'Sudah Ada, tanpa dokumentasi', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(299, 6, 52, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(300, 6, 53, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(301, 6, 54, '', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(302, 6, 55, '', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(303, 6, 56, '', 'Sudah Ada, terdokumentasi dan termonitoring', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(304, 6, 57, '', 'Sudah Ada, terdokumentasi dan termonitoring', NULL, '', 'submitted', '2025-01-09 08:41:57', NULL, 0000),
-(305, 6, 38, 'AUDIT-677F9E616A8B8', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(306, 6, 39, 'AUDIT-677F9E616A8B8', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(307, 6, 40, 'AUDIT-677F9E616A8B8', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(308, 6, 41, 'AUDIT-677F9E616A8B8', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(309, 6, 42, 'AUDIT-677F9E616A8B8', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(310, 6, 43, 'AUDIT-677F9E616A8B8', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(311, 6, 44, 'AUDIT-677F9E616A8B8', 'Sudah Ada, dan sudah Optimal', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(312, 6, 45, 'AUDIT-677F9E616A8B8', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(313, 6, 46, 'AUDIT-677F9E616A8B8', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(314, 6, 47, 'AUDIT-677F9E616A8B8', 'Sudah Ada, tanpa dokumentasi', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(315, 6, 48, 'AUDIT-677F9E616A8B8', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(316, 6, 49, 'AUDIT-677F9E616A8B8', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(317, 6, 50, 'AUDIT-677F9E616A8B8', 'Sudah Ada, tanpa dokumentasi', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(318, 6, 52, 'AUDIT-677F9E616A8B8', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(319, 6, 53, 'AUDIT-677F9E616A8B8', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(320, 6, 54, 'AUDIT-677F9E616A8B8', 'Belum Terfikirkan', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(321, 6, 55, 'AUDIT-677F9E616A8B8', 'Belum Ada, masih di inisiasikan', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(322, 6, 56, 'AUDIT-677F9E616A8B8', 'Sudah Ada, terdokumentasi dan termonitoring', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(323, 6, 57, 'AUDIT-677F9E616A8B8', 'Sudah Ada, terdokumentasi dan termonitoring', NULL, '', 'submitted', '2025-01-09 14:39:15', NULL, 0000),
-(324, 6, 38, 'AUDIT-677F9E616A8B8', 'Sudah Ada, tanpa dokumentasi', NULL, '', '', '2025-01-09 14:40:44', NULL, 0000),
-(325, 6, 39, 'AUDIT-677F9E616A8B8', 'Sudah Ada, tanpa dokumentasi', NULL, '', '', '2025-01-09 14:40:44', NULL, 0000),
-(326, 6, 40, 'AUDIT-677F9E616A8B8', 'Belum Ada, masih di inisiasikan', NULL, '', '', '2025-01-09 14:40:44', NULL, 0000),
-(327, 6, 41, 'AUDIT-677F9E616A8B8', 'Belum Terfikirkan', NULL, '', '', '2025-01-09 14:40:44', NULL, 0000),
-(328, 6, 42, 'AUDIT-677F9E616A8B8', 'Belum Ada, masih di inisiasikan', NULL, '', '', '2025-01-09 14:40:44', NULL, 0000),
-(329, 6, 43, 'AUDIT-677F9E616A8B8', 'Belum Ada, masih di inisiasikan', NULL, '', '', '2025-01-09 14:40:44', NULL, 0000),
-(330, 6, 44, 'AUDIT-677F9E616A8B8', 'Belum Ada, masih di inisiasikan', NULL, '', '', '2025-01-09 14:40:45', NULL, 0000),
-(331, 6, 45, 'AUDIT-677F9E616A8B8', 'Belum Ada, masih di inisiasikan', NULL, '', '', '2025-01-09 14:40:45', NULL, 0000),
-(332, 6, 46, 'AUDIT-677F9E616A8B8', 'Belum Terfikirkan', NULL, '', '', '2025-01-09 14:40:45', NULL, 0000),
-(333, 6, 47, 'AUDIT-677F9E616A8B8', 'Sudah Ada, dan terdokumentasikan', NULL, '', '', '2025-01-09 14:40:45', NULL, 0000),
-(334, 6, 48, 'AUDIT-677F9E616A8B8', 'Belum Terfikirkan', NULL, '', '', '2025-01-09 14:40:45', NULL, 0000),
-(335, 6, 49, 'AUDIT-677F9E616A8B8', 'Sudah Ada, terdokumentasi dan termonitoring', NULL, '', '', '2025-01-09 14:40:45', NULL, 0000),
-(336, 6, 50, 'AUDIT-677F9E616A8B8', 'Sudah Ada, terdokumentasi dan termonitoring', NULL, '', '', '2025-01-09 14:40:45', NULL, 0000),
-(337, 6, 52, 'AUDIT-677F9E616A8B8', 'Sudah Ada, terdokumentasi dan termonitoring', NULL, '', '', '2025-01-09 14:40:45', NULL, 0000),
-(338, 6, 53, 'AUDIT-677F9E616A8B8', 'Sudah Ada, tanpa dokumentasi', NULL, '', '', '2025-01-09 14:40:45', NULL, 0000),
-(339, 6, 54, 'AUDIT-677F9E616A8B8', 'Sudah Ada, terdokumentasi dan termonitoring', NULL, '', '', '2025-01-09 14:40:45', NULL, 0000),
-(340, 6, 55, 'AUDIT-677F9E616A8B8', 'Sudah Ada, dan terdokumentasikan', NULL, '', '', '2025-01-09 14:40:45', NULL, 0000),
-(341, 6, 56, 'AUDIT-677F9E616A8B8', 'Sudah Ada, dan terdokumentasikan', NULL, '', '', '2025-01-09 14:40:45', NULL, 0000),
-(342, 6, 57, 'AUDIT-677F9E616A8B8', 'Sudah Ada, tanpa dokumentasi', NULL, '', '', '2025-01-09 14:40:45', NULL, 0000);
+INSERT INTO `asesmen_hasil` (`id`, `asesmen_kode`, `score_session_id`, `category`, `average_score`, `verification_code`, `verified_at`, `created_at`) VALUES
+(1, 'AUDIT-67895A8F32211', 1737083362, 'Service Strategy', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 04:33:03'),
+(2, 'AUDIT-67895A8F32211', 1737083362, 'Service Design', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 04:33:03'),
+(3, 'AUDIT-67895A8F32211', 1737083362, 'Service Transition', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 04:33:03'),
+(4, 'AUDIT-67895A8F32211', 1737083362, 'Service Operation', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 04:33:03'),
+(5, 'AUDIT-67895A8F32211', 1737083362, 'Continual Service Improvement', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 04:33:03'),
+(6, 'AUDIT-67895A8F32211', 1737170025, 'Service Strategy', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:08:47'),
+(7, 'AUDIT-67895A8F32211', 1737170025, 'Service Design', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:08:47'),
+(8, 'AUDIT-67895A8F32211', 1737170025, 'Service Transition', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:08:47'),
+(9, 'AUDIT-67895A8F32211', 1737170025, 'Service Operation', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:08:47'),
+(10, 'AUDIT-67895A8F32211', 1737170025, 'Continual Service Improvement', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:08:47'),
+(11, 'AUDIT-67895A8F32211', 1737083362, 'Service Strategy', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 05:38:12'),
+(12, 'AUDIT-67895A8F32211', 1737083362, 'Service Design', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 05:38:12'),
+(13, 'AUDIT-67895A8F32211', 1737083362, 'Service Transition', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 05:38:12'),
+(14, 'AUDIT-67895A8F32211', 1737083362, 'Service Operation', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 05:38:12'),
+(15, 'AUDIT-67895A8F32211', 1737083362, 'Continual Service Improvement', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 05:38:12'),
+(16, 'AUDIT-67895A8F32211', 1737170025, 'Service Strategy', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:39:43'),
+(17, 'AUDIT-67895A8F32211', 1737170025, 'Service Design', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:39:43'),
+(18, 'AUDIT-67895A8F32211', 1737170025, 'Service Transition', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:39:43'),
+(19, 'AUDIT-67895A8F32211', 1737170025, 'Service Operation', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:39:43'),
+(20, 'AUDIT-67895A8F32211', 1737170025, 'Continual Service Improvement', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:39:43'),
+(21, 'AUDIT-67895A8F32211', 1737170025, 'Service Strategy', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 07:28:13'),
+(22, 'AUDIT-67895A8F32211', 1737170025, 'Service Design', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 07:28:13'),
+(23, 'AUDIT-67895A8F32211', 1737170025, 'Service Transition', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 07:28:13'),
+(24, 'AUDIT-67895A8F32211', 1737170025, 'Service Operation', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 07:28:13'),
+(25, 'AUDIT-67895A8F32211', 1737170025, 'Continual Service Improvement', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 07:28:13'),
+(26, 'AUDIT-678B58BED30CD', 1737185533, 'Service Strategy', '1.00', NULL, NULL, '2025-01-18 07:32:23'),
+(27, 'AUDIT-678B58BED30CD', 1737185533, 'Service Design', '1.00', NULL, NULL, '2025-01-18 07:32:23'),
+(28, 'AUDIT-678B58BED30CD', 1737185533, 'Service Transition', '1.00', NULL, NULL, '2025-01-18 07:32:23'),
+(29, 'AUDIT-678B58BED30CD', 1737185533, 'Service Operation', '1.00', NULL, NULL, '2025-01-18 07:32:23'),
+(30, 'AUDIT-678B58BED30CD', 1737185533, 'Continual Service Improvement', '1.00', NULL, NULL, '2025-01-18 07:32:23'),
+(31, 'AUDIT-678B58BED30CD', 1737189188, 'Service Strategy', '1.00', 'VERIFY-678B9C66E1447', '2025-01-18 13:19:50', '2025-01-18 08:33:15'),
+(32, 'AUDIT-678B58BED30CD', 1737189188, 'Service Design', '1.00', 'VERIFY-678B9C66E1447', '2025-01-18 13:19:50', '2025-01-18 08:33:15'),
+(33, 'AUDIT-678B58BED30CD', 1737189188, 'Service Transition', '1.00', 'VERIFY-678B9C66E1447', '2025-01-18 13:19:50', '2025-01-18 08:33:15'),
+(34, 'AUDIT-678B58BED30CD', 1737189188, 'Service Operation', '1.00', 'VERIFY-678B9C66E1447', '2025-01-18 13:19:50', '2025-01-18 08:33:15'),
+(35, 'AUDIT-678B58BED30CD', 1737189188, 'Continual Service Improvement', '1.00', 'VERIFY-678B9C66E1447', '2025-01-18 13:19:50', '2025-01-18 08:33:15'),
+(36, 'AUDIT-67895A8F32211', 1737170025, 'Service Strategy', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 11:53:03'),
+(37, 'AUDIT-67895A8F32211', 1737170025, 'Service Design', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 11:53:03'),
+(38, 'AUDIT-67895A8F32211', 1737170025, 'Service Transition', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 11:53:03'),
+(39, 'AUDIT-67895A8F32211', 1737170025, 'Service Operation', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 11:53:03'),
+(40, 'AUDIT-67895A8F32211', 1737170025, 'Continual Service Improvement', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 11:53:03');
+
+-- --------------------------------------------------------
 
 --
--- Trigger `assessment_answers`
+-- Table structure for table `asesmen_jawaban`
+--
+
+CREATE TABLE `asesmen_jawaban` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `question_id` int(11) NOT NULL,
+  `asesmen_kode` varchar(50) DEFAULT NULL,
+  `jawaban` text,
+  `skor` int(11) DEFAULT NULL,
+  `status` enum('draft','submitted') DEFAULT 'draft',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `source` varchar(50) DEFAULT NULL,
+  `periode_audit` year(4) NOT NULL,
+  `score_session_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `asesmen_jawaban`
+--
+
+INSERT INTO `asesmen_jawaban` (`id`, `user_id`, `question_id`, `asesmen_kode`, `jawaban`, `skor`, `status`, `created_at`, `source`, `periode_audit`, `score_session_id`) VALUES
+(381, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(382, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(383, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(384, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(385, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(386, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(387, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(388, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(389, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(390, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(391, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(392, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(393, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(394, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(395, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(396, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(397, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(398, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(399, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
+(400, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(401, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(402, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(403, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(404, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(405, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(406, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(407, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(408, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(409, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(410, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(411, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(412, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(413, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(414, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(415, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(416, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(417, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(418, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:40:26', NULL, 2025, NULL),
+(419, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(420, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(421, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(422, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(423, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(424, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(425, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(426, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(427, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(428, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(429, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(430, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(431, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(432, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(433, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(434, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(435, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(436, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(437, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:13', NULL, 2025, NULL),
+(438, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(439, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(440, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(441, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(442, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(443, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(444, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(445, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(446, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(447, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(448, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(449, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(450, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(451, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(452, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(453, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(454, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(455, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(456, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:52:44', NULL, 2025, NULL),
+(457, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(458, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(459, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(460, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(461, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(462, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(463, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(464, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(465, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(466, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(467, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(468, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(469, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(470, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(471, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(472, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(473, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(474, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(475, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:03:31', NULL, 2025, NULL),
+(476, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(477, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(478, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(479, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(480, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(481, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(482, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(483, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(484, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(485, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(486, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(487, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(488, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(489, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(490, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(491, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(492, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(493, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(494, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:05:56', NULL, 2025, NULL),
+(495, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(496, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(497, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(498, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(499, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(500, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(501, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(502, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(503, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(504, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(505, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(506, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(507, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(508, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(509, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(510, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(511, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(512, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(513, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:11:14', NULL, 2025, NULL),
+(514, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(515, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(516, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(517, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(518, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(519, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(520, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(521, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(522, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(523, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(524, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(525, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(526, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(527, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(528, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(529, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(530, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(531, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(532, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:29:55', NULL, 2025, NULL),
+(533, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(534, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(535, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(536, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(537, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(538, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(539, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(540, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(541, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(542, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(543, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(544, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(545, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(546, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(547, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(548, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(549, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(550, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(551, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:34:54', NULL, 2025, NULL),
+(552, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(553, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(554, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(555, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(556, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(557, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(558, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(559, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(560, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(561, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(562, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(563, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(564, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(565, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(566, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(567, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(568, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(569, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(570, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:36:05', NULL, 2025, NULL),
+(571, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(572, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(573, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(574, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(575, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(576, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(577, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(578, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(579, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(580, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(581, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(582, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(583, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(584, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(585, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(586, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(587, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(588, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(589, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:40:35', NULL, 2025, NULL),
+(590, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(591, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(592, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(593, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(594, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(595, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(596, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(597, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(598, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(599, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(600, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(601, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(602, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(603, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(604, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(605, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(606, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(607, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(608, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:11', NULL, 2025, 1737060371),
+(609, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(610, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(611, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(612, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(613, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(614, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(615, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(616, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(617, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(618, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(619, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(620, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(621, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(622, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(623, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(624, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(625, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(626, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(627, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:46', NULL, 2025, 1737060406),
+(628, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(629, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(630, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(631, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(632, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(633, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(634, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(635, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(636, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(637, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(638, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(639, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(640, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(641, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(642, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(643, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(644, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(645, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(646, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:46:49', NULL, 2025, 1737060409),
+(647, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(648, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(649, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(650, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(651, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(652, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(653, 6, 44, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(654, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(655, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(656, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(657, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(658, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(659, 6, 50, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(660, 6, 52, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(661, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(662, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan terdokumentasikan', 3, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(663, 6, 55, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(664, 6, 56, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(665, 6, 57, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 20:47:20', NULL, 2025, 1737060440),
+(666, 6, 38, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(667, 6, 39, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(668, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(669, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(670, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(671, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(672, 6, 44, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(673, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(674, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(675, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(676, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(677, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(678, 6, 50, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(679, 6, 52, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(680, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(681, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(682, 6, 55, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(683, 6, 56, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(684, 6, 57, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-17 03:09:22', NULL, 2025, 1737083362),
+(685, 6, 38, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(686, 6, 39, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(687, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(688, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(689, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(690, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(691, 6, 44, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(692, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(693, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(694, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(695, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(696, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(697, 6, 50, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(698, 6, 52, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(699, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(700, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(701, 6, 55, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(702, 6, 56, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(703, 6, 57, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 03:13:45', NULL, 2025, 1737170025),
+(704, 6, 38, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(705, 6, 39, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(706, 6, 40, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(707, 6, 41, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(708, 6, 42, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(709, 6, 43, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(710, 6, 44, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(711, 6, 45, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(712, 6, 46, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(713, 6, 47, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(714, 6, 48, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(715, 6, 49, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(716, 6, 50, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(717, 6, 52, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(718, 6, 53, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(719, 6, 54, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(720, 6, 55, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(721, 6, 56, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(722, 6, 57, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:32:13', NULL, 2025, 1737185533),
+(723, 6, 38, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(724, 6, 39, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(725, 6, 40, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(726, 6, 41, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(727, 6, 42, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(728, 6, 43, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(729, 6, 44, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(730, 6, 45, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(731, 6, 46, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(732, 6, 47, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(733, 6, 48, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(734, 6, 49, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(735, 6, 50, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(736, 6, 52, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(737, 6, 53, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(738, 6, 54, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(739, 6, 55, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(740, 6, 56, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(741, 6, 57, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 07:57:57', NULL, 2025, 1737187077),
+(742, 6, 38, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(743, 6, 39, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(744, 6, 40, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(745, 6, 41, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(746, 6, 42, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(747, 6, 43, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(748, 6, 44, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(749, 6, 45, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(750, 6, 46, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(751, 6, 47, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(752, 6, 48, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(753, 6, 49, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(754, 6, 50, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(755, 6, 52, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(756, 6, 53, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(757, 6, 54, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(758, 6, 55, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(759, 6, 56, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(760, 6, 57, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 08:33:08', NULL, 2025, 1737189188),
+(761, 6, 38, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(762, 6, 39, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(763, 6, 40, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(764, 6, 41, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(765, 6, 42, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(766, 6, 43, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(767, 6, 44, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(768, 6, 45, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(769, 6, 46, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(770, 6, 47, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(771, 6, 48, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(772, 6, 49, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(773, 6, 50, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(774, 6, 52, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806);
+INSERT INTO `asesmen_jawaban` (`id`, `user_id`, `question_id`, `asesmen_kode`, `jawaban`, `skor`, `status`, `created_at`, `source`, `periode_audit`, `score_session_id`) VALUES
+(775, 6, 53, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(776, 6, 54, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(777, 6, 55, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(778, 6, 56, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(779, 6, 57, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
+(780, 6, 38, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(781, 6, 39, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(782, 6, 40, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(783, 6, 41, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(784, 6, 42, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(785, 6, 43, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(786, 6, 44, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(787, 6, 45, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(788, 6, 46, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(789, 6, 47, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(790, 6, 48, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(791, 6, 49, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(792, 6, 50, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(793, 6, 52, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(794, 6, 53, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(795, 6, 54, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(796, 6, 55, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(797, 6, 56, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(798, 6, 57, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:40', NULL, 2025, 1737204820),
+(799, 6, 38, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(800, 6, 39, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(801, 6, 40, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(802, 6, 41, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(803, 6, 42, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(804, 6, 43, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(805, 6, 44, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(806, 6, 45, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(807, 6, 46, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(808, 6, 47, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(809, 6, 48, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(810, 6, 49, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(811, 6, 50, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(812, 6, 52, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(813, 6, 53, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(814, 6, 54, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(815, 6, 55, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(816, 6, 56, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(817, 6, 57, 'ASESMEN-678B91E2C1D49', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-18 12:54:33', NULL, 2025, 1737204873),
+(818, 6, 38, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(819, 6, 39, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(820, 6, 40, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(821, 6, 41, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(822, 6, 42, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(823, 6, 43, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(824, 6, 44, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(825, 6, 45, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(826, 6, 46, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(827, 6, 47, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(828, 6, 48, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(829, 6, 49, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(830, 6, 50, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(831, 6, 52, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(832, 6, 53, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(833, 6, 54, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(834, 6, 55, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(835, 6, 56, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830),
+(836, 6, 57, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 13:10:30', NULL, 2025, 1737205830);
+
+--
+-- Triggers `asesmen_jawaban`
 --
 DELIMITER $$
-CREATE TRIGGER `after_assessment_answers_update` AFTER UPDATE ON `assessment_answers` FOR EACH ROW BEGIN
+CREATE TRIGGER `after_assessment_answers_update` AFTER UPDATE ON `asesmen_jawaban` FOR EACH ROW BEGIN
     IF NEW.status <> OLD.status THEN
         UPDATE eksternal_audit_question
         SET status = NEW.status
@@ -272,44 +613,48 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `auditee`
+-- Table structure for table `asesmen_pertanyaan`
 --
 
-CREATE TABLE `auditee` (
+CREATE TABLE `asesmen_pertanyaan` (
   `id` int(11) NOT NULL,
-  `kode_audit` varchar(50) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `periode_audit` year(4) NOT NULL,
+  `kode_mapping` varchar(255) NOT NULL,
+  `asesmen_periode` int(11) DEFAULT NULL,
+  `pertanyaan` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `is_read` tinyint(1) DEFAULT '0',
-  `form_status` tinyint(1) NOT NULL DEFAULT '0'
+  `source` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `auditee`
+-- Dumping data for table `asesmen_pertanyaan`
 --
 
-INSERT INTO `auditee` (`id`, `kode_audit`, `user_id`, `periode_audit`, `created_at`, `is_read`, `form_status`) VALUES
-(19, 'AUDIT-677F9E616A8B8', 6, 2025, '2025-01-09 10:01:05', 0, 1);
+INSERT INTO `asesmen_pertanyaan` (`id`, `kode_mapping`, `asesmen_periode`, `pertanyaan`, `created_at`, `source`) VALUES
+(0, '1_Continual Service Improvement_5', 2026, 'Test', '2025-01-18 12:56:55', 'kominfojatim'),
+(38, '1_Continual Service Improvement_5', 2025, 'Apakah kejadian yang mungkin mengganggu proses bisnis telah diidentifikasi (contoh : kebakaran, banjir, gempa, dll)?', '2025-01-09 02:36:32', 'kominfojatim'),
+(39, '1_Continual Service Improvement_6', 2025, 'Apakah Strategy Plan dikembangkan berdasarkan hasil penilaian risiko ini untuk menentukan pendekatan menyeluruh dalam Business Continuity Plan?\r\n', '2025-01-09 02:36:45', 'kominfojatim'),
+(40, '1_Continual Service Improvement_7', 2025, 'Apakah terdapat proses yang mengatur pengembangan dan pembangunan keberlanjutan bisnis diseluruh organisasi?', '2025-01-09 02:37:01', 'kominfojatim'),
+(41, '1_Service Design_1', 2025, 'Apakah terdapat catatan inventaris aset penting yang berhubungan dengan sistem informasi?\r\n', '2025-01-09 02:37:17', 'kominfojatim'),
+(42, '1_Service Design_2', 2025, 'Apakah klasifikasi keamanan dan identifikasi keamanan lokasi aset telah didefinisikan?\r\n', '2025-01-09 02:37:26', 'kominfojatim'),
+(43, '1_Service Design_3', 2025, 'Apakah terdapat skema atau pedoman klasifikasi yang membantu dalam menentukan penanganan dan penjagaan informasi?\r\n', '2025-01-09 02:37:40', 'kominfojatim'),
+(44, '1_Service Design_4', 2025, 'Apakah terdapat prosedur labelling dan handling informasi berdasarkan skema klasifikasi informasi organisasi?\r\n', '2025-01-09 02:37:52', 'kominfojatim'),
+(45, '1_Service Operation_1', 2025, 'Apakah Kebijakan Keamanan telah mengidentifikasikan setiap prosedur operasional (contoh : back-up, pengecekan perlengkapan, proses pemeliharaan, dll) ?\r\n', '2025-01-09 02:38:16', 'kominfojatim'),
+(46, '1_Service Operation_2', 2025, 'Apakah semua program dalam sistem produksi tunduk dengan peraturan change control ?\r\n', '2025-01-09 02:38:24', 'kominfojatim'),
+(47, '1_Service Operation_3', 2025, 'Apakah audit log dilakukan untuk setiap perubahan dalam program produksi?\r\n', '2025-01-09 02:38:35', 'kominfojatim'),
+(48, '1_Service Operation_5', 2025, 'Apakah kapasitas ( contoh : Hard disk space, RAM, CPU, server) dimonitoring dan peramalan kebutuhan kapasitas dilakukan?\r\n', '2025-01-09 02:38:44', 'kominfojatim'),
+(49, '1_Service Strategy_1', 2025, 'Apakah terdapat dokumen Kebijakan Keamanan Informasi yang sudah disetujui oleh pihak manajemen dan telah dikomunikasikan kepada seluruh karyawan?\r\n', '2025-01-09 02:39:02', 'kominfojatim'),
+(50, '1_Service Strategy_2', 2025, 'Apakah dokumen Kebijakan Keamanan Informasi telah membahas komitmen pihak manajemen terhadap keamanan TI?\r\n', '2025-01-09 02:39:12', 'kominfojatim'),
+(52, '1_Service Strategy_3', 2025, 'Apakah terdapat penanggung jawab terhadap dokumen Kebijakan Keamanan Informasi, baik untuk melakukan perubahan maupun penilaian pencapain ?\r\n', '2025-01-09 02:39:31', 'kominfojatim'),
+(53, '1_Service Strategy_4', 2025, 'Apakah terdapat forum yang membahas keamanan informasi ?\r\n', '2025-01-09 02:39:47', 'kominfojatim'),
+(54, '1_Service Transition_1', 2025, 'Apakah kebutuhan akan keamanan merupakan bagian dari kebutuhan bisnis yang dinyatakan untuk sistem atau peningkatan sistem yang sudah ada sebelumnya?', '2025-01-09 02:40:41', 'kominfojatim'),
+(55, '1_Service Transition_2', 2025, 'Apakah identifikasi kebutuhan dan kontrol keamanan telah mencerminkan nilai bisnis dari aset informasi, termasuk konsekuensi akan kegagalan keamanan?\r\n', '2025-01-09 02:40:50', 'kominfojatim'),
+(56, '1_Service Transition_3', 2025, 'Apakah penilaian risiko telah selesai sebelum pengembangan sistem dilakukan?\r\n', '2025-01-09 02:41:00', 'kominfojatim'),
+(57, '1_Service Transition_4', 2025, 'Apakah data inputterhadap sistem aplikasi divalidasi untuk memastikan data yang dimasukkan adalah benar dan sesuai?\r\n', '2025-01-09 02:41:09', 'kominfojatim');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `audit_history`
---
-
-CREATE TABLE `audit_history` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `description` text NOT NULL,
-  `result` text,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `cobit`
+-- Table structure for table `cobit`
 --
 
 CREATE TABLE `cobit` (
@@ -321,7 +666,7 @@ CREATE TABLE `cobit` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `cobit`
+-- Dumping data for table `cobit`
 --
 
 INSERT INTO `cobit` (`id`, `version`, `domain`, `process_id`, `process_name`) VALUES
@@ -560,7 +905,7 @@ INSERT INTO `cobit` (`id`, `version`, `domain`, `process_id`, `process_name`) VA
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `criteria`
+-- Table structure for table `criteria`
 --
 
 CREATE TABLE `criteria` (
@@ -572,7 +917,7 @@ CREATE TABLE `criteria` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `criteria`
+-- Dumping data for table `criteria`
 --
 
 INSERT INTO `criteria` (`id`, `jenis`, `kondisi`, `skor`, `created_at`) VALUES
@@ -586,77 +931,7 @@ INSERT INTO `criteria` (`id`, `jenis`, `kondisi`, `skor`, `created_at`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `eksternal_audit_question`
---
-
-CREATE TABLE `eksternal_audit_question` (
-  `id` int(11) NOT NULL,
-  `kode_mapping` varchar(255) NOT NULL,
-  `periode_audit` year(4) NOT NULL,
-  `pertanyaan` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `source` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data untuk tabel `eksternal_audit_question`
---
-
-INSERT INTO `eksternal_audit_question` (`id`, `kode_mapping`, `periode_audit`, `pertanyaan`, `created_at`, `source`) VALUES
-(38, '1_Continual Service Improvement_5', 2025, 'Apakah kejadian yang mungkin mengganggu proses bisnis telah diidentifikasi (contoh : kebakaran, banjir, gempa, dll)?', '2025-01-09 02:36:32', 'kominfojatim'),
-(39, '1_Continual Service Improvement_6', 2025, 'Apakah Strategy Plan dikembangkan berdasarkan hasil penilaian risiko ini untuk menentukan pendekatan menyeluruh dalam Business Continuity Plan?\r\n', '2025-01-09 02:36:45', 'kominfojatim'),
-(40, '1_Continual Service Improvement_7', 2025, 'Apakah terdapat proses yang mengatur pengembangan dan pembangunan keberlanjutan bisnis diseluruh organisasi?', '2025-01-09 02:37:01', 'kominfojatim'),
-(41, '1_Service Design_1', 2025, 'Apakah terdapat catatan inventaris aset penting yang berhubungan dengan sistem informasi?\r\n', '2025-01-09 02:37:17', 'kominfojatim'),
-(42, '1_Service Design_2', 2025, 'Apakah klasifikasi keamanan dan identifikasi keamanan lokasi aset telah didefinisikan?\r\n', '2025-01-09 02:37:26', 'kominfojatim'),
-(43, '1_Service Design_3', 2025, 'Apakah terdapat skema atau pedoman klasifikasi yang membantu dalam menentukan penanganan dan penjagaan informasi?\r\n', '2025-01-09 02:37:40', 'kominfojatim'),
-(44, '1_Service Design_4', 2025, 'Apakah terdapat prosedur labelling dan handling informasi berdasarkan skema klasifikasi informasi organisasi?\r\n', '2025-01-09 02:37:52', 'kominfojatim'),
-(45, '1_Service Operation_1', 2025, 'Apakah Kebijakan Keamanan telah mengidentifikasikan setiap prosedur operasional (contoh : back-up, pengecekan perlengkapan, proses pemeliharaan, dll) ?\r\n', '2025-01-09 02:38:16', 'kominfojatim'),
-(46, '1_Service Operation_2', 2025, 'Apakah semua program dalam sistem produksi tunduk dengan peraturan change control ?\r\n', '2025-01-09 02:38:24', 'kominfojatim'),
-(47, '1_Service Operation_3', 2025, 'Apakah audit log dilakukan untuk setiap perubahan dalam program produksi?\r\n', '2025-01-09 02:38:35', 'kominfojatim'),
-(48, '1_Service Operation_5', 2025, 'Apakah kapasitas ( contoh : Hard disk space, RAM, CPU, server) dimonitoring dan peramalan kebutuhan kapasitas dilakukan?\r\n', '2025-01-09 02:38:44', 'kominfojatim'),
-(49, '1_Service Strategy_1', 2025, 'Apakah terdapat dokumen Kebijakan Keamanan Informasi yang sudah disetujui oleh pihak manajemen dan telah dikomunikasikan kepada seluruh karyawan?\r\n', '2025-01-09 02:39:02', 'kominfojatim'),
-(50, '1_Service Strategy_2', 2025, 'Apakah dokumen Kebijakan Keamanan Informasi telah membahas komitmen pihak manajemen terhadap keamanan TI?\r\n', '2025-01-09 02:39:12', 'kominfojatim'),
-(52, '1_Service Strategy_3', 2025, 'Apakah terdapat penanggung jawab terhadap dokumen Kebijakan Keamanan Informasi, baik untuk melakukan perubahan maupun penilaian pencapain ?\r\n', '2025-01-09 02:39:31', 'kominfojatim'),
-(53, '1_Service Strategy_4', 2025, 'Apakah terdapat forum yang membahas keamanan informasi ?\r\n', '2025-01-09 02:39:47', 'kominfojatim'),
-(54, '1_Service Transition_1', 2025, 'Apakah kebutuhan akan keamanan merupakan bagian dari kebutuhan bisnis yang dinyatakan untuk sistem atau peningkatan sistem yang sudah ada sebelumnya?', '2025-01-09 02:40:41', 'kominfojatim'),
-(55, '1_Service Transition_2', 2025, 'Apakah identifikasi kebutuhan dan kontrol keamanan telah mencerminkan nilai bisnis dari aset informasi, termasuk konsekuensi akan kegagalan keamanan?\r\n', '2025-01-09 02:40:50', 'kominfojatim'),
-(56, '1_Service Transition_3', 2025, 'Apakah penilaian risiko telah selesai sebelum pengembangan sistem dilakukan?\r\n', '2025-01-09 02:41:00', 'kominfojatim'),
-(57, '1_Service Transition_4', 2025, 'Apakah data inputterhadap sistem aplikasi divalidasi untuk memastikan data yang dimasukkan adalah benar dan sesuai?\r\n', '2025-01-09 02:41:09', 'kominfojatim'),
-(58, '1_Continual Service Improvement_5', 2026, 'Tes', '2025-01-09 05:38:43', 'kominfojatim');
-
---
--- Trigger `eksternal_audit_question`
---
-DELIMITER $$
-CREATE TRIGGER `after_eksternal_audit_question_update` AFTER UPDATE ON `eksternal_audit_question` FOR EACH ROW BEGIN
-    IF NEW.status <> OLD.status THEN
-        UPDATE assessment_answers
-        SET status = NEW.status
-        WHERE question_id = NEW.id;
-    END IF;
-END
-$$
-DELIMITER ;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `internal_audit_question`
---
-
-CREATE TABLE `internal_audit_question` (
-  `id` int(11) NOT NULL,
-  `kode_mapping` varchar(255) NOT NULL,
-  `periode_audit` year(4) NOT NULL,
-  `pertanyaan` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` enum('draft','active','archived') DEFAULT 'draft'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `iso`
+-- Table structure for table `iso`
 --
 
 CREATE TABLE `iso` (
@@ -667,7 +942,7 @@ CREATE TABLE `iso` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `iso`
+-- Dumping data for table `iso`
 --
 
 INSERT INTO `iso` (`id`, `version`, `annex`, `control`) VALUES
@@ -870,7 +1145,7 @@ INSERT INTO `iso` (`id`, `version`, `annex`, `control`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `itil`
+-- Table structure for table `itil`
 --
 
 CREATE TABLE `itil` (
@@ -880,7 +1155,7 @@ CREATE TABLE `itil` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `itil`
+-- Dumping data for table `itil`
 --
 
 INSERT INTO `itil` (`id`, `version`, `service_lifecycle`) VALUES
@@ -893,7 +1168,120 @@ INSERT INTO `itil` (`id`, `version`, `service_lifecycle`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `mapping_criteria`
+-- Table structure for table `log_aktivitas`
+--
+
+CREATE TABLE `log_aktivitas` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `activity` text NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `log_aktivitas`
+--
+
+INSERT INTO `log_aktivitas` (`id`, `user_id`, `activity`, `timestamp`) VALUES
+(0, 1, 'Login ke sistem', '2025-01-15 05:33:10'),
+(1, 1, 'Login ke sistem', '2025-01-05 21:26:23'),
+(2, 1, 'Login ke sistem', '2025-01-05 21:36:37'),
+(3, 1, 'Login ke sistem', '2025-01-05 21:36:48'),
+(4, 1, 'Logout dari sistem', '2025-01-05 21:39:16'),
+(5, 1, 'Login ke sistem', '2025-01-05 21:39:20'),
+(6, 1, 'Logout dari sistem', '2025-01-05 21:39:51'),
+(13, 1, 'Login ke sistem', '2025-01-05 21:56:30'),
+(15, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:03:30'),
+(16, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:05:03'),
+(17, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:06:12'),
+(18, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:07:58'),
+(19, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:10:27'),
+(20, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:12:47'),
+(21, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:13:34'),
+(22, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:15:05'),
+(23, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:16:37'),
+(24, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:27:08'),
+(25, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:27:57'),
+(26, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:28:48'),
+(27, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:30:00'),
+(28, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:32:13'),
+(29, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:32:45'),
+(30, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:33:54'),
+(31, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:34:54'),
+(32, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:35:32'),
+(33, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:36:04'),
+(34, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:40:09'),
+(35, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:43:02'),
+(36, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:43:28'),
+(37, 1, 'Menyimpan mapping versi: 1', '2025-01-05 22:44:14'),
+(38, 1, 'Login ke sistem', '2025-01-06 01:52:57'),
+(39, 1, 'Logout dari sistem', '2025-01-06 06:37:46'),
+(41, 1, 'Login ke sistem', '2025-01-07 12:50:34'),
+(42, 1, 'Logout dari sistem', '2025-01-07 12:52:38'),
+(43, 1, 'Login ke sistem', '2025-01-07 12:52:57'),
+(44, 1, 'Logout dari sistem', '2025-01-07 14:22:30'),
+(46, 1, 'Login ke sistem', '2025-01-07 14:23:20'),
+(52, 1, 'Login ke sistem', '2025-01-07 15:54:50'),
+(53, 1, 'Logout dari sistem', '2025-01-07 16:04:49'),
+(54, 1, 'Login ke sistem', '2025-01-07 16:05:16'),
+(55, 1, 'Logout dari sistem', '2025-01-07 16:34:20'),
+(56, 1, 'Login ke sistem', '2025-01-07 16:36:43'),
+(57, 1, 'Logout dari sistem', '2025-01-07 16:36:53'),
+(58, 1, 'Login ke sistem', '2025-01-07 16:38:00'),
+(59, 1, 'Logout dari sistem', '2025-01-07 16:38:09'),
+(60, 6, 'Login ke sistem', '2025-01-07 16:39:00'),
+(61, 6, 'Logout dari sistem', '2025-01-07 16:39:05'),
+(62, 1, 'Login ke sistem', '2025-01-07 16:39:33'),
+(63, 1, 'Logout dari sistem', '2025-01-07 17:09:15'),
+(64, 1, 'Login ke sistem', '2025-01-07 17:56:37'),
+(65, 1, 'Logout dari sistem', '2025-01-07 17:56:45'),
+(66, 6, 'Login ke sistem', '2025-01-07 17:59:31'),
+(67, 1, 'Login ke sistem', '2025-01-07 18:34:43'),
+(68, 6, 'Logout dari sistem', '2025-01-08 03:13:47'),
+(69, 8, 'Login ke sistem', '2025-01-08 03:14:00'),
+(70, 8, 'Logout dari sistem', '2025-01-08 03:20:28'),
+(71, 6, 'Login ke sistem', '2025-01-08 03:20:43'),
+(72, 6, 'Logout dari sistem', '2025-01-08 03:40:54'),
+(73, 1, 'Login ke sistem', '2025-01-08 03:41:40'),
+(74, 1, 'Logout dari sistem', '2025-01-08 05:05:50'),
+(75, 6, 'Login ke sistem', '2025-01-08 05:06:01'),
+(76, 1, 'Login ke sistem', '2025-01-08 05:09:28'),
+(77, 1, 'Logout dari sistem', '2025-01-08 05:13:25'),
+(78, 6, 'Login ke sistem', '2025-01-08 05:13:39'),
+(79, 6, 'Logout dari sistem', '2025-01-08 10:04:44'),
+(80, 8, 'Login ke sistem', '2025-01-08 10:04:53'),
+(81, 8, 'Logout dari sistem', '2025-01-08 11:51:22'),
+(82, 8, 'Login ke sistem', '2025-01-08 11:51:49'),
+(83, 8, 'Logout dari sistem', '2025-01-08 12:36:55'),
+(84, 6, 'Login ke sistem', '2025-01-08 12:37:03'),
+(85, 6, 'Logout dari sistem', '2025-01-08 12:53:37'),
+(86, 8, 'Login ke sistem', '2025-01-08 12:53:41'),
+(87, 1, 'Logout dari sistem', '2025-01-08 13:08:30'),
+(88, 8, 'Login ke sistem', '2025-01-08 13:08:38'),
+(89, 8, 'Logout dari sistem', '2025-01-08 13:08:48'),
+(90, 6, 'Login ke sistem', '2025-01-08 13:08:59'),
+(91, 8, 'Logout dari sistem', '2025-01-08 17:57:55'),
+(92, 1, 'Login ke sistem', '2025-01-08 17:58:00'),
+(93, 1, 'Logout dari sistem', '2025-01-08 18:00:59'),
+(94, 6, 'Login ke sistem', '2025-01-08 18:01:11'),
+(95, 6, 'Logout dari sistem', '2025-01-08 18:04:35'),
+(96, 1, 'Login ke sistem', '2025-01-08 18:04:41'),
+(97, 1, 'Logout dari sistem', '2025-01-08 18:46:33'),
+(98, 8, 'Login ke sistem', '2025-01-08 18:46:41'),
+(99, 1, 'Login ke sistem', '2025-01-08 19:34:05'),
+(100, 1, 'Logout dari sistem', '2025-01-08 19:34:28'),
+(101, 8, 'Login ke sistem', '2025-01-08 19:34:33'),
+(102, 8, 'Logout dari sistem', '2025-01-08 19:34:43'),
+(103, 6, 'Login ke sistem', '2025-01-08 19:34:54'),
+(104, 6, 'Logout dari sistem', '2025-01-08 19:35:30'),
+(105, 8, 'Login ke sistem', '2025-01-08 19:35:33'),
+(106, 6, 'Logout dari sistem', '2025-01-09 14:49:26'),
+(107, 1, 'Login ke sistem', '2025-01-09 14:49:32');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mapping_criteria`
 --
 
 CREATE TABLE `mapping_criteria` (
@@ -904,7 +1292,7 @@ CREATE TABLE `mapping_criteria` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `mapping_criteria`
+-- Dumping data for table `mapping_criteria`
 --
 
 INSERT INTO `mapping_criteria` (`id`, `kode_mapping`, `jenis_kriteria`, `created_at`) VALUES
@@ -931,7 +1319,7 @@ INSERT INTO `mapping_criteria` (`id`, `kode_mapping`, `jenis_kriteria`, `created
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `mapping_standard`
+-- Table structure for table `mapping_standard`
 --
 
 CREATE TABLE `mapping_standard` (
@@ -951,7 +1339,7 @@ CREATE TABLE `mapping_standard` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `mapping_standard`
+-- Dumping data for table `mapping_standard`
 --
 
 INSERT INTO `mapping_standard` (`id`, `mapping_version`, `itil_version`, `itil_service_lifecycle`, `cobit_process_id`, `cobit_process_name`, `nomor_audit`, `kode_mapping`, `cobit_version`, `iso_annex`, `iso_control`, `iso_version`, `created_at`) VALUES
@@ -978,95 +1366,7 @@ INSERT INTO `mapping_standard` (`id`, `mapping_version`, `itil_version`, `itil_s
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `maturity_scores`
---
-
-CREATE TABLE `maturity_scores` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `kode_mapping` varchar(255) NOT NULL,
-  `skor` int(11) NOT NULL,
-  `komentar` text,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `questions`
---
-
-CREATE TABLE `questions` (
-  `id` int(11) NOT NULL,
-  `ITIL` varchar(255) NOT NULL,
-  `iso_code` varchar(50) DEFAULT NULL,
-  `cobit_code` varchar(50) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `question` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `rankings`
---
-
-CREATE TABLE `rankings` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `rank` int(11) NOT NULL,
-  `score` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `recommendations`
---
-
-CREATE TABLE `recommendations` (
-  `id` int(11) NOT NULL,
-  `auditor_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `recommendation` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `self_assessment`
---
-
-CREATE TABLE `self_assessment` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `kode_mapping` varchar(255) NOT NULL,
-  `jawaban` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `self_assessments`
---
-
-CREATE TABLE `self_assessments` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `question_id` int(11) NOT NULL,
-  `assessment` text NOT NULL,
-  `score` int(11) DEFAULT NULL,
-  `status` enum('Pending','Verified') DEFAULT 'Pending',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -1079,344 +1379,106 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `company`, `created_at`) VALUES
 (1, 'admin', '0192023a7bbd73250516f069df18b500', 'Admin', 'Dinas Kominfo Provinsi Jawa Timur', '2025-01-05 07:45:08'),
 (6, 'it_kominfogresik', '202cb962ac59075b964b07152d234b70', 'Manajemen TI', 'Dinas Kominfo Kabupaten Gresik', '2025-01-07 16:37:23'),
-(7, 'auditor_kominfogresik', '202cb962ac59075b964b07152d234b70', 'IT Auditor', 'SPMI Dinas Kominfo Kabupaten Gresik', '2025-01-07 16:38:38'),
-(8, 'kominfojatim', '202cb962ac59075b964b07152d234b70', 'Tim Penilai', 'Auditor Dinas Kominfo Provinsi Jawa Timur', '2025-01-07 16:38:54');
+(8, 'kominfojatim', '202cb962ac59075b964b07152d234b70', 'Tim Penilai', 'Asesor Dinas Kominfo Provinsi Jawa Timur', '2025-01-07 16:38:54');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indeks untuk tabel `activity_logs`
+-- Indexes for table `asesi`
 --
-ALTER TABLE `activity_logs`
+ALTER TABLE `asesi`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `kode_audit` (`asesmen_kode`),
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indeks untuk tabel `assessment_answers`
+-- Indexes for table `asesmen_hasil`
 --
-ALTER TABLE `assessment_answers`
+ALTER TABLE `asesmen_hasil`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `asesmen_jawaban`
+--
+ALTER TABLE `asesmen_jawaban`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `question_id` (`question_id`);
 
 --
--- Indeks untuk tabel `auditee`
+-- Indexes for table `asesmen_pertanyaan`
 --
-ALTER TABLE `auditee`
+ALTER TABLE `asesmen_pertanyaan`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `kode_audit` (`kode_audit`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `kode_mapping` (`kode_mapping`);
 
 --
--- Indeks untuk tabel `audit_history`
---
-ALTER TABLE `audit_history`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indeks untuk tabel `cobit`
+-- Indexes for table `cobit`
 --
 ALTER TABLE `cobit`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `criteria`
+-- Indexes for table `criteria`
 --
 ALTER TABLE `criteria`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `eksternal_audit_question`
---
-ALTER TABLE `eksternal_audit_question`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `kode_mapping` (`kode_mapping`);
-
---
--- Indeks untuk tabel `internal_audit_question`
---
-ALTER TABLE `internal_audit_question`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `iso`
+-- Indexes for table `iso`
 --
 ALTER TABLE `iso`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `itil`
+-- Indexes for table `itil`
 --
 ALTER TABLE `itil`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `mapping_criteria`
+-- Indexes for table `log_aktivitas`
 --
-ALTER TABLE `mapping_criteria`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `kode_mapping` (`kode_mapping`);
-
---
--- Indeks untuk tabel `mapping_standard`
---
-ALTER TABLE `mapping_standard`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `kode_mapping` (`kode_mapping`);
-
---
--- Indeks untuk tabel `maturity_scores`
---
-ALTER TABLE `maturity_scores`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `kode_mapping` (`kode_mapping`);
-
---
--- Indeks untuk tabel `questions`
---
-ALTER TABLE `questions`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indeks untuk tabel `rankings`
---
-ALTER TABLE `rankings`
+ALTER TABLE `log_aktivitas`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indeks untuk tabel `recommendations`
+-- Indexes for table `mapping_criteria`
 --
-ALTER TABLE `recommendations`
+ALTER TABLE `mapping_criteria`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `auditor_id` (`auditor_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indeks untuk tabel `self_assessment`
---
-ALTER TABLE `self_assessment`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
   ADD KEY `kode_mapping` (`kode_mapping`);
 
 --
--- Indeks untuk tabel `self_assessments`
---
-ALTER TABLE `self_assessments`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `question_id` (`question_id`);
-
---
--- Indeks untuk tabel `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`);
-
---
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `activity_logs`
+-- AUTO_INCREMENT for table `asesi`
 --
-ALTER TABLE `activity_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+ALTER TABLE `asesi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
--- AUTO_INCREMENT untuk tabel `assessment_answers`
+-- AUTO_INCREMENT for table `asesmen_hasil`
 --
-ALTER TABLE `assessment_answers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=343;
+ALTER TABLE `asesmen_hasil`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
--- AUTO_INCREMENT untuk tabel `auditee`
+-- AUTO_INCREMENT for table `asesmen_jawaban`
 --
-ALTER TABLE `auditee`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
-
---
--- AUTO_INCREMENT untuk tabel `audit_history`
---
-ALTER TABLE `audit_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `cobit`
---
-ALTER TABLE `cobit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=267;
-
---
--- AUTO_INCREMENT untuk tabel `criteria`
---
-ALTER TABLE `criteria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- AUTO_INCREMENT untuk tabel `eksternal_audit_question`
---
-ALTER TABLE `eksternal_audit_question`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
-
---
--- AUTO_INCREMENT untuk tabel `internal_audit_question`
---
-ALTER TABLE `internal_audit_question`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `iso`
---
-ALTER TABLE `iso`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=310;
-
---
--- AUTO_INCREMENT untuk tabel `itil`
---
-ALTER TABLE `itil`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT untuk tabel `mapping_criteria`
---
-ALTER TABLE `mapping_criteria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
-
---
--- AUTO_INCREMENT untuk tabel `mapping_standard`
---
-ALTER TABLE `mapping_standard`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
-
---
--- AUTO_INCREMENT untuk tabel `maturity_scores`
---
-ALTER TABLE `maturity_scores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `questions`
---
-ALTER TABLE `questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `rankings`
---
-ALTER TABLE `rankings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `recommendations`
---
-ALTER TABLE `recommendations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `self_assessment`
---
-ALTER TABLE `self_assessment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `self_assessments`
---
-ALTER TABLE `self_assessments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT untuk tabel `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
---
-
---
--- Ketidakleluasaan untuk tabel `activity_logs`
---
-ALTER TABLE `activity_logs`
-  ADD CONSTRAINT `activity_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `assessment_answers`
---
-ALTER TABLE `assessment_answers`
-  ADD CONSTRAINT `assessment_answers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `assessment_answers_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `eksternal_audit_question` (`id`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `auditee`
---
-ALTER TABLE `auditee`
-  ADD CONSTRAINT `auditee_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `audit_history`
---
-ALTER TABLE `audit_history`
-  ADD CONSTRAINT `audit_history_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `eksternal_audit_question`
---
-ALTER TABLE `eksternal_audit_question`
-  ADD CONSTRAINT `eksternal_audit_question_ibfk_1` FOREIGN KEY (`kode_mapping`) REFERENCES `mapping_standard` (`kode_mapping`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `mapping_criteria`
---
-ALTER TABLE `mapping_criteria`
-  ADD CONSTRAINT `mapping_criteria_ibfk_1` FOREIGN KEY (`kode_mapping`) REFERENCES `mapping_standard` (`kode_mapping`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `maturity_scores`
---
-ALTER TABLE `maturity_scores`
-  ADD CONSTRAINT `maturity_scores_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `maturity_scores_ibfk_2` FOREIGN KEY (`kode_mapping`) REFERENCES `mapping_standard` (`kode_mapping`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `rankings`
---
-ALTER TABLE `rankings`
-  ADD CONSTRAINT `rankings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `recommendations`
---
-ALTER TABLE `recommendations`
-  ADD CONSTRAINT `recommendations_ibfk_1` FOREIGN KEY (`auditor_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `recommendations_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `self_assessment`
---
-ALTER TABLE `self_assessment`
-  ADD CONSTRAINT `self_assessment_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `self_assessment_ibfk_2` FOREIGN KEY (`kode_mapping`) REFERENCES `mapping_standard` (`kode_mapping`) ON DELETE CASCADE;
-
---
--- Ketidakleluasaan untuk tabel `self_assessments`
---
-ALTER TABLE `self_assessments`
-  ADD CONSTRAINT `self_assessments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `self_assessments_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE;
+ALTER TABLE `asesmen_jawaban`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=837;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
