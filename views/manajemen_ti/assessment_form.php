@@ -129,99 +129,118 @@ $incoming_forms_query = $conn->query("
 <!-- Tampilkan Notifikasi -->
 <?php if (isset($error)): ?>
     <div class="alert alert-danger"><?php echo $error; ?></div>
-<?php endif; ?>
+<?php endif;
 
-<!-- Form dan Tabel -->
-<h3 class="text-center">Formulir Self-Assessment</h3>
+?>
 
 <!-- Tabel Formulir Masuk -->
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Periode Audit</th>
-            <th>Sumber</th>
-            <th>Kode Audit</th>
-            <th>Jumlah Pertanyaan</th>
-            <th>Status</th>
-            <th>Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if ($incoming_forms_query && $incoming_forms_query->num_rows > 0): ?>
-            <?php while ($row = $incoming_forms_query->fetch_assoc()): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($row['periode_audit']); ?></td>
-                    <td><?php echo htmlspecialchars($row['source']); ?></td>
-                    <td><?php echo htmlspecialchars($row['kode_audit']); ?></td>
-                    <td><?php echo htmlspecialchars($row['total_questions']); ?></td>
-                    <td>
-                        <?php
-                        $status_label = mapFormStatusToLabel((int)$row['form_status'], 'Manajemen TI');
-                        $badge_class = $row['form_status'] == 3 ? 'success' : ($row['form_status'] == 2 ? 'warning' : ($row['form_status'] == 1 ? 'primary' : 'secondary'));
-                        ?>
-                        <span class="badge bg-<?php echo $badge_class; ?>">
-                            <?php echo htmlspecialchars($status_label); ?>
-                        </span>
-                    </td>
-                    <td>
-                        <?php if ((int)$row['form_status'] === 3): ?>
-                            <a href="score_view.php?kode_audit=<?php echo urlencode($row['kode_audit']); ?>" class="btn btn-sm btn-success">Lihat Skor</a>
-                        <?php else: ?>
-                            <a href="assessment_form.php?kode_audit=<?php echo urlencode($row['kode_audit']); ?>" class="btn btn-sm btn-primary">
-                                <?php echo (int)$row['form_status'] === 2 ? 'Lanjutkan' : 'Mulai Mengisi'; ?>
-                            </a>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-        <?php else: ?>
+<div class="container my-5">
+    <h3 class="text-center mb-4"><i class="bi bi-file-earmark-text"></i> Formulir Self-Assessment</h3>
+    <p class="text-center text-muted">Di bawah ini adalah daftar formulir self-assessment yang perlu diisi atau telah dikirimkan.</p>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
             <tr>
-                <td colspan="6" class="text-center">Tidak ada formulir masuk atau riwayat pengisian.</td>
+                <th>Periode Audit</th>
+                <th>Sumber</th>
+                <th>Kode Audit</th>
+                <th>Jumlah Pertanyaan</th>
+                <th>Status</th>
+                <th>Aksi</th>
             </tr>
-        <?php endif; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php if ($incoming_forms_query && $incoming_forms_query->num_rows > 0): ?>
+                <?php while ($row = $incoming_forms_query->fetch_assoc()): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['periode_audit']); ?></td>
+                        <td><?php echo htmlspecialchars($row['source']); ?></td>
+                        <td><?php echo htmlspecialchars($row['kode_audit']); ?></td>
+                        <td><?php echo htmlspecialchars($row['total_questions']); ?></td>
+                        <td>
+                            <?php
+                            $status_label = mapFormStatusToLabel((int)$row['form_status'], 'Manajemen TI');
+                            $badge_class = $row['form_status'] == 3 ? 'success' : ($row['form_status'] == 2 ? 'warning' : ($row['form_status'] == 1 ? 'primary' : 'secondary'));
+                            ?>
+                            <span class="badge bg-<?php echo $badge_class; ?>">
+                                <?php echo htmlspecialchars($status_label); ?>
+                            </span>
+                        </td>
+                        <td>
+                            <?php if ((int)$row['form_status'] === 3): ?>
+                                <a href="score_view.php?kode_audit=<?php echo urlencode($row['kode_audit']); ?>" class="btn btn-sm btn-success">Lihat Skor</a>
+                            <?php else: ?>
+                                <a href="assessment_form.php?kode_audit=<?php echo urlencode($row['kode_audit']); ?>" class="btn btn-sm btn-primary">
+                                    <?php echo (int)$row['form_status'] === 2 ? 'Lanjutkan' : 'Mulai Mengisi'; ?>
+                                </a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="6" class="text-center">Tidak ada formulir masuk atau riwayat pengisian.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
 
 <!-- Form Self-Assessment -->
-<form method="POST" action="assessment_form.php?kode_audit=<?php echo htmlspecialchars($kode_audit); ?>">
-    <?php foreach ($lifecycle_stages as $stage): ?>
-        <h4><?php echo htmlspecialchars($stage); ?></h4>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nomor Audit</th>
-                    <th>Pertanyaan</th>
-                    <th>Jawaban</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($questions_by_lifecycle[$stage])): ?>
-                    <?php foreach ($questions_by_lifecycle[$stage] as $question): ?>
+<?php if ($kode_audit): ?>
+    <div class="container mt-5">
+        <form method="POST" action="assessment_form.php?kode_audit=<?php echo htmlspecialchars($kode_audit); ?>">
+            <?php foreach ($lifecycle_stages as $stage): ?>
+                <h4 class="mt-4"><?php echo htmlspecialchars($stage); ?></h4>
+                <table class="table table-bordered">
+                    <thead class="table-light">
                         <tr>
-                            <td><?php echo htmlspecialchars($question['kode_mapping']); ?></td>
-                            <td><?php echo htmlspecialchars($question['pertanyaan']); ?></td>
-                            <td>
-                                <select name="answers[<?php echo $question['id']; ?>][jawaban]" class="form-select" required>
-                                    <option value="">Pilih Jawaban</option>
-                                    <?php foreach ($criteria as $kondisi => $skor): ?>
-                                        <option value="<?php echo htmlspecialchars($kondisi); ?>"
-                                            <?php echo isset($existing_answers[$question['id']]['jawaban']) && $existing_answers[$question['id']]['jawaban'] === $kondisi ? 'selected' : ''; ?>>
-                                            <?php echo htmlspecialchars($kondisi); ?> (Skor: <?php echo $skor; ?>)
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </td>
+                            <th>Nomor Audit</th>
+                            <th>Pertanyaan</th>
+                            <th>Jawaban</th>
                         </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="3">Tidak ada pertanyaan.</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-    <?php endforeach; ?>
-    <button type="submit" name="submit_assessment" class="btn btn-primary">Lihat Skor</button>
-</form>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $questions_query = $conn->query("
+                            SELECT DISTINCT q.id, q.kode_mapping, q.pertanyaan 
+                            FROM eksternal_audit_question q
+                            JOIN auditee a ON a.periode_audit = q.periode_audit
+                            WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(q.kode_mapping, '_', 2), '_', -1) = '$stage'
+                            AND a.kode_audit = '$kode_audit'
+                        ");
+                        $questions = $questions_query ? $questions_query->fetch_all(MYSQLI_ASSOC) : [];
+
+                        if (!empty($questions)): ?>
+                            <?php foreach ($questions as $question): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($question['kode_mapping']); ?></td>
+                                    <td><?php echo htmlspecialchars($question['pertanyaan']); ?></td>
+                                    <td>
+                                        <select name="answers[<?php echo $question['id']; ?>][jawaban]" class="form-select" required>
+                                            <option value="">Pilih Jawaban</option>
+                                            <?php foreach ($criteria as $kondisi => $skor): ?>
+                                                <option value="<?php echo htmlspecialchars($kondisi); ?>"
+                                                    <?php echo isset($existing_answers[$question['id']]['jawaban']) && $existing_answers[$question['id']]['jawaban'] === $kondisi ? 'selected' : ''; ?>>
+                                                    <?php echo htmlspecialchars($kondisi); ?> (Skor: <?php echo $skor; ?>)
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="3" class="text-center">Tidak ada pertanyaan untuk tahap ini.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            <?php endforeach; ?>
+            <div class="text-end">
+                <button type="submit" name="submit_assessment" class="btn btn-primary">Lihat Skor</button>
+            </div>
+        </form>
+    </div>
+<?php endif; ?>
 
 <?php include '../../includes/footer.php'; ?>
