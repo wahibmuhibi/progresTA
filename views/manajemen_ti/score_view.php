@@ -4,7 +4,7 @@ include '../../includes/auth.php';
 include '../../includes/db.php';
 include '../../includes/header.php';
 
-// Ambil daftar kode audit dan score session ID berdasarkan user ID
+// Ambil daftar kode asesmen dan score session ID berdasarkan user ID
 $user_id = $_SESSION['user_id'];
 
 // Ambil semua sesi skor untuk user
@@ -25,7 +25,7 @@ if ($audit_query && $audit_query->num_rows > 0) {
     }
 }
 
-// Tangkap kode audit dan score session ID dari form
+// Tangkap kode asesmen dan score session ID dari form
 $asesmen_kode = isset($_GET['asesmen_kode']) ? $conn->real_escape_string($_GET['asesmen_kode']) : null;
 $score_session_id = isset($_GET['score_session_id']) ? (int)$_GET['score_session_id'] : null;
 
@@ -43,7 +43,7 @@ $counts = array_fill_keys(array_keys($categories), 0);
 $overall_average = 0;
 
 if ($asesmen_kode && $score_session_id) {
-    // Ambil data skor berdasarkan kode audit dan score session ID
+    // Ambil data skor berdasarkan kode asesmen dan score session ID
     $query = "SELECT q.kode_mapping, q.pertanyaan, a.jawaban, a.skor FROM assessment_answers a JOIN asesmen_pertanyaan q ON a.question_id = q.id WHERE a.asesmen_kode = '$asesmen_kode' AND a.score_session_id = $score_session_id AND a.user_id = $user_id";
     $result = $conn->query($query);
 
@@ -96,9 +96,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_to_asesor'])) {
 <form method="GET" action="score_view.php" class="mb-4">
     <div class="row">
         <div class="col-md-6">
-            <label for="asesmen_kode" class="form-label">Pilih Kode Audit</label>
+            <label for="asesmen_kode" class="form-label">Pilih Kode Asesmen</label>
             <select name="asesmen_kode" id="asesmen_kode" class="form-select" required onchange="this.form.submit()">
-                <option value="" disabled selected>Pilih Kode Audit</option>
+                <option value="" disabled selected>Pilih Kode Asesmen</option>
                 <?php foreach ($audit_data as $audit_code => $sessions): ?>
                     <option value="<?php echo htmlspecialchars($audit_code); ?>" <?php echo ($asesmen_kode === $audit_code) ? 'selected' : ''; ?>>
                         <?php echo htmlspecialchars($audit_code); ?>
@@ -183,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_to_asesor'])) {
             </tbody>
         </table>
     <?php else: ?>
-        <div class="alert alert-warning">Data tidak ditemukan untuk kode audit dan ID sesi skor ini.</div>
+        <div class="alert alert-warning">Data tidak ditemukan untuk kode asesmen dan ID sesi skor ini.</div>
     <?php endif; ?>
 <?php endif; ?>
 

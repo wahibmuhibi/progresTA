@@ -46,9 +46,9 @@ if (!defined('BASE_URL')) {
             <?php elseif ($role === 'Manajemen TI'): ?>
                 <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/assessment_form.php" class="btn btn-primary mb-2">Isi Self-Assessment</a>
                 <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/score_view.php" class="btn btn-primary mb-2">Lihat Skor</a>
-                <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/audit_history.php" class="btn btn-primary mb-2">Riwayat Audit</a>
+                <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/audit_history.php" class="btn btn-primary mb-2">Riwayat Asesmen</a>
             <?php elseif ($role === 'IT Auditor'): ?>
-                <a href="<?php echo BASE_URL; ?>/views/auditor/audit_view.php" class="btn btn-primary mb-2">Lihat Audit</a>
+                <a href="<?php echo BASE_URL; ?>/views/auditor/audit_view.php" class="btn btn-primary mb-2">Lihat Asesmen</a>
                 <a href="<?php echo BASE_URL; ?>/views/auditor/recommendations.php" class="btn btn-primary mb-2">Rekomendasi Perbaikan</a>
             <?php elseif ($role === 'Tim Penilai'): ?>
                 <a href="<?php echo BASE_URL; ?>/views/tim_penilai/subjects.php" class="btn btn-primary mb-2">Lihat Subjek Penilaian</a>

@@ -80,14 +80,14 @@ if ($existing_answers_query && $existing_answers_query->num_rows > 0) {
 // Proses penyimpanan jawaban
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$asesmen_kode) {
-        $error = "Kode audit tidak ditemukan.";
+        $error = "Kode Asesmen tidak ditemukan.";
     } else {
-        // Ambil periode audit berdasarkan kode audit
+        // Ambil periode asesmen berdasarkan kode asesmen
         $periode_query = $conn->query("SELECT asesmen_periode FROM asesi WHERE asesmen_kode = '$asesmen_kode'");
         $asesmen_periode = $periode_query && $periode_query->num_rows > 0 ? $periode_query->fetch_assoc()['asesmen_periode'] : null;
 
         if (!$asesmen_periode) {
-            $error = "Periode audit tidak ditemukan untuk kode audit: $asesmen_kode.";
+            $error = "Periode Asesmen tidak ditemukan untuk kode asesmen: $asesmen_kode.";
         } else {
             // Generate score_session_id baru
             $score_session_id = time(); // Gunakan timestamp sebagai ID sesi unik
@@ -140,9 +140,9 @@ $incoming_forms_query = $conn->query("
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
             <tr>
-                <th>Periode Audit</th>
+                <th>Periode Asesmen</th>
                 <th>Sumber</th>
-                <th>Kode Audit</th>
+                <th>Kode Asesmen</th>
                 <th>Jumlah Pertanyaan</th>
                 <th>Status</th>
                 <th>Aksi</th>
@@ -194,7 +194,7 @@ $incoming_forms_query = $conn->query("
                 <table class="table table-bordered">
                     <thead class="table-light">
                         <tr>
-                            <th>Nomor Audit</th>
+                            <th>Nomor Asesmen</th>
                             <th>Pertanyaan</th>
                             <th>Jawaban</th>
                         </tr>

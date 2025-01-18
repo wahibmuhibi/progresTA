@@ -28,7 +28,7 @@ $assessment_history = $conn->query($query);
         <thead>
             <tr>
                 <th>No</th>
-                <th>Kode Audit</th>
+                <th>Kode Asesmen</th>
                 <th>Kode Verifikasi</th>
                 <th>Rata-Rata Skor</th>
                 <th>Tanggal Verifikasi</th>

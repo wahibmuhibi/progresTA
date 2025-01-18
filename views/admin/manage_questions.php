@@ -227,7 +227,7 @@ $result = $conn->query($query);
     </div>
     <div class="row mb-3">
         <div class="col-md-4">
-            <label for="nomor_audit" class="form-label">Nomor Audit</label>
+            <label for="nomor_audit" class="form-label">Nomor Asesmen</label>
             <input type="number" name="nomor_audit" id="nomor_audit" class="form-control" placeholder="Contoh: 1" required>
         </div>
     </div>
@@ -276,7 +276,7 @@ $result = $conn->query($query);
             <th>Versi COBIT</th>
             <th>COBIT Process ID</th>
             <th>COBIT Process Name</th>
-            <th>Nomor Audit</th>
+            <th>Nomor Asesmen</th>
             <th>Kode Mapping</th>
             <th>Aksi</th>
         </tr>

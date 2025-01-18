@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_verification']
     ";
 
     if ($conn->query($delete_query)) {
-        echo "<div class='alert alert-success'>Verifikasi untuk kode audit $asesmen_kode telah dibatalkan.</div>";
+        echo "<div class='alert alert-success'>Verifikasi untuk kode asesmen $asesmen_kode telah dibatalkan.</div>";
     } else {
         echo "<div class='alert alert-danger'>Gagal membatalkan verifikasi. Kesalahan: {$conn->error}</div>";
     }
@@ -44,7 +44,7 @@ $rankings_query = $conn->query("
             <tr>
                 <th>Rank</th>
                 <th>Nama Asesi</th>
-                <th>Kode Audit</th>
+                <th>Kode Asesmen</th>
                 <th>Kode Verifikasi</th>
                 <th>Rata-Rata Skor</th>
                 <th>Tanggal Verifikasi</th>
@@ -63,7 +63,7 @@ $rankings_query = $conn->query("
                     <td><?php echo htmlspecialchars(round($row['overall_average'], 2)); ?></td>
                     <td><?php echo htmlspecialchars($row['verified_at']); ?></td>
                     <td>
-                        <form method="POST" action="" onsubmit="return confirm('Yakin ingin membatalkan verifikasi untuk kode audit ini?');">
+                        <form method="POST" action="" onsubmit="return confirm('Yakin ingin membatalkan verifikasi untuk kode asesmen ini?');">
                             <input type="hidden" name="asesmen_kode" value="<?php echo htmlspecialchars($row['asesmen_kode']); ?>">
                             <button type="submit" name="cancel_verification" class="btn btn-danger btn-sm">Batalkan</button>
                         </form>

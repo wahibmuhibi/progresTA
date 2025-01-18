@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validasi input
     if (empty($kode_mapping) || empty($pertanyaan) || empty($asesmen_periode)) {
-        $error = "Kode Mapping, Periode Audit, dan Pertanyaan tidak boleh kosong.";
+        $error = "Kode Mapping, Periode Asesmen, dan Pertanyaan tidak boleh kosong.";
     } else {
         $query = "
             INSERT INTO asesmen_pertanyaan (kode_mapping, asesmen_periode, pertanyaan, source) 
@@ -87,7 +87,7 @@ if (isset($_POST['kode_mapping'])) {
             </select>
         </div>
         <div class="col-md-6">
-            <label for="asesmen_periode" class="form-label">Periode Audit</label>
+            <label for="asesmen_periode" class="form-label">Periode Asesmen</label>
             <input type="number" name="asesmen_periode" id="asesmen_periode" class="form-control" placeholder="Contoh: 2025" min="2000" max="2099" required>
         </div>
     </div>
@@ -96,7 +96,7 @@ if (isset($_POST['kode_mapping'])) {
         <div class="row mb-3">
             <div class="col-md-12">
                 <p class="bg-light p-3 border rounded">
-                    <strong>Pertanyaan Audit nomor <?php echo htmlspecialchars($mapping_details['nomor_audit']); ?>:</strong> 
+                    <strong>Pertanyaan Asesmen nomor <?php echo htmlspecialchars($mapping_details['nomor_audit']); ?>:</strong> 
                     mengacu pada <strong><?php echo htmlspecialchars($mapping_details['itil_version']); ?></strong> 
                     (<strong><?php echo htmlspecialchars($mapping_details['itil_service_lifecycle']); ?></strong>), 
                     <strong><?php echo htmlspecialchars($mapping_details['iso_version']); ?></strong> 
@@ -126,7 +126,7 @@ if (isset($_POST['kode_mapping'])) {
         <tr>
             <th>No</th>
             <th>Kode Mapping</th>
-            <th>Periode Audit</th>
+            <th>Periode Asesmen</th>
             <th>Pertanyaan</th>
             <th>Source</th>
             <th>Aksi</th>

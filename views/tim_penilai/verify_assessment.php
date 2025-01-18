@@ -5,7 +5,7 @@ check_roles(['Tim Penilai']);
 include '../../includes/db.php';
 include '../../includes/header.php';
 
-// Tangkap kode audit dan score session ID dari URL
+// Tangkap kode asesmen dan score session ID dari URL
 $asesmen_kode = isset($_GET['asesmen_kode']) ? $conn->real_escape_string($_GET['asesmen_kode']) : null;
 $score_session_id = isset($_GET['score_session_id']) ? (int)$_GET['score_session_id'] : null;
 
@@ -48,11 +48,11 @@ if ($asesmen_kode && $score_session_id) {
 
 <h3 class="text-center">Daftar Assessment Tersedia untuk Verifikasi</h3>
 
-<!-- Tabel Daftar Kode Audit dan Score Session ID -->
+<!-- Tabel Daftar Kode Asesmen dan Score Session ID -->
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Kode Audit</th>
+            <th>Kode Asesmen</th>
             <th>Score Session ID</th>
             <th>Tanggal Dibuat</th>
             <th>Aksi</th>
@@ -97,7 +97,7 @@ if ($asesmen_kode && $score_session_id) {
             </tbody>
         </table>
     <?php else: ?>
-        <div class="alert alert-warning">Tidak ada hasil rata-rata untuk kode audit dan sesi skor ini.</div>
+        <div class="alert alert-warning">Tidak ada hasil rata-rata untuk kode asesmen dan sesi skor ini.</div>
     <?php endif; ?>
 
     <!-- Tabel Detail Jawaban -->
