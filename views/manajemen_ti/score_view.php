@@ -24,7 +24,6 @@ if ($audit_query && $audit_query->num_rows > 0) {
         ];
     }
 }
-
 // Tangkap kode audit dan score session ID dari form
 $kode_audit = isset($_GET['kode_audit']) ? $conn->real_escape_string($_GET['kode_audit']) : null;
 $score_session_id = isset($_GET['score_session_id']) ? (int)$_GET['score_session_id'] : null;
@@ -41,12 +40,7 @@ $counts = array_fill_keys(array_keys($categories), 0);
 
 if ($kode_audit && $score_session_id) {
     // Ambil data skor berdasarkan kode audit dan score session ID
-    $query = "
-        SELECT q.kode_mapping, q.pertanyaan, a.jawaban, a.skor 
-        FROM assessment_answers a
-        JOIN eksternal_audit_question q ON a.question_id = q.id
-        WHERE a.kode_audit = '$kode_audit' AND a.score_session_id = $score_session_id AND a.user_id = $user_id
-    ";
+    $query = "SELECT q.kode_mapping, q.pertanyaan, a.jawaban, a.skor FROM assessment_answers a JOIN eksternal_audit_question q ON a.question_id = q.id WHERE a.kode_audit = '$kode_audit' AND a.score_session_id = $score_session_id AND a.user_id = $user_id";
     $result = $conn->query($query);
 
     // Hitung rata-rata skor untuk kategori ITIL Service Lifecycle
@@ -164,11 +158,15 @@ if ($kode_audit && $score_session_id) {
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Rata-Rata Keseluruhan</th>
+            <th>Kategori</th>
+            <th>Rata-Rata</th>
+            <th>Pointer Value</th>
         </tr>
     </thead>
     <tbody>
         <tr>
+            <td>Tingkat Kesiapan Keamanan</td>
+            <td><?php echo round($overall_average / 18, 2); ?></td>
             <td><?php echo round($overall_average, 2); ?></td>
         </tr>
     </tbody>
