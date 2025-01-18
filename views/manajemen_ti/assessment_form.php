@@ -47,7 +47,7 @@ if ($kode_audit) {
         $questions_query = $conn->query("
             SELECT DISTINCT q.id, q.kode_mapping, q.pertanyaan 
             FROM asesmen_pertanyaan q
-            JOIN auditee a ON a.asesmen_periode = q.asesmen_periode
+            JOIN asesi a ON a.asesmen_periode = q.asesmen_periode
             WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(q.kode_mapping, '_', 2), '_', -1) = '$stage'
             AND a.kode_audit = '$kode_audit'
         ");
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Kode audit tidak ditemukan.";
     } else {
         // Ambil periode audit berdasarkan kode audit
-        $periode_query = $conn->query("SELECT asesmen_periode FROM auditee WHERE kode_audit = '$kode_audit'");
+        $periode_query = $conn->query("SELECT asesmen_periode FROM asesi WHERE kode_audit = '$kode_audit'");
         $asesmen_periode = $periode_query && $periode_query->num_rows > 0 ? $periode_query->fetch_assoc()['asesmen_periode'] : null;
 
         if (!$asesmen_periode) {
@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Ambil daftar formulir masuk
 $incoming_forms_query = $conn->query("
     SELECT a.kode_audit, a.asesmen_periode, a.form_status, COALESCE(q.source, 'Tim Penilai') AS source, COUNT(q.id) AS total_questions
-    FROM auditee a
+    FROM asesi a
     JOIN asesmen_pertanyaan q ON a.asesmen_periode = q.asesmen_periode
     WHERE a.user_id = {$_SESSION['user_id']}
     GROUP BY a.kode_audit, a.asesmen_periode, q.source
@@ -204,7 +204,7 @@ $incoming_forms_query = $conn->query("
                         $questions_query = $conn->query("
                             SELECT DISTINCT q.id, q.kode_mapping, q.pertanyaan 
                             FROM asesmen_pertanyaan q
-                            JOIN auditee a ON a.asesmen_periode = q.asesmen_periode
+                            JOIN asesi a ON a.asesmen_periode = q.asesmen_periode
                             WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(q.kode_mapping, '_', 2), '_', -1) = '$stage'
                             AND a.kode_audit = '$kode_audit'
                         ");

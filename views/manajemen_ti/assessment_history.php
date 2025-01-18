@@ -11,7 +11,7 @@ $user_id = $_SESSION['user_id'];
 $query = "
     SELECT DISTINCT r.kode_audit, r.verification_code, r.verified_at, AVG(r.average_score) AS overall_score
     FROM assessment_results r
-    JOIN auditee a ON r.kode_audit = a.kode_audit
+    JOIN asesi a ON r.kode_audit = a.kode_audit
     WHERE r.verification_code IS NOT NULL AND a.user_id = $user_id
     GROUP BY r.kode_audit, r.verification_code, r.verified_at
     ORDER BY r.verified_at DESC

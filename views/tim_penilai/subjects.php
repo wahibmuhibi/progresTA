@@ -39,19 +39,19 @@ if ($periode_query && $periode_query->num_rows > 0) {
 
 // Ambil daftar subjek penilaian berdasarkan periode audit
 $selected_periode = isset($_GET['asesmen_periode']) ? (int)$_GET['asesmen_periode'] : null;
-$auditee_query = $conn->query("
-    SELECT a.id AS auditee_id, a.kode_audit, u.username, u.company, a.asesmen_periode, a.form_status 
-    FROM auditee a 
+$asesi_query = $conn->query("
+    SELECT a.id AS asesi_id, a.kode_audit, u.username, u.company, a.asesmen_periode, a.form_status 
+    FROM asesi a 
     JOIN users u ON a.user_id = u.id 
     " . ($selected_periode ? "WHERE a.asesmen_periode = $selected_periode" : "") . " 
     ORDER BY a.created_at DESC
 ");
 
-// Ambil daftar Manajemen TI untuk form tambah auditee
+// Ambil daftar Manajemen TI untuk form tambah Asesi
 $manajemen_ti_query = $conn->query("SELECT id, username, company FROM users WHERE role = 'Manajemen TI' ORDER BY username ASC");
 
 // Tambah Auditee
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_auditee'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_asesi'])) {
     $user_id = (int)$_POST['user_id'];
     $asesmen_periode = (int)$_POST['asesmen_periode'];
     $kode_audit = strtoupper(uniqid("AUDIT-"));
@@ -59,40 +59,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_auditee'])) {
     if (empty($user_id) || empty($asesmen_periode)) {
         $error = "Akun Manajemen TI dan Periode Audit harus dipilih.";
     } else {
-        $query = "INSERT INTO auditee (user_id, asesmen_periode, kode_audit) VALUES ($user_id, $asesmen_periode, '$kode_audit')";
+        $query = "INSERT INTO asesi (user_id, asesmen_periode, kode_audit) VALUES ($user_id, $asesmen_periode, '$kode_audit')";
         if ($conn->query($query)) {
             $success = "Auditee berhasil ditambahkan dengan kode audit: $kode_audit.";
         } else {
-            $error = "Terjadi kesalahan saat menambahkan auditee: " . $conn->error;
+            $error = "Terjadi kesalahan saat menambahkan asesi: " . $conn->error;
         }
     }
 }
 
 // Hapus Auditee
-if (isset($_GET['delete_auditee_id'])) {
-    $delete_auditee_id = (int)$_GET['delete_auditee_id'];
-    $query = "DELETE FROM auditee WHERE id = $delete_auditee_id";
+if (isset($_GET['delete_asesi_id'])) {
+    $delete_asesi_id = (int)$_GET['delete_asesi_id'];
+    $query = "DELETE FROM asesi WHERE id = $delete_asesi_id";
     if ($conn->query($query)) {
         $success = "Auditee berhasil dihapus.";
     } else {
-        $error = "Terjadi kesalahan saat menghapus auditee: " . $conn->error;
+        $error = "Terjadi kesalahan saat menghapus asesi: " . $conn->error;
     }
 }
 
 // Kirim ke Auditee
-if (isset($_GET['send_to_auditee_id'])) {
-    $send_to_auditee_id = (int)$_GET['send_to_auditee_id'];
+if (isset($_GET['send_to_asesi_id'])) {
+    $send_to_asesi_id = (int)$_GET['send_to_asesi_id'];
 
     $query = "
-        UPDATE auditee 
+        UPDATE asesi 
         SET form_status = 1
-        WHERE id = $send_to_auditee_id
+        WHERE id = $send_to_asesi_id
     ";
 
     if ($conn->query($query)) {
-        $success = "Formulir berhasil dikirim ke auditee.";
+        $success = "Formulir berhasil dikirim ke asesi.";
         // Debugging perubahan
-        $updated_status_query = $conn->query("SELECT form_status FROM auditee WHERE id = $send_to_auditee_id");
+        $updated_status_query = $conn->query("SELECT form_status FROM asesi WHERE id = $send_to_asesi_id");
         $updated_status = $updated_status_query->fetch_assoc();
         error_log("Status setelah dikirim: " . $updated_status['form_status']);
     } else {
@@ -124,8 +124,8 @@ if (isset($_GET['send_to_auditee_id'])) {
         </tr>
     </thead>
     <tbody>
-        <?php if ($auditee_query && $auditee_query->num_rows > 0): ?>
-            <?php while ($row = $auditee_query->fetch_assoc()): ?>
+        <?php if ($asesi_query && $asesi_query->num_rows > 0): ?>
+            <?php while ($row = $asesi_query->fetch_assoc()): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($row['username']); ?></td>
                     <td><?php echo htmlspecialchars($row['company']); ?></td>
@@ -144,17 +144,17 @@ if (isset($_GET['send_to_auditee_id'])) {
                     </td>
                     <td>
                         <?php if ($row['form_status'] == 3): ?>
-                            <a href="verify_assessment.php?auditee_id=<?php echo $row['auditee_id']; ?>" class="btn btn-sm btn-primary">Verifikasi</a>
+                            <a href="verify_assessment.php?asesi_id=<?php echo $row['asesi_id']; ?>" class="btn btn-sm btn-primary">Verifikasi</a>
                         <?php else: ?>
-                            <a href="?send_to_auditee_id=<?php echo $row['auditee_id']; ?>" class="btn btn-sm btn-primary">Kirim</a>
+                            <a href="?send_to_asesi_id=<?php echo $row['asesi_id']; ?>" class="btn btn-sm btn-primary">Kirim</a>
                         <?php endif; ?>
-                        <a href="?delete_auditee_id=<?php echo $row['auditee_id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus auditee ini?')">Hapus</a>
+                        <a href="?delete_asesi_id=<?php echo $row['asesi_id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus Asesi ini?')">Hapus</a>
                     </td>
                 </tr>
             <?php endwhile; ?>
         <?php else: ?>
             <tr>
-                <td colspan="6" class="text-center">Tidak ada auditee untuk periode ini.</td>
+                <td colspan="6" class="text-center">Tidak ada Asesi untuk periode ini.</td>
             </tr>
         <?php endif; ?>
     </tbody>
@@ -187,5 +187,5 @@ if (isset($_GET['send_to_auditee_id'])) {
             </select>
         </div>
     </div>
-    <button type="submit" name="add_auditee" class="btn btn-primary mt-3">Tambah Auditee</button>
+    <button type="submit" name="add_asesi" class="btn btn-primary mt-3">Tambah Auditee</button>
 </form>

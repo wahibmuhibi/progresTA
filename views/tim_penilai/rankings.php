@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_verification']
 $rankings_query = $conn->query("
     SELECT r.kode_audit, r.verification_code, u.username AS asesi_name, AVG(r.average_score) AS overall_average, r.verified_at
     FROM assessment_results r
-    JOIN auditee a ON r.kode_audit = a.kode_audit
+    JOIN asesi a ON r.kode_audit = a.kode_audit
     JOIN users u ON a.user_id = u.id
     WHERE r.verification_code IS NOT NULL
     GROUP BY r.kode_audit
