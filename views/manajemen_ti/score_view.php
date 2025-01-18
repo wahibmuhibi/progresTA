@@ -24,6 +24,7 @@ if ($audit_query && $audit_query->num_rows > 0) {
         ];
     }
 }
+
 // Tangkap kode audit dan score session ID dari form
 $kode_audit = isset($_GET['kode_audit']) ? $conn->real_escape_string($_GET['kode_audit']) : null;
 $score_session_id = isset($_GET['score_session_id']) ? (int)$_GET['score_session_id'] : null;
@@ -37,6 +38,9 @@ $categories = [
     'Continual Service Improvement' => 0,
 ];
 $counts = array_fill_keys(array_keys($categories), 0);
+
+// Default value for overall_average
+$overall_average = 0;
 
 if ($kode_audit && $score_session_id) {
     // Ambil data skor berdasarkan kode audit dan score session ID
@@ -52,14 +56,38 @@ if ($kode_audit && $score_session_id) {
                 $counts[$category]++;
             }
         }
+
+        // Hitung rata-rata skor setiap kategori
+        foreach ($categories as $category => $total_score) {
+            $categories[$category] = $counts[$category] > 0 ? $total_score / $counts[$category] : 0;
+        }
+
+        // Hitung rata-rata keseluruhan dengan formula (*18)
+        $overall_average = array_sum($categories) / count($categories) * 18;
+    }
+}
+
+// Menyimpan Data Tabel
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_to_asesor'])) {
+    $kode_audit = $conn->real_escape_string($_POST['kode_audit']);
+    $score_session_id = (int) $_POST['score_session_id'];
+    $categories = json_decode($_POST['categories'], true);
+
+    foreach ($categories as $category => $average_score) {
+        $category = $conn->real_escape_string($category);
+        $average_score = (float) $average_score;
+
+        $insert_query = "
+            INSERT INTO assessment_results (kode_audit, score_session_id, category, average_score)
+            VALUES ('$kode_audit', $score_session_id, '$category', $average_score)
+        ";
+
+        if (!$conn->query($insert_query)) {
+            echo "<div class='alert alert-danger'>Gagal menyimpan hasil untuk kategori $category. Kesalahan: {$conn->error}</div>";
+        }
     }
 
-    // Hitung rata-rata skor setiap kategori
-    foreach ($categories as $category => $total_score) {
-        $categories[$category] = $counts[$category] > 0 ? $total_score / $counts[$category] : 0;
-    }
-    // Hitung rata-rata keseluruhan dengan formula (*18)
-    $overall_average = array_sum($categories) / count($categories) * 18;
+    echo "<div class='alert alert-success'>Hasil berhasil dikirim ke Asesor.</div>";
 }
 ?>
 
@@ -96,7 +124,7 @@ if ($kode_audit && $score_session_id) {
 </form>
 
 <!-- Tabel Hasil Skor -->
-<?php if ($result && $result->num_rows > 0): ?>
+    <h3 class="text-center mt-5">Detail Jawaban Self-Assessment</h3>
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -118,151 +146,137 @@ if ($kode_audit && $score_session_id) {
             <?php endwhile; ?>
         </tbody>
     </table>
-<?php elseif ($kode_audit && $score_session_id): ?>
-    <div class="alert alert-warning">Data tidak ditemukan untuk kombinasi kode audit dan ID sesi skor yang dipilih.</div>
-<?php endif; ?>
 
-<!-- Dashboard Radar Chart -->
-<h3 class="text-center mt-5">Dashboard Kinerja</h3>
-<div class="text-center">
-    <canvas id="radarChart" width="400" height="400"></canvas>
-</div>
-
-<!-- Tabel Output Dashboard -->
-<h3 class="text-center mt-5">Output Dashboard Kinerja</h3>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Kategori</th>
-            <th>Rata-Rata Skor</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($categories as $category => $average): ?>
+    <!-- Tabel Dashboard Kinerja -->
+    <h3 class="text-center mt-5">Output Dashboard Kinerja</h3>
+    <table class="table table-bordered">
+        <thead>
             <tr>
-                <td><?php echo htmlspecialchars($category); ?></td>
-                <td><?php echo round($average, 2); ?></td>
+                <th>Kategori</th>
+                <th>Rata-Rata Skor</th>
             </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php foreach ($categories as $category => $average): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($category); ?></td>
+                    <td><?php echo round($average, 2); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 
-<!-- Dashboard Speedometer -->
-<h3 class="text-center mt-5">Dashboard Tingkat Kesiapan Keamanan</h3>
-<div class="text-center">
-    <canvas id="speedometerChart" width="400" height="200"></canvas>
-</div>
+    <!-- Tabel Output Tingkat Kesiapan Keamanan -->
+    <h3 class="text-center mt-5">Output Tingkat Kesiapan Keamanan</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Kategori</th>
+                <th>Rata-Rata</th>
+                <th>Pointer Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Tingkat Kesiapan Keamanan</td>
+                <td><?php echo round($overall_average / 18, 2); ?></td>
+                <td><?php echo round($overall_average, 2); ?></td>
+            </tr>
+        </tbody>
+    </table>
 
-<!-- Tabel Output Tingkat Kesiapan Keamanan -->
-<h3 class="text-center mt-5">Output Tingkat Kesiapan Keamanan</h3>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Kategori</th>
-            <th>Rata-Rata</th>
-            <th>Pointer Value</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Tingkat Kesiapan Keamanan</td>
-            <td><?php echo round($overall_average / 18, 2); ?></td>
-            <td><?php echo round($overall_average, 2); ?></td>
-        </tr>
-    </tbody>
-</table>
+<!-- Tombol Kirim ke Asesor -->
+<?php if ($result && $result->num_rows > 0): ?>
+    <div class="text-center mt-4">
+        <form method="POST" action="">
+            <input type="hidden" name="kode_audit" value="<?php echo htmlspecialchars($kode_audit); ?>">
+            <input type="hidden" name="score_session_id" value="<?php echo htmlspecialchars($score_session_id); ?>">
+            <input type="hidden" name="categories" value="<?php echo htmlspecialchars(json_encode($categories)); ?>">
+            <input type="hidden" name="overall_score" value="<?php echo htmlspecialchars($overall_average); ?>">
+            <button type="submit" name="send_to_asesor" class="btn btn-primary">Kirim ke Asesor</button>
+        </form>
+    </div>
+<?php endif; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
 <script>
-    // Radar Chart
-    const radarCtx = document.getElementById('radarChart').getContext('2d');
-    new Chart(radarCtx, {
-        type: 'radar',
-        data: {
-            labels: [
-                'Kesiapan Organisasi (Service Strategy)',
-                'Manajemen Aset (Service Design)',
-                'Penyusunan Keamanan TI (Service Transition)',
-                'Pelaksanaan Keamanan TI (Service Operation)',
-                'Perencanaan Pengembangan (Continual Service Improvement)'
+// Radar Chart
+const radarCtx = document.getElementById('radarChart').getContext('2d');
+new Chart(radarCtx, {
+    type: 'radar',
+    data: {
+        labels: [
+            'Kesiapan Organisasi (Service Strategy)',
+            'Manajemen Aset (Service Design)',
+            'Penyusunan Keamanan TI (Service Transition)',
+            'Pelaksanaan Keamanan TI (Service Operation)',
+            'Perencanaan Pengembangan (Continual Service Improvement)'
+        ],
+        datasets: [{
+            label: 'Rata-Rata Skor',
+            data: [
+                <?php echo $categories['Service Strategy']; ?>,
+                <?php echo $categories['Service Design']; ?>,
+                <?php echo $categories['Service Transition']; ?>,
+                <?php echo $categories['Service Operation']; ?>,
+                <?php echo $categories['Continual Service Improvement']; ?>
             ],
-            datasets: [{
-                label: 'Rata-Rata Skor',
-                data: [
-                    <?php echo $categories['Service Strategy']; ?>,
-                    <?php echo $categories['Service Design']; ?>,
-                    <?php echo $categories['Service Transition']; ?>,
-                    <?php echo $categories['Service Operation']; ?>,
-                    <?php echo $categories['Continual Service Improvement']; ?>
-                ],
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                r: {
-                    angleLines: { display: true },
-                    suggestedMin: 0,
-                    suggestedMax: 5
-                }
-            },
-            plugins: {
-                legend: { display: true }
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            r: {
+                angleLines: { display: true },
+                suggestedMin: 0,
+                suggestedMax: 5
             }
-        }
-    });
-
-    // Speedometer Chart
-    const speedometerCtx = document.getElementById('speedometerChart').getContext('2d');
-    const speedometerValue = <?php echo round($overall_average, 2); ?>;
-
-    new Chart(speedometerCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Rendah (Merah)', 'Sedang (Kuning)', 'Baik (Hijau)'],
-            datasets: [{
-                data: [20, 30, 50],
-                backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
-                borderWidth: 0,
-            }]
         },
-        options: {
-            rotation: -90,
-            circumference: 180,
-            cutout: '70%',
-            plugins: {
-                legend: { display: false },
-                annotation: {
-                    annotations: {
-                        pointer: {
-                            type: 'line',
-                            xMin: 50 + (speedometerValue / 100) * 150,
-                            xMax: 50 + (speedometerValue / 100) * 150,
-                            yMin: 0,
-                            yMax: 80,
-                            borderColor: 'black',
-                            borderWidth: 3,
-                        }
+        plugins: {
+            legend: { display: true }
+        }
+    }
+});
+
+// Speedometer Chart
+const speedometerCtx = document.getElementById('speedometerChart').getContext('2d');
+const speedometerValue = <?php echo round($overall_average, 2); ?>;
+
+new Chart(speedometerCtx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Rendah (Merah)', 'Sedang (Kuning)', 'Baik (Hijau)'],
+        datasets: [{
+            data: [20, 30, 50],
+            backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
+            borderWidth: 0,
+        }]
+    },
+    options: {
+        rotation: -90,
+        circumference: 180,
+        cutout: '70%',
+        plugins: {
+            legend: { display: false },
+            annotation: {
+                annotations: {
+                    pointer: {
+                        type: 'line',
+                        xMin: 50 + (speedometerValue / 100) * 150,
+                        xMax: 50 + (speedometerValue / 100) * 150,
+                        yMin: 0,
+                        yMax: 80,
+                        borderColor: 'black',
+                        borderWidth: 3,
                     }
                 }
             }
         }
-    });
+    }
+});
 </script>
-
-<?php if ($result && $result->num_rows > 0): ?>
-    <!-- Tombol Kirim ke Asessor -->
-    <div class="text-center mt-4">
-        <a href="../tim_penilai/verify_assessment.php?kode_audit=<?php echo urlencode($kode_audit); ?>&score_session_id=<?php echo urlencode($score_session_id); ?>"
-           class="btn btn-primary">
-           Kirim ke Asessor
-        </a>
-    </div>
-<?php elseif ($kode_audit && $score_session_id): ?>
-    <div class="alert alert-warning">Data tidak ditemukan untuk kombinasi kode audit dan ID sesi skor yang dipilih.</div>
-<?php endif; ?>
 
 <?php include '../../includes/footer.php'; ?>

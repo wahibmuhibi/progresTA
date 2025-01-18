@@ -24,6 +24,40 @@ $query = "
 ";
 $result = $conn->query($query);
 
+// Menampilkan Hasil
+$kode_audit = isset($_GET['kode_audit']) ? $conn->real_escape_string($_GET['kode_audit']) : null;
+$score_session_id = isset($_GET['score_session_id']) ? (int) $_GET['score_session_id'] : null;
+
+if ($kode_audit && $score_session_id) {
+    $results_query = $conn->query("
+        SELECT * 
+        FROM assessment_results
+        WHERE kode_audit = '$kode_audit' AND score_session_id = $score_session_id
+    ");
+
+    if ($results_query && $results_query->num_rows > 0): ?>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Kategori</th>
+                    <th>Rata-Rata Skor</th>
+                    <th>Tingkat Kesiapan Keamanan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($row = $results_query->fetch_assoc()): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['category']); ?></td>
+                        <td><?php echo htmlspecialchars($row['average_score']); ?></td>
+                        <td><?php echo htmlspecialchars($row['overall_score']); ?></td>
+                    </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <div class="alert alert-warning">Tidak ada data ditemukan.</div>
+    <?php endif;
+}
 ?>
 
 <h3 class="text-center">Verifikasi Assessment</h3>
