@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 18, 2025 at 02:26 PM
+-- Generation Time: Jan 18, 2025 at 05:05 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 5.6.40
 
@@ -60,10 +60,11 @@ CREATE TABLE `asesmen_hasil` (
   `id` int(11) NOT NULL,
   `asesmen_kode` varchar(50) DEFAULT NULL,
   `score_session_id` int(11) NOT NULL,
-  `category` varchar(100) NOT NULL,
-  `average_score` decimal(5,2) NOT NULL,
+  `aspek` varchar(255) DEFAULT NULL,
+  `skor_rata_rata` float DEFAULT NULL,
   `verification_code` varchar(50) DEFAULT NULL,
   `verified_at` datetime DEFAULT NULL,
+  `rekomendasi` text,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -71,47 +72,47 @@ CREATE TABLE `asesmen_hasil` (
 -- Dumping data for table `asesmen_hasil`
 --
 
-INSERT INTO `asesmen_hasil` (`id`, `asesmen_kode`, `score_session_id`, `category`, `average_score`, `verification_code`, `verified_at`, `created_at`) VALUES
-(1, 'AUDIT-67895A8F32211', 1737083362, 'Service Strategy', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 04:33:03'),
-(2, 'AUDIT-67895A8F32211', 1737083362, 'Service Design', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 04:33:03'),
-(3, 'AUDIT-67895A8F32211', 1737083362, 'Service Transition', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 04:33:03'),
-(4, 'AUDIT-67895A8F32211', 1737083362, 'Service Operation', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 04:33:03'),
-(5, 'AUDIT-67895A8F32211', 1737083362, 'Continual Service Improvement', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 04:33:03'),
-(6, 'AUDIT-67895A8F32211', 1737170025, 'Service Strategy', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:08:47'),
-(7, 'AUDIT-67895A8F32211', 1737170025, 'Service Design', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:08:47'),
-(8, 'AUDIT-67895A8F32211', 1737170025, 'Service Transition', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:08:47'),
-(9, 'AUDIT-67895A8F32211', 1737170025, 'Service Operation', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:08:47'),
-(10, 'AUDIT-67895A8F32211', 1737170025, 'Continual Service Improvement', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:08:47'),
-(11, 'AUDIT-67895A8F32211', 1737083362, 'Service Strategy', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 05:38:12'),
-(12, 'AUDIT-67895A8F32211', 1737083362, 'Service Design', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 05:38:12'),
-(13, 'AUDIT-67895A8F32211', 1737083362, 'Service Transition', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 05:38:12'),
-(14, 'AUDIT-67895A8F32211', 1737083362, 'Service Operation', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 05:38:12'),
-(15, 'AUDIT-67895A8F32211', 1737083362, 'Continual Service Improvement', '5.00', 'VERIFY-678B70E759866', '2025-01-18 10:14:15', '2025-01-18 05:38:12'),
-(16, 'AUDIT-67895A8F32211', 1737170025, 'Service Strategy', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:39:43'),
-(17, 'AUDIT-67895A8F32211', 1737170025, 'Service Design', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:39:43'),
-(18, 'AUDIT-67895A8F32211', 1737170025, 'Service Transition', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:39:43'),
-(19, 'AUDIT-67895A8F32211', 1737170025, 'Service Operation', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:39:43'),
-(20, 'AUDIT-67895A8F32211', 1737170025, 'Continual Service Improvement', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 05:39:43'),
-(21, 'AUDIT-67895A8F32211', 1737170025, 'Service Strategy', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 07:28:13'),
-(22, 'AUDIT-67895A8F32211', 1737170025, 'Service Design', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 07:28:13'),
-(23, 'AUDIT-67895A8F32211', 1737170025, 'Service Transition', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 07:28:13'),
-(24, 'AUDIT-67895A8F32211', 1737170025, 'Service Operation', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 07:28:13'),
-(25, 'AUDIT-67895A8F32211', 1737170025, 'Continual Service Improvement', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 07:28:13'),
-(26, 'AUDIT-678B58BED30CD', 1737185533, 'Service Strategy', '1.00', NULL, NULL, '2025-01-18 07:32:23'),
-(27, 'AUDIT-678B58BED30CD', 1737185533, 'Service Design', '1.00', NULL, NULL, '2025-01-18 07:32:23'),
-(28, 'AUDIT-678B58BED30CD', 1737185533, 'Service Transition', '1.00', NULL, NULL, '2025-01-18 07:32:23'),
-(29, 'AUDIT-678B58BED30CD', 1737185533, 'Service Operation', '1.00', NULL, NULL, '2025-01-18 07:32:23'),
-(30, 'AUDIT-678B58BED30CD', 1737185533, 'Continual Service Improvement', '1.00', NULL, NULL, '2025-01-18 07:32:23'),
-(31, 'AUDIT-678B58BED30CD', 1737189188, 'Service Strategy', '1.00', 'VERIFY-678B9C66E1447', '2025-01-18 13:19:50', '2025-01-18 08:33:15'),
-(32, 'AUDIT-678B58BED30CD', 1737189188, 'Service Design', '1.00', 'VERIFY-678B9C66E1447', '2025-01-18 13:19:50', '2025-01-18 08:33:15'),
-(33, 'AUDIT-678B58BED30CD', 1737189188, 'Service Transition', '1.00', 'VERIFY-678B9C66E1447', '2025-01-18 13:19:50', '2025-01-18 08:33:15'),
-(34, 'AUDIT-678B58BED30CD', 1737189188, 'Service Operation', '1.00', 'VERIFY-678B9C66E1447', '2025-01-18 13:19:50', '2025-01-18 08:33:15'),
-(35, 'AUDIT-678B58BED30CD', 1737189188, 'Continual Service Improvement', '1.00', 'VERIFY-678B9C66E1447', '2025-01-18 13:19:50', '2025-01-18 08:33:15'),
-(36, 'AUDIT-67895A8F32211', 1737170025, 'Service Strategy', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 11:53:03'),
-(37, 'AUDIT-67895A8F32211', 1737170025, 'Service Design', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 11:53:03'),
-(38, 'AUDIT-67895A8F32211', 1737170025, 'Service Transition', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 11:53:03'),
-(39, 'AUDIT-67895A8F32211', 1737170025, 'Service Operation', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 11:53:03'),
-(40, 'AUDIT-67895A8F32211', 1737170025, 'Continual Service Improvement', '5.00', 'VERIFY-678B99AE7ACAB', '2025-01-18 13:08:14', '2025-01-18 11:53:03');
+INSERT INTO `asesmen_hasil` (`id`, `asesmen_kode`, `score_session_id`, `aspek`, `skor_rata_rata`, `verification_code`, `verified_at`, `rekomendasi`, `created_at`) VALUES
+(1, 'AUDIT-67895A8F32211', 1737083362, 'Service Strategy', 5, 'VERIFY-678B70E759866', '2025-01-18 10:14:15', NULL, '2025-01-18 04:33:03'),
+(2, 'AUDIT-67895A8F32211', 1737083362, 'Service Design', 5, 'VERIFY-678B70E759866', '2025-01-18 10:14:15', NULL, '2025-01-18 04:33:03'),
+(3, 'AUDIT-67895A8F32211', 1737083362, 'Service Transition', 5, 'VERIFY-678B70E759866', '2025-01-18 10:14:15', NULL, '2025-01-18 04:33:03'),
+(4, 'AUDIT-67895A8F32211', 1737083362, 'Service Operation', 5, 'VERIFY-678B70E759866', '2025-01-18 10:14:15', NULL, '2025-01-18 04:33:03'),
+(5, 'AUDIT-67895A8F32211', 1737083362, 'Continual Service Improvement', 5, 'VERIFY-678B70E759866', '2025-01-18 10:14:15', NULL, '2025-01-18 04:33:03'),
+(6, 'AUDIT-67895A8F32211', 1737170025, 'Service Strategy', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 05:08:47'),
+(7, 'AUDIT-67895A8F32211', 1737170025, 'Service Design', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 05:08:47'),
+(8, 'AUDIT-67895A8F32211', 1737170025, 'Service Transition', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 05:08:47'),
+(9, 'AUDIT-67895A8F32211', 1737170025, 'Service Operation', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 05:08:47'),
+(10, 'AUDIT-67895A8F32211', 1737170025, 'Continual Service Improvement', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 05:08:47'),
+(11, 'AUDIT-67895A8F32211', 1737083362, 'Service Strategy', 5, 'VERIFY-678B70E759866', '2025-01-18 10:14:15', NULL, '2025-01-18 05:38:12'),
+(12, 'AUDIT-67895A8F32211', 1737083362, 'Service Design', 5, 'VERIFY-678B70E759866', '2025-01-18 10:14:15', NULL, '2025-01-18 05:38:12'),
+(13, 'AUDIT-67895A8F32211', 1737083362, 'Service Transition', 5, 'VERIFY-678B70E759866', '2025-01-18 10:14:15', NULL, '2025-01-18 05:38:12'),
+(14, 'AUDIT-67895A8F32211', 1737083362, 'Service Operation', 5, 'VERIFY-678B70E759866', '2025-01-18 10:14:15', NULL, '2025-01-18 05:38:12'),
+(15, 'AUDIT-67895A8F32211', 1737083362, 'Continual Service Improvement', 5, 'VERIFY-678B70E759866', '2025-01-18 10:14:15', NULL, '2025-01-18 05:38:12'),
+(16, 'AUDIT-67895A8F32211', 1737170025, 'Service Strategy', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 05:39:43'),
+(17, 'AUDIT-67895A8F32211', 1737170025, 'Service Design', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 05:39:43'),
+(18, 'AUDIT-67895A8F32211', 1737170025, 'Service Transition', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 05:39:43'),
+(19, 'AUDIT-67895A8F32211', 1737170025, 'Service Operation', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 05:39:43'),
+(20, 'AUDIT-67895A8F32211', 1737170025, 'Continual Service Improvement', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 05:39:43'),
+(21, 'AUDIT-67895A8F32211', 1737170025, 'Service Strategy', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 07:28:13'),
+(22, 'AUDIT-67895A8F32211', 1737170025, 'Service Design', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 07:28:13'),
+(23, 'AUDIT-67895A8F32211', 1737170025, 'Service Transition', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 07:28:13'),
+(24, 'AUDIT-67895A8F32211', 1737170025, 'Service Operation', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 07:28:13'),
+(25, 'AUDIT-67895A8F32211', 1737170025, 'Continual Service Improvement', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 07:28:13'),
+(26, 'AUDIT-678B58BED30CD', 1737185533, 'Service Strategy', 1, NULL, NULL, NULL, '2025-01-18 07:32:23'),
+(27, 'AUDIT-678B58BED30CD', 1737185533, 'Service Design', 1, NULL, NULL, NULL, '2025-01-18 07:32:23'),
+(28, 'AUDIT-678B58BED30CD', 1737185533, 'Service Transition', 1, NULL, NULL, NULL, '2025-01-18 07:32:23'),
+(29, 'AUDIT-678B58BED30CD', 1737185533, 'Service Operation', 1, NULL, NULL, NULL, '2025-01-18 07:32:23'),
+(30, 'AUDIT-678B58BED30CD', 1737185533, 'Continual Service Improvement', 1, NULL, NULL, NULL, '2025-01-18 07:32:23'),
+(31, 'AUDIT-678B58BED30CD', 1737189188, 'Service Strategy', 1, 'VERIFY-678BD010EDEBA', '2025-01-18 17:00:16', 'Tes', '2025-01-18 08:33:15'),
+(32, 'AUDIT-678B58BED30CD', 1737189188, 'Service Design', 1, 'VERIFY-678BD010EDEBA', '2025-01-18 17:00:16', 'Tes', '2025-01-18 08:33:15'),
+(33, 'AUDIT-678B58BED30CD', 1737189188, 'Service Transition', 1, 'VERIFY-678BD010EDEBA', '2025-01-18 17:00:16', 'Tes', '2025-01-18 08:33:15'),
+(34, 'AUDIT-678B58BED30CD', 1737189188, 'Service Operation', 1, 'VERIFY-678BD010EDEBA', '2025-01-18 17:00:16', 'Tes', '2025-01-18 08:33:15'),
+(35, 'AUDIT-678B58BED30CD', 1737189188, 'Continual Service Improvement', 1, 'VERIFY-678BD010EDEBA', '2025-01-18 17:00:16', 'Tes', '2025-01-18 08:33:15'),
+(36, 'AUDIT-67895A8F32211', 1737170025, 'Service Strategy', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 11:53:03'),
+(37, 'AUDIT-67895A8F32211', 1737170025, 'Service Design', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 11:53:03'),
+(38, 'AUDIT-67895A8F32211', 1737170025, 'Service Transition', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 11:53:03'),
+(39, 'AUDIT-67895A8F32211', 1737170025, 'Service Operation', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 11:53:03'),
+(40, 'AUDIT-67895A8F32211', 1737170025, 'Continual Service Improvement', 5, 'VERIFY-678BCFD7DDBF1', '2025-01-18 16:59:19', 'Tes', '2025-01-18 11:53:03');
 
 -- --------------------------------------------------------
 
@@ -659,7 +660,7 @@ INSERT INTO `asesmen_pertanyaan` (`id`, `kode_mapping`, `asesmen_periode`, `pert
 
 CREATE TABLE `cobit` (
   `id` int(11) NOT NULL,
-  `version` varchar(50) NOT NULL,
+  `versi` varchar(255) DEFAULT NULL,
   `domain` varchar(255) DEFAULT NULL,
   `process_id` varchar(10) DEFAULT NULL,
   `process_name` varchar(255) DEFAULT NULL
@@ -669,7 +670,7 @@ CREATE TABLE `cobit` (
 -- Dumping data for table `cobit`
 --
 
-INSERT INTO `cobit` (`id`, `version`, `domain`, `process_id`, `process_name`) VALUES
+INSERT INTO `cobit` (`id`, `versi`, `domain`, `process_id`, `process_name`) VALUES
 (36, 'COBIT 4.1', 'Acquire and Implement (AI)', 'AI1.1', 'Definition and Maintenance of Business Functional and Technical Requirements'),
 (37, 'COBIT 4.1', 'Acquire and Implement (AI)', 'AI1.2', 'Risk Analysis Report'),
 (38, 'COBIT 4.1', 'Acquire and Implement (AI)', 'AI1.3', 'Feasibility Study and Formulation of Alternative Courses of Action'),
@@ -905,38 +906,12 @@ INSERT INTO `cobit` (`id`, `version`, `domain`, `process_id`, `process_name`) VA
 -- --------------------------------------------------------
 
 --
--- Table structure for table `criteria`
---
-
-CREATE TABLE `criteria` (
-  `id` int(11) NOT NULL,
-  `jenis` varchar(255) NOT NULL,
-  `kondisi` varchar(255) NOT NULL,
-  `skor` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `criteria`
---
-
-INSERT INTO `criteria` (`id`, `jenis`, `kondisi`, `skor`, `created_at`) VALUES
-(8, 'Maturity Level', 'Belum Terfikirkan', 0, '2025-01-07 16:02:24'),
-(9, 'Maturity Level', 'Belum Ada, masih di inisiasikan', 1, '2025-01-07 16:02:43'),
-(10, 'Maturity Level', 'Sudah Ada, tanpa dokumentasi', 2, '2025-01-07 16:03:29'),
-(11, 'Maturity Level', 'Sudah Ada, dan terdokumentasikan', 3, '2025-01-07 16:03:43'),
-(12, 'Maturity Level', 'Sudah Ada, terdokumentasi dan termonitoring', 4, '2025-01-07 16:03:55'),
-(13, 'Maturity Level', 'Sudah Ada, dan sudah Optimal', 5, '2025-01-07 16:04:08');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `iso`
 --
 
 CREATE TABLE `iso` (
   `id` int(11) NOT NULL,
-  `version` varchar(50) NOT NULL,
+  `versi` varchar(255) DEFAULT NULL,
   `annex` varchar(50) NOT NULL,
   `control` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -945,7 +920,7 @@ CREATE TABLE `iso` (
 -- Dumping data for table `iso`
 --
 
-INSERT INTO `iso` (`id`, `version`, `annex`, `control`) VALUES
+INSERT INTO `iso` (`id`, `versi`, `annex`, `control`) VALUES
 (115, 'ISO 27002:2013', 'A.5.1.1', 'Policies for information security'),
 (116, 'ISO 27002:2013', 'A.5.1.2', 'Review of the policies for information security'),
 (117, 'ISO 27002:2013', 'A.6.1.1', 'Information security roles and responsibilities'),
@@ -1150,7 +1125,7 @@ INSERT INTO `iso` (`id`, `version`, `annex`, `control`) VALUES
 
 CREATE TABLE `itil` (
   `id` int(11) NOT NULL,
-  `version` varchar(50) NOT NULL,
+  `versi` varchar(255) DEFAULT NULL,
   `service_lifecycle` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -1158,7 +1133,7 @@ CREATE TABLE `itil` (
 -- Dumping data for table `itil`
 --
 
-INSERT INTO `itil` (`id`, `version`, `service_lifecycle`) VALUES
+INSERT INTO `itil` (`id`, `versi`, `service_lifecycle`) VALUES
 (1, 'ITIL v3', 'Service Strategy'),
 (2, 'ITIL v3', 'Service Design'),
 (3, 'ITIL v3', 'Service Transition'),
@@ -1174,7 +1149,7 @@ INSERT INTO `itil` (`id`, `version`, `service_lifecycle`) VALUES
 CREATE TABLE `log_aktivitas` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `activity` text NOT NULL,
+  `aktivitas` varchar(255) DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -1182,7 +1157,7 @@ CREATE TABLE `log_aktivitas` (
 -- Dumping data for table `log_aktivitas`
 --
 
-INSERT INTO `log_aktivitas` (`id`, `user_id`, `activity`, `timestamp`) VALUES
+INSERT INTO `log_aktivitas` (`id`, `user_id`, `aktivitas`, `timestamp`) VALUES
 (0, 1, 'Login ke sistem', '2025-01-15 05:33:10'),
 (1, 1, 'Login ke sistem', '2025-01-05 21:26:23'),
 (2, 1, 'Login ke sistem', '2025-01-05 21:36:37'),
@@ -1366,6 +1341,32 @@ INSERT INTO `mapping_standard` (`id`, `mapping_version`, `itil_version`, `itil_s
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `maturity`
+--
+
+CREATE TABLE `maturity` (
+  `id` int(11) NOT NULL,
+  `jenis` varchar(255) NOT NULL,
+  `kondisi` varchar(255) NOT NULL,
+  `skor` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `maturity`
+--
+
+INSERT INTO `maturity` (`id`, `jenis`, `kondisi`, `skor`, `created_at`) VALUES
+(8, 'Maturity Level', 'Belum Terfikirkan', 0, '2025-01-07 16:02:24'),
+(9, 'Maturity Level', 'Belum Ada, masih di inisiasikan', 1, '2025-01-07 16:02:43'),
+(10, 'Maturity Level', 'Sudah Ada, tanpa dokumentasi', 2, '2025-01-07 16:03:29'),
+(11, 'Maturity Level', 'Sudah Ada, dan terdokumentasikan', 3, '2025-01-07 16:03:43'),
+(12, 'Maturity Level', 'Sudah Ada, terdokumentasi dan termonitoring', 4, '2025-01-07 16:03:55'),
+(13, 'Maturity Level', 'Sudah Ada, dan sudah Optimal', 5, '2025-01-07 16:04:08');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -1374,7 +1375,7 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role` enum('Manajemen TI','Admin','Tim Penilai','IT Auditor') NOT NULL,
-  `company` varchar(100) DEFAULT NULL,
+  `institusi` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -1382,7 +1383,7 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `role`, `company`, `created_at`) VALUES
+INSERT INTO `users` (`id`, `username`, `password`, `role`, `institusi`, `created_at`) VALUES
 (1, 'admin', '0192023a7bbd73250516f069df18b500', 'Admin', 'Dinas Kominfo Provinsi Jawa Timur', '2025-01-05 07:45:08'),
 (6, 'it_kominfogresik', '202cb962ac59075b964b07152d234b70', 'Manajemen TI', 'Dinas Kominfo Kabupaten Gresik', '2025-01-07 16:37:23'),
 (8, 'kominfojatim', '202cb962ac59075b964b07152d234b70', 'Tim Penilai', 'Asesor Dinas Kominfo Provinsi Jawa Timur', '2025-01-07 16:38:54');
@@ -1427,12 +1428,6 @@ ALTER TABLE `cobit`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `criteria`
---
-ALTER TABLE `criteria`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `iso`
 --
 ALTER TABLE `iso`
@@ -1457,6 +1452,12 @@ ALTER TABLE `log_aktivitas`
 ALTER TABLE `mapping_criteria`
   ADD PRIMARY KEY (`id`),
   ADD KEY `kode_mapping` (`kode_mapping`);
+
+--
+-- Indexes for table `maturity`
+--
+ALTER TABLE `maturity`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
