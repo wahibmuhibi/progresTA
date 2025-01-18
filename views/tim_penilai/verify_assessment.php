@@ -6,12 +6,12 @@ include '../../includes/db.php';
 include '../../includes/header.php';
 
 // Tangkap kode audit dan score session ID dari URL
-$kode_audit = isset($_GET['kode_audit']) ? $conn->real_escape_string($_GET['kode_audit']) : null;
+$asesmen_kode = isset($_GET['asesmen_kode']) ? $conn->real_escape_string($_GET['asesmen_kode']) : null;
 $score_session_id = isset($_GET['score_session_id']) ? (int)$_GET['score_session_id'] : null;
 
 // Ambil daftar assessment yang tersedia untuk verifikasi
 $available_assessments = $conn->query("
-    SELECT DISTINCT kode_audit, score_session_id, created_at 
+    SELECT DISTINCT asesmen_kode, score_session_id, created_at 
     FROM assessment_results 
     WHERE verification_code IS NULL
     ORDER BY created_at DESC
@@ -25,23 +25,23 @@ if (!$available_assessments || $available_assessments->num_rows === 0) {
 
 // Ambil data hasil assessment jika parameter URL ada
 $results_query = null;
-if ($kode_audit && $score_session_id) {
+if ($asesmen_kode && $score_session_id) {
     $results_query = $conn->query("
         SELECT DISTINCT category, AVG(average_score) AS average_score
         FROM assessment_results
-        WHERE kode_audit = '$kode_audit' AND score_session_id = $score_session_id
+        WHERE asesmen_kode = '$asesmen_kode' AND score_session_id = $score_session_id
         GROUP BY category
     ");
 }
 
 // Ambil data detail dari assessment_answers
 $details_query = null;
-if ($kode_audit && $score_session_id) {
+if ($asesmen_kode && $score_session_id) {
     $details_query = $conn->query("
         SELECT q.kode_mapping, q.pertanyaan, a.jawaban, a.skor 
         FROM assessment_answers a
         JOIN asesmen_pertanyaan q ON a.question_id = q.id
-        WHERE a.kode_audit = '$kode_audit' AND a.score_session_id = $score_session_id
+        WHERE a.asesmen_kode = '$asesmen_kode' AND a.score_session_id = $score_session_id
     ");
 }
 ?>
@@ -61,11 +61,11 @@ if ($kode_audit && $score_session_id) {
     <tbody>
         <?php while ($row = $available_assessments->fetch_assoc()): ?>
             <tr>
-                <td><?php echo htmlspecialchars($row['kode_audit']); ?></td>
+                <td><?php echo htmlspecialchars($row['asesmen_kode']); ?></td>
                 <td><?php echo htmlspecialchars($row['score_session_id']); ?></td>
                 <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                 <td>
-                    <a href="verify_assessment.php?kode_audit=<?php echo urlencode($row['kode_audit']); ?>&score_session_id=<?php echo urlencode($row['score_session_id']); ?>" 
+                    <a href="verify_assessment.php?asesmen_kode=<?php echo urlencode($row['asesmen_kode']); ?>&score_session_id=<?php echo urlencode($row['score_session_id']); ?>" 
                        class="btn btn-primary btn-sm">
                         Verifikasi
                     </a>
@@ -75,7 +75,7 @@ if ($kode_audit && $score_session_id) {
     </tbody>
 </table>
 
-<?php if ($kode_audit && $score_session_id): ?>
+<?php if ($asesmen_kode && $score_session_id): ?>
     <h3 class="text-center mt-5">Detail Assessment untuk Verifikasi</h3>
 
     <!-- Tabel Rata-Rata Hasil Assessment -->
@@ -127,7 +127,7 @@ if ($kode_audit && $score_session_id) {
         <!-- Tombol Verifikasi -->
         <div class="text-center mt-4">
             <form method="POST" action="">
-                <input type="hidden" name="kode_audit" value="<?php echo htmlspecialchars($kode_audit); ?>">
+                <input type="hidden" name="asesmen_kode" value="<?php echo htmlspecialchars($asesmen_kode); ?>">
                 <input type="hidden" name="score_session_id" value="<?php echo htmlspecialchars($score_session_id); ?>">
                 <button type="submit" name="verify" class="btn btn-success">Verifikasi</button>
             </form>
@@ -142,7 +142,7 @@ if ($kode_audit && $score_session_id) {
             $update_query = "
                 UPDATE assessment_results
                 SET verification_code = '$verification_code', verified_at = '$verified_at'
-                WHERE kode_audit = '$kode_audit' AND score_session_id = $score_session_id
+                WHERE asesmen_kode = '$asesmen_kode' AND score_session_id = $score_session_id
             ";
             if ($conn->query($update_query)) {
                 echo "<div class='alert alert-success mt-4'>Assessment berhasil diverifikasi. Kode Verifikasi: $verification_code</div>";

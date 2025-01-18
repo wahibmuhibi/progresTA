@@ -28,7 +28,7 @@ function mapFormStatusToLabel($status, $role)
     return 'Tidak Diketahui';
 }
 
-// Ambil daftar periode audit
+// Ambil daftar periode Asesmen
 $periode_query = $conn->query("SELECT DISTINCT asesmen_periode FROM asesmen_pertanyaan ORDER BY asesmen_periode DESC");
 $asesmen_periode_list = [];
 if ($periode_query && $periode_query->num_rows > 0) {
@@ -37,10 +37,10 @@ if ($periode_query && $periode_query->num_rows > 0) {
     }
 }
 
-// Ambil daftar subjek penilaian berdasarkan periode audit
+// Ambil daftar subjek penilaian berdasarkan periode Asesmen
 $selected_periode = isset($_GET['asesmen_periode']) ? (int)$_GET['asesmen_periode'] : null;
 $asesi_query = $conn->query("
-    SELECT a.id AS asesi_id, a.kode_audit, u.username, u.company, a.asesmen_periode, a.form_status 
+    SELECT a.id AS asesi_id, a.asesmen_kode, u.username, u.company, a.asesmen_periode, a.form_status 
     FROM asesi a 
     JOIN users u ON a.user_id = u.id 
     " . ($selected_periode ? "WHERE a.asesmen_periode = $selected_periode" : "") . " 
@@ -50,36 +50,36 @@ $asesi_query = $conn->query("
 // Ambil daftar Manajemen TI untuk form tambah Asesi
 $manajemen_ti_query = $conn->query("SELECT id, username, company FROM users WHERE role = 'Manajemen TI' ORDER BY username ASC");
 
-// Tambah Auditee
+// Tambah Asesi
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_asesi'])) {
     $user_id = (int)$_POST['user_id'];
     $asesmen_periode = (int)$_POST['asesmen_periode'];
-    $kode_audit = strtoupper(uniqid("AUDIT-"));
+    $asesmen_kode = strtoupper(uniqid("ASESMEN-"));
 
     if (empty($user_id) || empty($asesmen_periode)) {
-        $error = "Akun Manajemen TI dan Periode Audit harus dipilih.";
+        $error = "Akun Manajemen TI dan Periode Asesmen harus dipilih.";
     } else {
-        $query = "INSERT INTO asesi (user_id, asesmen_periode, kode_audit) VALUES ($user_id, $asesmen_periode, '$kode_audit')";
+        $query = "INSERT INTO asesi (user_id, asesmen_periode, asesmen_kode) VALUES ($user_id, $asesmen_periode, '$asesmen_kode')";
         if ($conn->query($query)) {
-            $success = "Auditee berhasil ditambahkan dengan kode audit: $kode_audit.";
+            $success = "Asesi berhasil ditambahkan dengan kode Asesmen: $asesmen_kode.";
         } else {
             $error = "Terjadi kesalahan saat menambahkan asesi: " . $conn->error;
         }
     }
 }
 
-// Hapus Auditee
+// Hapus Asesi
 if (isset($_GET['delete_asesi_id'])) {
     $delete_asesi_id = (int)$_GET['delete_asesi_id'];
     $query = "DELETE FROM asesi WHERE id = $delete_asesi_id";
     if ($conn->query($query)) {
-        $success = "Auditee berhasil dihapus.";
+        $success = "Asesi berhasil dihapus.";
     } else {
         $error = "Terjadi kesalahan saat menghapus asesi: " . $conn->error;
     }
 }
 
-// Kirim ke Auditee
+// Kirim ke Asesi
 if (isset($_GET['send_to_asesi_id'])) {
     $send_to_asesi_id = (int)$_GET['send_to_asesi_id'];
 
@@ -111,14 +111,14 @@ if (isset($_GET['send_to_asesi_id'])) {
     <div class="alert alert-danger"><?php echo $error; ?></div>
 <?php endif; ?>
 
-<!-- Tabel Auditee -->
+<!-- Tabel Asesi -->
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>Username</th>
             <th>Company</th>
-            <th>Periode Audit</th>
-            <th>Kode Audit</th>
+            <th>Periode Asesmen</th>
+            <th>Kode Asesmen</th>
             <th>Status</th>
             <th>Aksi</th>
         </tr>
@@ -130,7 +130,7 @@ if (isset($_GET['send_to_asesi_id'])) {
                     <td><?php echo htmlspecialchars($row['username']); ?></td>
                     <td><?php echo htmlspecialchars($row['company']); ?></td>
                     <td><?php echo htmlspecialchars($row['asesmen_periode']); ?></td>
-                    <td><?php echo htmlspecialchars($row['kode_audit']); ?></td>
+                    <td><?php echo htmlspecialchars($row['asesmen_kode']); ?></td>
                     <td>
                         <?php 
                         $status_label = mapFormStatusToLabel($row['form_status'], 'Tim Penilai');
@@ -160,8 +160,8 @@ if (isset($_GET['send_to_asesi_id'])) {
     </tbody>
 </table>
 
-<!-- Form Tambah Auditee -->
-<h4 class="mt-4">Tambah Auditee</h4>
+<!-- Form Tambah Asesi -->
+<h4 class="mt-4">Tambah Asesi</h4>
 <form method="POST" action="">
     <div class="row">
         <div class="col-md-6">
@@ -176,7 +176,7 @@ if (isset($_GET['send_to_asesi_id'])) {
             </select>
         </div>
         <div class="col-md-6">
-            <label for="asesmen_periode" class="form-label">Periode Audit</label>
+            <label for="asesmen_periode" class="form-label">Periode Asesmen</label>
             <select name="asesmen_periode" id="asesmen_periode" class="form-select" required>
                 <option value="" disabled selected>Pilih Periode</option>
                 <?php foreach ($asesmen_periode_list as $periode): ?>
@@ -187,5 +187,5 @@ if (isset($_GET['send_to_asesi_id'])) {
             </select>
         </div>
     </div>
-    <button type="submit" name="add_asesi" class="btn btn-primary mt-3">Tambah Auditee</button>
+    <button type="submit" name="add_asesi" class="btn btn-primary mt-3">Tambah Asesi</button>
 </form>

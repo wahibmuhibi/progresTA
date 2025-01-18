@@ -24,7 +24,7 @@ function mapFormStatusToLabel($status, $role)
 }
 
 // Inisialisasi variabel
-$kode_audit = isset($_GET['kode_audit']) ? $conn->real_escape_string($_GET['kode_audit']) : null;
+$asesmen_kode = isset($_GET['asesmen_kode']) ? $conn->real_escape_string($_GET['asesmen_kode']) : null;
 
 // Ambil data ITIL Service Lifecycle
 $lifecycle_query = $conn->query("
@@ -42,14 +42,14 @@ if ($lifecycle_query && $lifecycle_query->num_rows > 0) {
 
 // Ambil pertanyaan berdasarkan ITIL Service Lifecycle
 $questions_by_lifecycle = [];
-if ($kode_audit) {
+if ($asesmen_kode) {
     foreach ($lifecycle_stages as $stage) {
         $questions_query = $conn->query("
             SELECT DISTINCT q.id, q.kode_mapping, q.pertanyaan 
             FROM asesmen_pertanyaan q
             JOIN asesi a ON a.asesmen_periode = q.asesmen_periode
             WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(q.kode_mapping, '_', 2), '_', -1) = '$stage'
-            AND a.kode_audit = '$kode_audit'
+            AND a.asesmen_kode = '$asesmen_kode'
         ");
         $questions_by_lifecycle[$stage] = $questions_query ? $questions_query->fetch_all(MYSQLI_ASSOC) : [];
     }
@@ -68,7 +68,7 @@ if ($criteria_query && $criteria_query->num_rows > 0) {
 $existing_answers_query = $conn->query("
     SELECT question_id, jawaban, skor 
     FROM assessment_answers 
-    WHERE kode_audit = '$kode_audit' AND user_id = {$_SESSION['user_id']}
+    WHERE asesmen_kode = '$asesmen_kode' AND user_id = {$_SESSION['user_id']}
 ");
 $existing_answers = [];
 if ($existing_answers_query && $existing_answers_query->num_rows > 0) {
@@ -79,15 +79,15 @@ if ($existing_answers_query && $existing_answers_query->num_rows > 0) {
 
 // Proses penyimpanan jawaban
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!$kode_audit) {
+    if (!$asesmen_kode) {
         $error = "Kode audit tidak ditemukan.";
     } else {
         // Ambil periode audit berdasarkan kode audit
-        $periode_query = $conn->query("SELECT asesmen_periode FROM asesi WHERE kode_audit = '$kode_audit'");
+        $periode_query = $conn->query("SELECT asesmen_periode FROM asesi WHERE asesmen_kode = '$asesmen_kode'");
         $asesmen_periode = $periode_query && $periode_query->num_rows > 0 ? $periode_query->fetch_assoc()['asesmen_periode'] : null;
 
         if (!$asesmen_periode) {
-            $error = "Periode audit tidak ditemukan untuk kode audit: $kode_audit.";
+            $error = "Periode audit tidak ditemukan untuk kode audit: $asesmen_kode.";
         } else {
             // Generate score_session_id baru
             $score_session_id = time(); // Gunakan timestamp sebagai ID sesi unik
@@ -99,8 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Simpan atau perbarui data ke database
                 $query = "
-                    INSERT INTO assessment_answers (user_id, question_id, kode_audit, jawaban, skor, asesmen_periode, score_session_id) 
-                    VALUES ({$_SESSION['user_id']}, $question_id, '$kode_audit', '$jawaban', $skor, '$asesmen_periode', $score_session_id)
+                    INSERT INTO assessment_answers (user_id, question_id, asesmen_kode, jawaban, skor, asesmen_periode, score_session_id) 
+                    VALUES ({$_SESSION['user_id']}, $question_id, '$asesmen_kode', '$jawaban', $skor, '$asesmen_periode', $score_session_id)
                     ON DUPLICATE KEY UPDATE jawaban = '$jawaban', skor = $skor, score_session_id = $score_session_id
                 ";
                 if (!$conn->query($query)) {
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Redirect ke halaman skor
-            header("Location: score_view.php?kode_audit=$kode_audit&score_session_id=$score_session_id");
+            header("Location: score_view.php?asesmen_kode=$asesmen_kode&score_session_id=$score_session_id");
             exit;
         }
     }
@@ -117,11 +117,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Ambil daftar formulir masuk
 $incoming_forms_query = $conn->query("
-    SELECT a.kode_audit, a.asesmen_periode, a.form_status, COALESCE(q.source, 'Tim Penilai') AS source, COUNT(q.id) AS total_questions
+    SELECT a.asesmen_kode, a.asesmen_periode, a.form_status, COALESCE(q.source, 'Tim Penilai') AS source, COUNT(q.id) AS total_questions
     FROM asesi a
     JOIN asesmen_pertanyaan q ON a.asesmen_periode = q.asesmen_periode
     WHERE a.user_id = {$_SESSION['user_id']}
-    GROUP BY a.kode_audit, a.asesmen_periode, q.source
+    GROUP BY a.asesmen_kode, a.asesmen_periode, q.source
     ORDER BY a.asesmen_periode DESC
 ");
 ?>
@@ -154,7 +154,7 @@ $incoming_forms_query = $conn->query("
                     <tr>
                         <td><?php echo htmlspecialchars($row['asesmen_periode']); ?></td>
                         <td><?php echo htmlspecialchars($row['source']); ?></td>
-                        <td><?php echo htmlspecialchars($row['kode_audit']); ?></td>
+                        <td><?php echo htmlspecialchars($row['asesmen_kode']); ?></td>
                         <td><?php echo htmlspecialchars($row['total_questions']); ?></td>
                         <td>
                             <?php
@@ -167,9 +167,9 @@ $incoming_forms_query = $conn->query("
                         </td>
                         <td>
                             <?php if ((int)$row['form_status'] === 3): ?>
-                                <a href="score_view.php?kode_audit=<?php echo urlencode($row['kode_audit']); ?>" class="btn btn-sm btn-success">Lihat Skor</a>
+                                <a href="score_view.php?asesmen_kode=<?php echo urlencode($row['asesmen_kode']); ?>" class="btn btn-sm btn-success">Lihat Skor</a>
                             <?php else: ?>
-                                <a href="assessment_form.php?kode_audit=<?php echo urlencode($row['kode_audit']); ?>" class="btn btn-sm btn-primary">
+                                <a href="assessment_form.php?asesmen_kode=<?php echo urlencode($row['asesmen_kode']); ?>" class="btn btn-sm btn-primary">
                                     <?php echo (int)$row['form_status'] === 2 ? 'Lanjutkan' : 'Mulai Mengisi'; ?>
                                 </a>
                             <?php endif; ?>
@@ -186,9 +186,9 @@ $incoming_forms_query = $conn->query("
 </div>
 
 <!-- Form Self-Assessment -->
-<?php if ($kode_audit): ?>
+<?php if ($asesmen_kode): ?>
     <div class="container mt-5">
-        <form method="POST" action="assessment_form.php?kode_audit=<?php echo htmlspecialchars($kode_audit); ?>">
+        <form method="POST" action="assessment_form.php?asesmen_kode=<?php echo htmlspecialchars($asesmen_kode); ?>">
             <?php foreach ($lifecycle_stages as $stage): ?>
                 <h4 class="mt-4"><?php echo htmlspecialchars($stage); ?></h4>
                 <table class="table table-bordered">
@@ -206,7 +206,7 @@ $incoming_forms_query = $conn->query("
                             FROM asesmen_pertanyaan q
                             JOIN asesi a ON a.asesmen_periode = q.asesmen_periode
                             WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(q.kode_mapping, '_', 2), '_', -1) = '$stage'
-                            AND a.kode_audit = '$kode_audit'
+                            AND a.asesmen_kode = '$asesmen_kode'
                         ");
                         $questions = $questions_query ? $questions_query->fetch_all(MYSQLI_ASSOC) : [];
 
