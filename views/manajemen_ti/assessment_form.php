@@ -29,7 +29,7 @@ $kode_audit = isset($_GET['kode_audit']) ? $conn->real_escape_string($_GET['kode
 // Ambil data ITIL Service Lifecycle
 $lifecycle_query = $conn->query("
     SELECT DISTINCT SUBSTRING_INDEX(SUBSTRING_INDEX(kode_mapping, '_', 2), '_', -1) AS itil_service_lifecycle 
-    FROM eksternal_audit_question
+    FROM asesmen_pertanyaan
     WHERE kode_mapping IS NOT NULL
     ORDER BY itil_service_lifecycle ASC
 ");
@@ -46,7 +46,7 @@ if ($kode_audit) {
     foreach ($lifecycle_stages as $stage) {
         $questions_query = $conn->query("
             SELECT DISTINCT q.id, q.kode_mapping, q.pertanyaan 
-            FROM eksternal_audit_question q
+            FROM asesmen_pertanyaan q
             JOIN auditee a ON a.periode_audit = q.periode_audit
             WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(q.kode_mapping, '_', 2), '_', -1) = '$stage'
             AND a.kode_audit = '$kode_audit'
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $incoming_forms_query = $conn->query("
     SELECT a.kode_audit, a.periode_audit, a.form_status, COALESCE(q.source, 'Tim Penilai') AS source, COUNT(q.id) AS total_questions
     FROM auditee a
-    JOIN eksternal_audit_question q ON a.periode_audit = q.periode_audit
+    JOIN asesmen_pertanyaan q ON a.periode_audit = q.periode_audit
     WHERE a.user_id = {$_SESSION['user_id']}
     GROUP BY a.kode_audit, a.periode_audit, q.source
     ORDER BY a.periode_audit DESC
@@ -203,7 +203,7 @@ $incoming_forms_query = $conn->query("
                         <?php
                         $questions_query = $conn->query("
                             SELECT DISTINCT q.id, q.kode_mapping, q.pertanyaan 
-                            FROM eksternal_audit_question q
+                            FROM asesmen_pertanyaan q
                             JOIN auditee a ON a.periode_audit = q.periode_audit
                             WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(q.kode_mapping, '_', 2), '_', -1) = '$stage'
                             AND a.kode_audit = '$kode_audit'

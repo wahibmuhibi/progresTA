@@ -20,12 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Kode Mapping, Periode Audit, dan Pertanyaan tidak boleh kosong.";
     } else {
         $query = "
-            INSERT INTO eksternal_audit_question (kode_mapping, periode_audit, pertanyaan, source) 
+            INSERT INTO asesmen_pertanyaan (kode_mapping, periode_audit, pertanyaan, source) 
             VALUES ('$kode_mapping', $periode_audit, '$pertanyaan', '$source')
         ";
 
         if ($conn->query($query)) {
-            $success = "Pertanyaan eksternal audit berhasil disimpan.";
+            $success = "Pertanyaan asesmen berhasil disimpan.";
         } else {
             $error = "Terjadi kesalahan saat menyimpan pertanyaan: " . $conn->error;
         }
@@ -35,17 +35,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Hapus pertanyaan berdasarkan ID
 if (isset($_GET['delete_id'])) {
     $delete_id = $conn->real_escape_string($_GET['delete_id']);
-    $query = "DELETE FROM eksternal_audit_question WHERE id = '$delete_id'";
+    $query = "DELETE FROM asesmen_pertanyaan WHERE id = '$delete_id'";
 
     if ($conn->query($query)) {
-        $success = "Pertanyaan eksternal audit berhasil dihapus.";
+        $success = "Pertanyaan asesmen berhasil dihapus.";
     } else {
         $error = "Terjadi kesalahan saat menghapus pertanyaan: " . $conn->error;
     }
 }
 
 // Ambil daftar pertanyaan
-$questions = $conn->query("SELECT * FROM eksternal_audit_question ORDER BY periode_audit DESC, kode_mapping ASC");
+$questions = $conn->query("SELECT * FROM asesmen_pertanyaan ORDER BY periode_audit DESC, kode_mapping ASC");
 
 // Ambil data lengkap berdasarkan kode mapping
 $mapping_details = [];

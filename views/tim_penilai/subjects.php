@@ -29,7 +29,7 @@ function mapFormStatusToLabel($status, $role)
 }
 
 // Ambil daftar periode audit
-$periode_query = $conn->query("SELECT DISTINCT periode_audit FROM eksternal_audit_question ORDER BY periode_audit DESC");
+$periode_query = $conn->query("SELECT DISTINCT periode_audit FROM asesmen_pertanyaan ORDER BY periode_audit DESC");
 $periode_audit_list = [];
 if ($periode_query && $periode_query->num_rows > 0) {
     while ($row = $periode_query->fetch_assoc()) {

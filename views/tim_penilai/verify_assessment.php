@@ -40,7 +40,7 @@ if ($kode_audit && $score_session_id) {
     $details_query = $conn->query("
         SELECT q.kode_mapping, q.pertanyaan, a.jawaban, a.skor 
         FROM assessment_answers a
-        JOIN eksternal_audit_question q ON a.question_id = q.id
+        JOIN asesmen_pertanyaan q ON a.question_id = q.id
         WHERE a.kode_audit = '$kode_audit' AND a.score_session_id = $score_session_id
     ");
 }

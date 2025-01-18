@@ -44,7 +44,7 @@ $overall_average = 0;
 
 if ($kode_audit && $score_session_id) {
     // Ambil data skor berdasarkan kode audit dan score session ID
-    $query = "SELECT q.kode_mapping, q.pertanyaan, a.jawaban, a.skor FROM assessment_answers a JOIN eksternal_audit_question q ON a.question_id = q.id WHERE a.kode_audit = '$kode_audit' AND a.score_session_id = $score_session_id AND a.user_id = $user_id";
+    $query = "SELECT q.kode_mapping, q.pertanyaan, a.jawaban, a.skor FROM assessment_answers a JOIN asesmen_pertanyaan q ON a.question_id = q.id WHERE a.kode_audit = '$kode_audit' AND a.score_session_id = $score_session_id AND a.user_id = $user_id";
     $result = $conn->query($query);
 
     // Hitung rata-rata skor untuk kategori ITIL Service Lifecycle
