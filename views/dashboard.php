@@ -50,7 +50,7 @@ if (!defined('BASE_URL')) {
             <?php elseif ($role === 'Tim Penilai'): ?>
                 <a href="<?php echo BASE_URL; ?>/views/tim_penilai/subjects.php" class="btn btn-primary mb-2">Lihat Subjek Penilaian</a>
                 <a href="<?php echo BASE_URL; ?>/views/tim_penilai/verify_assessment.php" class="btn btn-primary mb-2">Verifikasi Self-Assessment</a>
-                <a href="<?php echo BASE_URL; ?>/views/tim_penilai/rankings.php" class="btn btn-primary mb-2">Lihat Ranking</a>
+                <a href="<?php echo BASE_URL; ?>/views/tim_penilai/rangking.php" class="btn btn-primary mb-2">Lihat Ranking</a>
                 <a href="<?php echo BASE_URL; ?>/views/tim_penilai/buat_asesmen.php" class="btn btn-primary mb-2">Buat Asesmen</a>
             <?php else: ?>
                 <p class="text-center text-danger">Role tidak dikenali.</p>
