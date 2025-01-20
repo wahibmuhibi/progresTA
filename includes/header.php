@@ -19,7 +19,7 @@
                 <ul class="navbar-nav ms-auto">
                     <?php if ($_SESSION['role'] === 'Admin'): ?>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/manage_users.php">Manajemen Pengguna</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/manage_questions.php">Manajemen Pertanyaan</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/manage_pertanyaan.php">Manajemen Pertanyaan</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/manage_standard.php">Manajemen Standard</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/manage_kriteria.php">Manajemen Kriteria</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/log_aktivitas.php">Log Aktivitas</a></li>
