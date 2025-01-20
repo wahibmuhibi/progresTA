@@ -86,13 +86,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$asesmen_kode) {
         $error = "Kode Asesmen tidak ditemukan.";
     } else {
-        // Ambil periode asesmen
-        $periode_query = $conn->query("SELECT asesmen_periode FROM asesi WHERE asesmen_kode = '$asesmen_kode' AND user_id = $user_id");
-        $asesmen_periode = $periode_query && $periode_query->num_rows > 0 ? $periode_query->fetch_assoc()['asesmen_periode'] : null;
+        // Ambil periode asesmen dan asesor_id
+        $asesi_query = $conn->query("SELECT asesmen_periode, asesor_id FROM asesi WHERE asesmen_kode = '$asesmen_kode' AND user_id = $user_id");
+        $asesi_data = $asesi_query && $asesi_query->num_rows > 0 ? $asesi_query->fetch_assoc() : null;
 
-        if (!$asesmen_periode) {
-            $error = "Periode Asesmen tidak ditemukan untuk kode asesmen: $asesmen_kode.";
+        if (!$asesi_data) {
+            $error = "Data Asesmen tidak ditemukan untuk kode asesmen: $asesmen_kode.";
         } else {
+            $asesmen_periode = $asesi_data['asesmen_periode'];
+            $asesor_id = $asesi_data['asesor_id'];
+
             // Generate score_session_id baru
             $score_session_id = time(); // Gunakan timestamp sebagai ID sesi unik
 
@@ -103,9 +106,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Simpan atau perbarui data ke database
                 $query = "
-                    INSERT INTO asesmen_jawaban (user_id, question_id, asesmen_kode, jawaban, skor, periode_audit, score_session_id) 
-                    VALUES ($user_id, $question_id, '$asesmen_kode', '$jawaban', $skor, '$asesmen_periode', $score_session_id)
-                    ON DUPLICATE KEY UPDATE jawaban = '$jawaban', skor = $skor, score_session_id = $score_session_id
+                    INSERT INTO asesmen_jawaban (user_id, question_id, asesmen_kode, jawaban, skor, periode_audit, score_session_id, asesor_id) 
+                    VALUES ($user_id, $question_id, '$asesmen_kode', '$jawaban', $skor, '$asesmen_periode', $score_session_id, $asesor_id)
+                    ON DUPLICATE KEY UPDATE 
+                        jawaban = '$jawaban', 
+                        skor = $skor, 
+                        score_session_id = $score_session_id, 
+                        asesor_id = $asesor_id
                 ";
 
                 if (!$conn->query($query)) {
