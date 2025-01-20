@@ -71,6 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p class="text-center mt-3">
             <a href="forgot_password.php" class="text-decoration-none">Lupa password?</a>
         </p>
+        <p class="text-center mt-2">
+            Belum punya akun? <a href="register.php" class="text-decoration-none">Daftar sekarang</a>
+        </p>
     </div>
 </body>
 </html>
