@@ -28,8 +28,13 @@ function mapFormStatusToLabel($status, $role)
 // Ambil user_id dari sesi login (Asesor)
 $logged_in_asesor_id = $_SESSION['user_id'];
 
-// Ambil daftar periode Asesmen
-$periode_query = $conn->query("SELECT DISTINCT asesmen_periode FROM asesmen_pertanyaan ORDER BY asesmen_periode DESC");
+// Ambil daftar periode asesmen berdasarkan pertanyaan yang dibuat oleh asesor
+$periode_query = $conn->query("
+    SELECT DISTINCT asesmen_periode 
+    FROM asesmen_pertanyaan 
+    WHERE asesor_id = $logged_in_asesor_id 
+    ORDER BY asesmen_periode DESC
+");
 $asesmen_periode_list = [];
 if ($periode_query && $periode_query->num_rows > 0) {
     while ($row = $periode_query->fetch_assoc()) {
