@@ -134,7 +134,7 @@ $result = $conn->query($query);
     <div class="alert alert-danger"><?php echo $error; ?></div>
 <?php endif; ?>
 
-<h4>Mapping Standard</h4>
+<h4>Mapping Framework</h4>
 <form method="POST" action="">
     <div class="row mb-3">
         <!-- Versi ITIL -->

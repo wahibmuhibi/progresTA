@@ -36,7 +36,7 @@ if (($selected_iso_version && !$iso_data) || ($selected_itil_version && !$itil_d
 }
 ?>
 
-<h3 class="text-center">Manajemen Standard</h3>
+<h3 class="text-center">Manajemen Framework</h3>
 
 <div class="container mt-4">
 

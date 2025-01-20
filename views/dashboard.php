@@ -40,7 +40,7 @@ if (!defined('BASE_URL')) {
             <?php if ($role === 'Admin'): ?>
                 <a href="<?php echo BASE_URL; ?>/views/admin/manage_users.php" class="btn btn-primary mb-2">Manajemen Pengguna</a>
                 <a href="<?php echo BASE_URL; ?>/views/admin/manage_pertanyaan.php" class="btn btn-primary mb-2">Manajemen Pertanyaan</a>
-                <a href="<?php echo BASE_URL; ?>/views/admin/manage_standard.php" class="btn btn-primary mb-2">Manajemen Standard</a>
+                <a href="<?php echo BASE_URL; ?>/views/admin/manage_framework.php" class="btn btn-primary mb-2">Manajemen Framework</a>
                 <a href="<?php echo BASE_URL; ?>/views/admin/manage_kriteria.php" class="btn btn-primary mb-2">Manajemen Kriteria</a>
                 <a href="<?php echo BASE_URL; ?>/views/admin/log_aktivitas.php" class="btn btn-primary mb-2">Log Aktivitas</a>
             <?php elseif ($role === 'Manajemen TI'): ?>
