@@ -66,7 +66,7 @@ if (isset($_GET['edit_username'])) {
                 <label for="role" class="form-label">Role</label>
                 <select name="role" id="role" class="form-select" required>
                     <option value="Admin" <?php echo $edit_user['role'] === 'Admin' ? 'selected' : ''; ?>>Admin</option>
-                    <option value="Manajemen TI" <?php echo $edit_user['role'] === 'Manajemen TI' ? 'selected' : ''; ?>>Manajemen TI</option>
+                    <option value="Asesi" <?php echo $edit_user['role'] === 'Asesi' ? 'selected' : ''; ?>>Asesi</option>
                     <option value="IT Auditor" <?php echo $edit_user['role'] === 'IT Auditor' ? 'selected' : ''; ?>>IT Auditor</option>
                     <option value="Asesor" <?php echo $edit_user['role'] === 'Asesor' ? 'selected' : ''; ?>>Asesor</option>
                 </select>

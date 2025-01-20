@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../../includes/auth.php';
-check_roles(['Manajemen TI']);
+check_roles(['Asesi']);
 include '../../includes/db.php';
 include '../../includes/header.php';
 

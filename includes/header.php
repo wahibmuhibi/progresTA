@@ -23,10 +23,10 @@
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/manage_framework.php">Manajemen Framework</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/manage_kriteria.php">Manajemen Kriteria</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/log_aktivitas.php">Log Aktivitas</a></li>
-                    <?php elseif ($_SESSION['role'] === 'Manajemen TI'): ?>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/formulir_asesmen.php">Self-Assessment</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/lihat_skor.php">Skor</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/riwayat_asesmen.php">Riwayat Asesmen</a></li>
+                    <?php elseif ($_SESSION['role'] === 'Asesi'): ?>
+                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/asesi/formulir_asesmen.php">Self-Assessment</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/asesi/lihat_skor.php">Skor</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/asesi/riwayat_asesmen.php">Riwayat Asesmen</a></li>
                     <?php elseif ($_SESSION['role'] === 'Asesor'): ?>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/asesor/manage_asesi.php">Manajemen Asesi</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/asesor/verif_asesmen.php">Verifikasi</a></li>

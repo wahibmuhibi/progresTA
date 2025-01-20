@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="role" class="form-label">Role</label>
                 <select name="role" class="form-select" required>
                     <option value="" disabled selected>Pilih Role</option>
-                    <option value="Manajemen TI">Manajemen TI</option>
+                    <option value="Asesi">Asesi</option>
                     <option value="Admin">Admin</option>
                     <option value="Asesor">Asesor</option>
                 </select>

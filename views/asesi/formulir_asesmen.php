@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../../includes/auth.php';
-check_roles(['Manajemen TI']);
+check_roles(['Asesi']);
 include '../../includes/db.php';
 include '../../includes/header.php';
 
@@ -9,7 +9,7 @@ include '../../includes/header.php';
 function mapFormStatusToLabel($status, $role)
 {
     $status_map = [
-        'Manajemen TI' => [
+        'Asesi' => [
             0 => 'Belum Diterima',
             1 => 'Diterima',
             3 => 'Terkirim'
@@ -160,7 +160,7 @@ $incoming_forms_query = $conn->query("
                         <td><?php echo htmlspecialchars($row['total_questions']); ?></td>
                         <td>
                             <?php
-                            $status_label = mapFormStatusToLabel((int)$row['form_status'], 'Manajemen TI');
+                            $status_label = mapFormStatusToLabel((int)$row['form_status'], 'Asesi');
                             $badge_class = $row['form_status'] == 3 ? 'success' : ($row['form_status'] == 2 ? 'warning' : ($row['form_status'] == 1 ? 'primary' : 'secondary'));
                             ?>
                             <span class="badge bg-<?php echo $badge_class; ?>">

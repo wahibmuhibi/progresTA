@@ -9,7 +9,7 @@ include '../../includes/header.php';
 function mapFormStatusToLabel($status, $role)
 {
     $status_map = [
-        'Manajemen TI' => [
+        'Asesi' => [
             0 => 'Belum Diterima',
             1 => 'Diterima',
             2 => 'Draf',
@@ -47,8 +47,8 @@ $asesi_query = $conn->query("
     ORDER BY a.created_at DESC
 ");
 
-// Ambil daftar Manajemen TI untuk form tambah Asesi
-$manajemen_ti_query = $conn->query("SELECT id, username, institusi FROM users WHERE role = 'Manajemen TI' ORDER BY username ASC");
+// Ambil daftar Asesi untuk form tambah Asesi
+$manajemen_ti_query = $conn->query("SELECT id, username, institusi FROM users WHERE role = 'Asesi' ORDER BY username ASC");
 
 // Tambah Asesi
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_asesi'])) {
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_asesi'])) {
     $asesmen_kode = strtoupper(uniqid("ASESMEN-"));
 
     if (empty($user_id) || empty($asesmen_periode)) {
-        $error = "Akun Manajemen TI dan Periode Asesmen harus dipilih.";
+        $error = "Akun Asesi dan Periode Asesmen harus dipilih.";
     } else {
         $query = "INSERT INTO asesi (user_id, asesmen_periode, asesmen_kode) VALUES ($user_id, $asesmen_periode, '$asesmen_kode')";
         if ($conn->query($query)) {
@@ -165,7 +165,7 @@ if (isset($_GET['send_to_asesi_id'])) {
 <form method="POST" action="">
     <div class="row">
         <div class="col-md-6">
-            <label for="user_id" class="form-label">Pilih Akun Manajemen TI</label>
+            <label for="user_id" class="form-label">Pilih Akun Asesi</label>
             <select name="user_id" id="user_id" class="form-select" required>
                 <option value="" disabled selected>Pilih Akun</option>
                 <?php while ($row = $manajemen_ti_query->fetch_assoc()): ?>
