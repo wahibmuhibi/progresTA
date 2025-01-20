@@ -19,6 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($kode_mapping) || empty($pertanyaan) || empty($asesmen_periode)) {
         $error = "Kode Mapping, Periode Asesmen, dan Pertanyaan tidak boleh kosong.";
     } else {
+        // Pastikan ID AUTO_INCREMENT benar
+        $max_id_query = $conn->query("SELECT MAX(id) AS max_id FROM asesmen_pertanyaan");
+        $max_id = $max_id_query->fetch_assoc()['max_id'];
+        $next_id = $max_id ? $max_id + 1 : 1;
+
+        $conn->query("ALTER TABLE asesmen_pertanyaan AUTO_INCREMENT = $next_id");
+
+        // Simpan pertanyaan baru
         $query = "
             INSERT INTO asesmen_pertanyaan (kode_mapping, asesmen_periode, pertanyaan, source) 
             VALUES ('$kode_mapping', $asesmen_periode, '$pertanyaan', '$source')
@@ -47,16 +55,6 @@ if (isset($_GET['delete_id'])) {
 // Ambil daftar pertanyaan
 $questions = $conn->query("SELECT * FROM asesmen_pertanyaan ORDER BY asesmen_periode DESC, kode_mapping ASC");
 
-// Ambil data lengkap berdasarkan kode mapping
-$mapping_details = [];
-if (isset($_POST['kode_mapping'])) {
-    $kode_mapping = $conn->real_escape_string($_POST['kode_mapping']);
-    $detail_query = "SELECT * FROM mapping_standard WHERE kode_mapping = '$kode_mapping'";
-    $detail_result = $conn->query($detail_query);
-    if ($detail_result && $detail_result->num_rows > 0) {
-        $mapping_details = $detail_result->fetch_assoc();
-    }
-}
 ?>
 
 <h3 class="text-center">Buat Pertanyaan Asesmen</h3>
@@ -91,24 +89,6 @@ if (isset($_POST['kode_mapping'])) {
             <input type="number" name="asesmen_periode" id="asesmen_periode" class="form-control" placeholder="Contoh: 2025" min="2000" max="2099" required>
         </div>
     </div>
-
-    <?php if (!empty($mapping_details)): ?>
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <p class="bg-light p-3 border rounded">
-                    <strong>Pertanyaan Asesmen nomor <?php echo htmlspecialchars($mapping_details['nomor_audit']); ?>:</strong> 
-                    mengacu pada <strong><?php echo htmlspecialchars($mapping_details['itil_version']); ?></strong> 
-                    (<strong><?php echo htmlspecialchars($mapping_details['itil_service_lifecycle']); ?></strong>), 
-                    <strong><?php echo htmlspecialchars($mapping_details['iso_version']); ?></strong> 
-                    (<strong><?php echo htmlspecialchars($mapping_details['iso_annex']); ?></strong> 
-                    <?php echo htmlspecialchars($mapping_details['iso_control']); ?>), 
-                    dan <strong><?php echo htmlspecialchars($mapping_details['cobit_version']); ?></strong> 
-                    (<strong><?php echo htmlspecialchars($mapping_details['cobit_process_id']); ?></strong> 
-                    <?php echo htmlspecialchars($mapping_details['cobit_process_name']); ?>).
-                </p>
-            </div>
-        </div>
-    <?php endif; ?>
 
     <div class="row mb-3">
         <div class="col-md-12">
