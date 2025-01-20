@@ -48,7 +48,7 @@ if (!defined('BASE_URL')) {
                 <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/lihat_skor.php" class="btn btn-primary mb-2">Lihat Skor</a>
                 <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/riwayat_asesmen.php" class="btn btn-primary mb-2">Riwayat Asesmen</a>
             <?php elseif ($role === 'Tim Penilai'): ?>
-                <a href="<?php echo BASE_URL; ?>/views/tim_penilai/subjects.php" class="btn btn-primary mb-2">Lihat Subjek Penilaian</a>
+                <a href="<?php echo BASE_URL; ?>/views/tim_penilai/tambah_asesi.php" class="btn btn-primary mb-2">Lihat Subjek Penilaian</a>
                 <a href="<?php echo BASE_URL; ?>/views/tim_penilai/verify_assessment.php" class="btn btn-primary mb-2">Verifikasi Self-Assessment</a>
                 <a href="<?php echo BASE_URL; ?>/views/tim_penilai/rangking.php" class="btn btn-primary mb-2">Lihat Ranking</a>
                 <a href="<?php echo BASE_URL; ?>/views/tim_penilai/buat_asesmen.php" class="btn btn-primary mb-2">Buat Asesmen</a>
