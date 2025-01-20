@@ -5,6 +5,9 @@ check_roles(['Asesor']);
 include '../../includes/db.php';
 include '../../includes/header.php';
 
+// Ambil ID Asesor dari sesi login
+$asesor_id = $_SESSION['user_id'];
+
 // Ambil data mapping dari tabel mapping_standard
 $mapping_data = $conn->query("SELECT id, kode_mapping FROM mapping_standard ORDER BY kode_mapping ASC");
 
@@ -13,23 +16,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kode_mapping = isset($_POST['kode_mapping']) ? $conn->real_escape_string($_POST['kode_mapping']) : '';
     $pertanyaan = isset($_POST['pertanyaan']) ? $conn->real_escape_string($_POST['pertanyaan']) : '';
     $asesmen_periode = isset($_POST['asesmen_periode']) ? (int)$_POST['asesmen_periode'] : 0;
-    $source = $_SESSION['user']; // Menggunakan username dari sesi sebagai pembuat
 
     // Validasi input
     if (empty($kode_mapping) || empty($pertanyaan) || empty($asesmen_periode)) {
         $error = "Kode Mapping, Periode Asesmen, dan Pertanyaan tidak boleh kosong.";
     } else {
-        // Pastikan ID AUTO_INCREMENT benar
-        $max_id_query = $conn->query("SELECT MAX(id) AS max_id FROM asesmen_pertanyaan");
-        $max_id = $max_id_query->fetch_assoc()['max_id'];
-        $next_id = $max_id ? $max_id + 1 : 1;
-
-        $conn->query("ALTER TABLE asesmen_pertanyaan AUTO_INCREMENT = $next_id");
-
-        // Simpan pertanyaan baru
         $query = "
-            INSERT INTO asesmen_pertanyaan (kode_mapping, asesmen_periode, pertanyaan, source) 
-            VALUES ('$kode_mapping', $asesmen_periode, '$pertanyaan', '$source')
+            INSERT INTO asesmen_pertanyaan (kode_mapping, asesmen_periode, pertanyaan, asesor_id) 
+            VALUES ('$kode_mapping', $asesmen_periode, '$pertanyaan', $asesor_id)
         ";
 
         if ($conn->query($query)) {
@@ -40,10 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Hapus pertanyaan berdasarkan ID
+// Hapus pertanyaan berdasarkan ID dan `asesor_id`
 if (isset($_GET['delete_id'])) {
     $delete_id = $conn->real_escape_string($_GET['delete_id']);
-    $query = "DELETE FROM asesmen_pertanyaan WHERE id = '$delete_id'";
+    $query = "DELETE FROM asesmen_pertanyaan WHERE id = '$delete_id' AND asesor_id = $asesor_id";
 
     if ($conn->query($query)) {
         $success = "Pertanyaan asesmen berhasil dihapus.";
@@ -52,9 +46,13 @@ if (isset($_GET['delete_id'])) {
     }
 }
 
-// Ambil daftar pertanyaan
-$questions = $conn->query("SELECT * FROM asesmen_pertanyaan ORDER BY asesmen_periode DESC, kode_mapping ASC");
-
+// Ambil daftar pertanyaan milik asesor yang sedang login
+$questions = $conn->query("
+    SELECT * 
+    FROM asesmen_pertanyaan 
+    WHERE asesor_id = $asesor_id 
+    ORDER BY asesmen_periode DESC, kode_mapping ASC
+");
 ?>
 
 <h3 class="text-center">Buat Pertanyaan Asesmen</h3>
@@ -108,7 +106,7 @@ $questions = $conn->query("SELECT * FROM asesmen_pertanyaan ORDER BY asesmen_per
             <th>Kode Mapping</th>
             <th>Periode Asesmen</th>
             <th>Pertanyaan</th>
-            <th>Source</th>
+            <th>Asesor ID</th>
             <th>Aksi</th>
         </tr>
     </thead>
@@ -120,7 +118,7 @@ $questions = $conn->query("SELECT * FROM asesmen_pertanyaan ORDER BY asesmen_per
                     <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
                     <td><?php echo htmlspecialchars($row['asesmen_periode']); ?></td>
                     <td><?php echo htmlspecialchars($row['pertanyaan']); ?></td>
-                    <td><?php echo htmlspecialchars($row['source']); ?></td>
+                    <td><?php echo htmlspecialchars($row['asesor_id']); ?></td>
                     <td>
                         <a href="?delete_id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus pertanyaan ini?')">Hapus</a>
                     </td>
@@ -133,3 +131,5 @@ $questions = $conn->query("SELECT * FROM asesmen_pertanyaan ORDER BY asesmen_per
         <?php endif; ?>
     </tbody>
 </table>
+
+<?php include '../../includes/footer.php'; ?>
