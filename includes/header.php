@@ -31,7 +31,7 @@
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/subjects.php">Subjek Penilaian</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/verify_assessment.php">Verifikasi</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/rankings.php">Ranking</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/create_assessment.php">Buat Asesmen</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/buat_asesmen.php">Buat Asesmen</a></li>
                     <?php endif; ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
