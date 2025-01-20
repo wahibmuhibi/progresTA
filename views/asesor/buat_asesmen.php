@@ -46,12 +46,13 @@ if (isset($_GET['delete_id'])) {
     }
 }
 
-// Ambil daftar pertanyaan milik asesor yang sedang login
+// Ambil daftar pertanyaan milik asesor yang sedang login, gabungkan dengan tabel `users` untuk mendapatkan username
 $questions = $conn->query("
-    SELECT * 
-    FROM asesmen_pertanyaan 
-    WHERE asesor_id = $asesor_id 
-    ORDER BY asesmen_periode DESC, kode_mapping ASC
+    SELECT q.*, u.username AS asesor_username 
+    FROM asesmen_pertanyaan q
+    JOIN users u ON q.asesor_id = u.id
+    WHERE q.asesor_id = $asesor_id
+    ORDER BY q.asesmen_periode DESC, q.kode_mapping ASC
 ");
 ?>
 
@@ -106,7 +107,7 @@ $questions = $conn->query("
             <th>Kode Mapping</th>
             <th>Periode Asesmen</th>
             <th>Pertanyaan</th>
-            <th>Asesor ID</th>
+            <th>Asesor</th>
             <th>Aksi</th>
         </tr>
     </thead>
@@ -118,7 +119,7 @@ $questions = $conn->query("
                     <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
                     <td><?php echo htmlspecialchars($row['asesmen_periode']); ?></td>
                     <td><?php echo htmlspecialchars($row['pertanyaan']); ?></td>
-                    <td><?php echo htmlspecialchars($row['asesor_id']); ?></td>
+                    <td><?php echo htmlspecialchars($row['asesor_username']); ?></td>
                     <td>
                         <a href="?delete_id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus pertanyaan ini?')">Hapus</a>
                     </td>
