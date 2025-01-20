@@ -21,7 +21,7 @@
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/manage_users.php">Manajemen Pengguna</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/manage_questions.php">Manajemen Pertanyaan</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/manage_standard.php">Manajemen Standard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/manage_criteria.php">Manajemen Kriteria</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/manage_kriteria.php">Manajemen Kriteria</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/log_aktivitas.php">Log Aktivitas</a></li>
                     <?php elseif ($_SESSION['role'] === 'Manajemen TI'): ?>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/assessment_form.php">Self-Assessment</a></li>
