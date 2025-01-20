@@ -22,11 +22,11 @@ function mapFormStatusToLabel($status, $role)
             3 => 'Self-Assessment Diterima'
         ]
     ];
-    if (isset($status_map[$role]) && isset($status_map[$role][$status])) {
-        return $status_map[$role][$status];
-    }
-    return 'Tidak Diketahui';
+    return isset($status_map[$role]) ? $status_map[$role][$status] : 'Tidak Diketahui';
 }
+
+// Ambil user_id dari sesi login (Asesor)
+$logged_in_asesor_id = $_SESSION['user_id'];
 
 // Ambil daftar periode Asesmen
 $periode_query = $conn->query("SELECT DISTINCT asesmen_periode FROM asesmen_pertanyaan ORDER BY asesmen_periode DESC");
@@ -37,18 +37,20 @@ if ($periode_query && $periode_query->num_rows > 0) {
     }
 }
 
-// Ambil daftar subjek penilaian berdasarkan periode Asesmen
+// Ambil daftar subjek penilaian berdasarkan asesor_id
 $selected_periode = isset($_GET['asesmen_periode']) ? (int)$_GET['asesmen_periode'] : null;
 $asesi_query = $conn->query("
-    SELECT a.id AS asesi_id, a.asesmen_kode, u.username, u.institusi, a.asesmen_periode, a.form_status 
+    SELECT a.id AS user_id, a.asesmen_kode, u.username AS asesi_name, u.institusi, a.asesmen_periode, a.form_status, s.username AS asesor_name
     FROM asesi a 
     JOIN users u ON a.user_id = u.id 
-    " . ($selected_periode ? "WHERE a.asesmen_periode = $selected_periode" : "") . " 
+    JOIN users s ON a.asesor_id = s.id 
+    WHERE a.asesor_id = $logged_in_asesor_id
+    " . ($selected_periode ? "AND a.asesmen_periode = $selected_periode" : "") . " 
     ORDER BY a.created_at DESC
 ");
 
 // Ambil daftar Asesi untuk form tambah Asesi
-$manajemen_ti_query = $conn->query("SELECT id, username, institusi FROM users WHERE role = 'Asesi' ORDER BY username ASC");
+$manajemen_ti_query = $conn->query("SELECT id, username FROM users WHERE role = 'Asesi' ORDER BY username ASC");
 
 // Tambah Asesi
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_asesi'])) {
@@ -59,11 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_asesi'])) {
     if (empty($user_id) || empty($asesmen_periode)) {
         $error = "Akun Asesi dan Periode Asesmen harus dipilih.";
     } else {
-        $query = "INSERT INTO asesi (user_id, asesmen_periode, asesmen_kode) VALUES ($user_id, $asesmen_periode, '$asesmen_kode')";
+        $query = "INSERT INTO asesi (user_id, asesmen_periode, asesmen_kode, asesor_id) VALUES ($user_id, $asesmen_periode, '$asesmen_kode', $logged_in_asesor_id)";
         if ($conn->query($query)) {
             $success = "Asesi berhasil ditambahkan dengan kode Asesmen: $asesmen_kode.";
         } else {
-            $error = "Terjadi kesalahan saat menambahkan asesi: " . $conn->error;
+            $error = "Terjadi kesalahan saat menambahkan Asesi: " . $conn->error;
         }
     }
 }
@@ -75,31 +77,20 @@ if (isset($_GET['delete_asesi_id'])) {
     if ($conn->query($query)) {
         $success = "Asesi berhasil dihapus.";
     } else {
-        $error = "Terjadi kesalahan saat menghapus asesi: " . $conn->error;
+        $error = "Terjadi kesalahan saat menghapus Asesi: " . $conn->error;
     }
 }
 
 // Kirim ke Asesi
 if (isset($_GET['send_to_asesi_id'])) {
     $send_to_asesi_id = (int)$_GET['send_to_asesi_id'];
-
-    $query = "
-        UPDATE asesi 
-        SET form_status = 1
-        WHERE id = $send_to_asesi_id
-    ";
-
+    $query = "UPDATE asesi SET form_status = 1 WHERE id = $send_to_asesi_id";
     if ($conn->query($query)) {
-        $success = "Formulir berhasil dikirim ke asesi.";
-        // Debugging perubahan
-        $updated_status_query = $conn->query("SELECT form_status FROM asesi WHERE id = $send_to_asesi_id");
-        $updated_status = $updated_status_query->fetch_assoc();
-        error_log("Status setelah dikirim: " . $updated_status['form_status']);
+        $success = "Formulir berhasil dikirim ke Asesi.";
     } else {
         $error = "Terjadi kesalahan saat mengirim formulir: " . $conn->error;
     }
 }
-
 ?>
 
 <h3 class="text-center">Subjek Penilaian</h3>
@@ -115,10 +106,11 @@ if (isset($_GET['send_to_asesi_id'])) {
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Username</th>
+            <th>Asesi</th>
             <th>Institusi</th>
             <th>Periode Asesmen</th>
             <th>Kode Asesmen</th>
+            <th>Asesor</th>
             <th>Status</th>
             <th>Aksi</th>
         </tr>
@@ -127,10 +119,11 @@ if (isset($_GET['send_to_asesi_id'])) {
         <?php if ($asesi_query && $asesi_query->num_rows > 0): ?>
             <?php while ($row = $asesi_query->fetch_assoc()): ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($row['username']); ?></td>
+                    <td><?php echo htmlspecialchars($row['asesi_name']); ?></td>
                     <td><?php echo htmlspecialchars($row['institusi']); ?></td>
                     <td><?php echo htmlspecialchars($row['asesmen_periode']); ?></td>
                     <td><?php echo htmlspecialchars($row['asesmen_kode']); ?></td>
+                    <td><?php echo htmlspecialchars($row['asesor_name']); ?></td>
                     <td>
                         <?php 
                         $status_label = mapFormStatusToLabel($row['form_status'], 'Asesor');
@@ -144,17 +137,17 @@ if (isset($_GET['send_to_asesi_id'])) {
                     </td>
                     <td>
                         <?php if ($row['form_status'] == 3): ?>
-                            <a href="verify_assessment.php?asesi_id=<?php echo $row['asesi_id']; ?>" class="btn btn-sm btn-primary">Verifikasi</a>
+                            <a href="verify_assessment.php?user_id=<?php echo $row['user_id']; ?>" class="btn btn-sm btn-primary">Verifikasi</a>
                         <?php else: ?>
-                            <a href="?send_to_asesi_id=<?php echo $row['asesi_id']; ?>" class="btn btn-sm btn-primary">Kirim</a>
+                            <a href="?send_to_asesi_id=<?php echo $row['user_id']; ?>" class="btn btn-sm btn-primary">Kirim</a>
                         <?php endif; ?>
-                        <a href="?delete_asesi_id=<?php echo $row['asesi_id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus Asesi ini?')">Hapus</a>
+                        <a href="?delete_asesi_id=<?php echo $row['user_id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus Asesi ini?')">Hapus</a>
                     </td>
                 </tr>
             <?php endwhile; ?>
         <?php else: ?>
             <tr>
-                <td colspan="6" class="text-center">Tidak ada Asesi untuk periode ini.</td>
+                <td colspan="7" class="text-center">Tidak ada Asesi untuk periode ini.</td>
             </tr>
         <?php endif; ?>
     </tbody>
@@ -170,7 +163,7 @@ if (isset($_GET['send_to_asesi_id'])) {
                 <option value="" disabled selected>Pilih Akun</option>
                 <?php while ($row = $manajemen_ti_query->fetch_assoc()): ?>
                     <option value="<?php echo $row['id']; ?>">
-                        <?php echo htmlspecialchars($row['username'] . ' (' . $row['institusi'] . ')'); ?>
+                        <?php echo htmlspecialchars($row['username']); ?>
                     </option>
                 <?php endwhile; ?>
             </select>
@@ -189,3 +182,5 @@ if (isset($_GET['send_to_asesi_id'])) {
     </div>
     <button type="submit" name="add_asesi" class="btn btn-primary mt-3">Tambah Asesi</button>
 </form>
+
+<?php include '../../includes/footer.php'; ?>
