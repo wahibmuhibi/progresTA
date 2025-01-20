@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify'])) {
                 <td><?php echo htmlspecialchars($row['score_session_id']); ?></td>
                 <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                 <td>
-                    <a href="verify_assessment.php?asesmen_kode=<?php echo urlencode($row['asesmen_kode']); ?>&score_session_id=<?php echo urlencode($row['score_session_id']); ?>" 
+                    <a href="verif_asesmen.php?asesmen_kode=<?php echo urlencode($row['asesmen_kode']); ?>&score_session_id=<?php echo urlencode($row['score_session_id']); ?>" 
                        class="btn btn-primary btn-sm">
                         Verifikasi
                     </a>
