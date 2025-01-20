@@ -46,7 +46,7 @@ if (!defined('BASE_URL')) {
             <?php elseif ($role === 'Manajemen TI'): ?>
                 <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/formulir_asesmen.php" class="btn btn-primary mb-2">Isi Self-Assessment</a>
                 <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/lihat_skor.php" class="btn btn-primary mb-2">Lihat Skor</a>
-                <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/audit_history.php" class="btn btn-primary mb-2">Riwayat Asesmen</a>
+                <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/riwayat_asesmen.php" class="btn btn-primary mb-2">Riwayat Asesmen</a>
             <?php elseif ($role === 'IT Auditor'): ?>
                 <a href="<?php echo BASE_URL; ?>/views/auditor/audit_view.php" class="btn btn-primary mb-2">Lihat Asesmen</a>
                 <a href="<?php echo BASE_URL; ?>/views/auditor/recommendations.php" class="btn btn-primary mb-2">Rekomendasi Perbaikan</a>
