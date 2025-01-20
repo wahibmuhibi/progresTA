@@ -5,15 +5,20 @@ check_roles(['Asesor']);
 include '../../includes/db.php';
 include '../../includes/header.php';
 
-// Tangkap kode audit dan score session ID dari URL
+// Ambil ID Asesor dari sesi login
+$asesor_id = $_SESSION['user_id'];
+
+// Tangkap kode asesmen dan score session ID dari URL
 $asesmen_kode = isset($_GET['asesmen_kode']) ? $conn->real_escape_string($_GET['asesmen_kode']) : null;
 $score_session_id = isset($_GET['score_session_id']) ? (int)$_GET['score_session_id'] : null;
 
-// Ambil daftar assessment yang tersedia untuk verifikasi
+// Ambil daftar assessment yang tersedia untuk verifikasi berdasarkan asesor_id
 $available_assessments = $conn->query("
-    SELECT DISTINCT asesmen_kode, score_session_id, created_at 
-    FROM asesmen_hasil 
-    ORDER BY created_at DESC
+    SELECT DISTINCT a.asesmen_kode, a.score_session_id, a.created_at
+    FROM asesmen_jawaban a
+    JOIN asesi b ON a.asesmen_kode = b.asesmen_kode
+    WHERE b.asesor_id = $asesor_id
+    ORDER BY a.created_at DESC
 ");
 
 if (!$available_assessments || $available_assessments->num_rows === 0) {
@@ -26,21 +31,11 @@ if (!$available_assessments || $available_assessments->num_rows === 0) {
 $results_query = null;
 if ($asesmen_kode && $score_session_id) {
     $results_query = $conn->query("
-        SELECT DISTINCT aspek, skor_rata_rata
-        FROM asesmen_hasil
-        WHERE asesmen_kode = '$asesmen_kode' AND score_session_id = $score_session_id
-        GROUP BY aspek
-    ");
-}
-
-// Ambil data detail dari asesmen_jawaban
-$details_query = null;
-if ($asesmen_kode && $score_session_id) {
-    $details_query = $conn->query("
-        SELECT q.kode_mapping, q.pertanyaan, a.jawaban, a.skor 
+        SELECT DISTINCT q.kode_mapping, q.pertanyaan, a.jawaban, a.skor 
         FROM asesmen_jawaban a
         JOIN asesmen_pertanyaan q ON a.question_id = q.id
-        WHERE a.asesmen_kode = '$asesmen_kode' AND a.score_session_id = $score_session_id
+        JOIN asesi b ON a.asesmen_kode = b.asesmen_kode
+        WHERE a.asesmen_kode = '$asesmen_kode' AND a.score_session_id = $score_session_id AND b.asesor_id = $asesor_id
     ");
 }
 
@@ -66,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify'])) {
 
 <h3 class="text-center">Daftar Assessment Tersedia untuk Verifikasi</h3>
 
-<!-- Tabel Daftar Kode Audit dan Score Session ID -->
+<!-- Tabel Daftar Kode Asesmen dan Score Session ID -->
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -96,31 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify'])) {
 <?php if ($asesmen_kode && $score_session_id): ?>
     <h3 class="text-center mt-5">Detail Assessment untuk Verifikasi</h3>
 
-    <!-- Tabel Rata-Rata Hasil Assessment -->
     <?php if ($results_query && $results_query->num_rows > 0): ?>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Aspek</th>
-                    <th>Rata-Rata Skor</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $results_query->fetch_assoc()): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($row['aspek']); ?></td>
-                        <td><?php echo htmlspecialchars(round($row['skor_rata_rata'], 2)); ?></td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <div class="alert alert-warning">Tidak ada hasil rata-rata untuk kode asesmen dan sesi skor ini.</div>
-    <?php endif; ?>
-
-    <!-- Tabel Detail Jawaban -->
-    <?php if ($details_query && $details_query->num_rows > 0): ?>
-        <h3 class="text-center mt-5">Detail Jawaban Self-Assessment</h3>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -131,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify'])) {
                 </tr>
             </thead>
             <tbody>
-                <?php while ($row = $details_query->fetch_assoc()): ?>
+                <?php while ($row = $results_query->fetch_assoc()): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
                         <td><?php echo htmlspecialchars($row['pertanyaan']); ?></td>
@@ -153,6 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify'])) {
                 <button type="submit" name="verify" class="btn btn-success">Verifikasi</button>
             </form>
         </div>
+    <?php else: ?>
+        <div class="alert alert-warning">Tidak ada data detail untuk verifikasi asesmen ini.</div>
     <?php endif; ?>
 <?php endif; ?>
 
