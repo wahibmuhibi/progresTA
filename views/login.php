@@ -4,7 +4,7 @@ include '../includes/functions.php';
 session_start();
 // Pastikan pengguna sudah logout sebelum masuk ke login
 if (isset($_SESSION['user'])) {
-    header("Location: dashboard.php");
+    header("Location: homepage.php");
     exit;
 }
 
@@ -34,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 log_activity($user['id'], 'Login ke sistem', $conn);
             }
 
-            // Redirect ke dashboard
-            header("Location: dashboard.php");
+            // Redirect ke homepage
+            header("Location: homepage.php");
             exit;
         } else {
             $error = "Login gagal. Username atau password salah.";

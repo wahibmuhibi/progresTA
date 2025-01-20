@@ -3,7 +3,7 @@ session_start();
 
 // Periksa apakah pengguna sudah login
 if (isset($_SESSION['user'])) {
-    header("Location: views/dashboard.php");
+    header("Location: views/homepage.php");
     exit;
 }
 ?>
