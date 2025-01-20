@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../../includes/auth.php';
-check_roles(['Tim Penilai']);
+check_roles(['Asesor']);
 include '../../includes/db.php';
 include '../../includes/header.php';
 

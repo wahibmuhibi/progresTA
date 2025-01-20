@@ -68,7 +68,7 @@ if (isset($_GET['edit_username'])) {
                     <option value="Admin" <?php echo $edit_user['role'] === 'Admin' ? 'selected' : ''; ?>>Admin</option>
                     <option value="Manajemen TI" <?php echo $edit_user['role'] === 'Manajemen TI' ? 'selected' : ''; ?>>Manajemen TI</option>
                     <option value="IT Auditor" <?php echo $edit_user['role'] === 'IT Auditor' ? 'selected' : ''; ?>>IT Auditor</option>
-                    <option value="Tim Penilai" <?php echo $edit_user['role'] === 'Tim Penilai' ? 'selected' : ''; ?>>Tim Penilai</option>
+                    <option value="Asesor" <?php echo $edit_user['role'] === 'Asesor' ? 'selected' : ''; ?>>Asesor</option>
                 </select>
             </div>
             <div class="col-md-4">

@@ -14,7 +14,7 @@ function mapFormStatusToLabel($status, $role)
             1 => 'Diterima',
             3 => 'Terkirim'
         ],
-        'Tim Penilai' => [
+        'Asesor' => [
             0 => 'Belum Dikirim',
             1 => 'Dikirim',
             3 => 'Self-Assessment Diterima'
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Ambil daftar formulir masuk
 $incoming_forms_query = $conn->query("
-    SELECT a.asesmen_kode, a.asesmen_periode, a.form_status, COALESCE(q.source, 'Tim Penilai') AS source, COUNT(q.id) AS total_questions
+    SELECT a.asesmen_kode, a.asesmen_periode, a.form_status, COALESCE(q.source, 'Asesor') AS source, COUNT(q.id) AS total_questions
     FROM asesi a
     JOIN asesmen_pertanyaan q ON a.asesmen_periode = q.asesmen_periode
     WHERE a.user_id = {$_SESSION['user_id']}

@@ -47,11 +47,11 @@ if (!defined('BASE_URL')) {
                 <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/formulir_asesmen.php" class="btn btn-primary mb-2">Isi Self-Assessment</a>
                 <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/lihat_skor.php" class="btn btn-primary mb-2">Lihat Skor</a>
                 <a href="<?php echo BASE_URL; ?>/views/manajemen_ti/riwayat_asesmen.php" class="btn btn-primary mb-2">Riwayat Asesmen</a>
-            <?php elseif ($role === 'Tim Penilai'): ?>
-                <a href="<?php echo BASE_URL; ?>/views/tim_penilai/manage_asesi.php" class="btn btn-primary mb-2">Manajemen Asesi</a>
-                <a href="<?php echo BASE_URL; ?>/views/tim_penilai/verif_asesmen.php" class="btn btn-primary mb-2">Verifikasi Self-Assessment</a>
-                <a href="<?php echo BASE_URL; ?>/views/tim_penilai/rangking.php" class="btn btn-primary mb-2">Lihat Ranking</a>
-                <a href="<?php echo BASE_URL; ?>/views/tim_penilai/buat_asesmen.php" class="btn btn-primary mb-2">Buat Asesmen</a>
+            <?php elseif ($role === 'Asesor'): ?>
+                <a href="<?php echo BASE_URL; ?>/views/asesor/manage_asesi.php" class="btn btn-primary mb-2">Manajemen Asesi</a>
+                <a href="<?php echo BASE_URL; ?>/views/asesor/verif_asesmen.php" class="btn btn-primary mb-2">Verifikasi Self-Assessment</a>
+                <a href="<?php echo BASE_URL; ?>/views/asesor/rangking.php" class="btn btn-primary mb-2">Lihat Ranking</a>
+                <a href="<?php echo BASE_URL; ?>/views/asesor/buat_asesmen.php" class="btn btn-primary mb-2">Buat Asesmen</a>
             <?php else: ?>
                 <p class="text-center text-danger">Role tidak dikenali.</p>
             <?php endif; ?>

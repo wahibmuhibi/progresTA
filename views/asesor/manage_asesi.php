@@ -1,7 +1,7 @@
 <?php
 session_start();
 include '../../includes/auth.php';
-check_roles(['Tim Penilai']);
+check_roles(['Asesor']);
 include '../../includes/db.php';
 include '../../includes/header.php';
 
@@ -15,7 +15,7 @@ function mapFormStatusToLabel($status, $role)
             2 => 'Draf',
             3 => 'Terkirim'
         ],
-        'Tim Penilai' => [
+        'Asesor' => [
             0 => 'Belum Dikirim',
             1 => 'Dikirim',
             2 => 'Dibaca',
@@ -133,7 +133,7 @@ if (isset($_GET['send_to_asesi_id'])) {
                     <td><?php echo htmlspecialchars($row['asesmen_kode']); ?></td>
                     <td>
                         <?php 
-                        $status_label = mapFormStatusToLabel($row['form_status'], 'Tim Penilai');
+                        $status_label = mapFormStatusToLabel($row['form_status'], 'Asesor');
                         $badge_class = $row['form_status'] == 3 ? 'success' :
                                     ($row['form_status'] == 2 ? 'warning' : 
                                     ($row['form_status'] == 1 ? 'primary' : 'secondary'));

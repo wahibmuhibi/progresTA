@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $role = $_POST['role'];
-    $company = $_POST['company'];
+    $institusi = $_POST['institusi'];
 
     $query = "SELECT * FROM users WHERE username = '$username'";
     $result = $conn->query($query);
@@ -15,8 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Username sudah digunakan.";
     } else {
         $hashedPassword = md5($password);
-        $insertQuery = "INSERT INTO users (username, password, role, company) 
-                        VALUES ('$username', '$hashedPassword', '$role', '$company')";
+        $insertQuery = "INSERT INTO users (username, password, role, institusi) 
+                        VALUES ('$username', '$hashedPassword', '$role', '$institusi')";
         if ($conn->query($insertQuery)) {
             $success = "Registrasi berhasil. Silakan login.";
         } else {
@@ -51,12 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <option value="" disabled selected>Pilih Role</option>
                     <option value="Manajemen TI">Manajemen TI</option>
                     <option value="Admin">Admin</option>
-                    <option value="Tim Penilai">Tim Penilai</option>
+                    <option value="Asesor">Asesor</option>
                 </select>
             </div>
             <div class="mb-3">
-                <label for="company" class="form-label">Instansi</label>
-                <input type="text" name="company" class="form-control" required>
+                <label for="institusi" class="form-label">Instansi</label>
+                <input type="text" name="institusi" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-primary w-100">Register</button>
         </form>

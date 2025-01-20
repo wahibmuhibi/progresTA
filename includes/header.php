@@ -27,11 +27,11 @@
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/formulir_asesmen.php">Self-Assessment</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/lihat_skor.php">Skor</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/riwayat_asesmen.php">Riwayat Asesmen</a></li>
-                    <?php elseif ($_SESSION['role'] === 'Tim Penilai'): ?>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/manage_asesi.php">Manajemen Asesi</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/verif_asesmen.php">Verifikasi</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/rangking.php">Ranking</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/buat_asesmen.php">Buat Asesmen</a></li>
+                    <?php elseif ($_SESSION['role'] === 'Asesor'): ?>
+                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/asesor/manage_asesi.php">Manajemen Asesi</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/asesor/verif_asesmen.php">Verifikasi</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/asesor/rangking.php">Ranking</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/asesor/buat_asesmen.php">Buat Asesmen</a></li>
                     <?php endif; ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
