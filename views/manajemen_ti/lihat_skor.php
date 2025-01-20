@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_to_asesor'])) {
 
 <h3 class="text-center">Hasil Skor Self-Assessment</h3>
 
-<form method="GET" action="score_view.php" class="mb-4">
+<form method="GET" action="lihat_skor.php" class="mb-4">
     <div class="row">
         <div class="col-md-6">
             <label for="asesmen_kode" class="form-label">Pilih Kode Asesmen</label>

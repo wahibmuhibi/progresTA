@@ -25,7 +25,7 @@
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/admin/log_aktivitas.php">Log Aktivitas</a></li>
                     <?php elseif ($_SESSION['role'] === 'Manajemen TI'): ?>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/formulir_asesmen.php">Self-Assessment</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/score_view.php">Skor</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/lihat_skor.php">Skor</a></li>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/manajemen_ti/assessment_history.php">Riwayat Asesmen</a></li>
                     <?php elseif ($_SESSION['role'] === 'Tim Penilai'): ?>
                         <li class="nav-item"><a class="nav-link" href="/tugasakhir/views/tim_penilai/subjects.php">Subjek Penilaian</a></li>

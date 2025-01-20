@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Redirect ke halaman skor
-            header("Location: score_view.php?asesmen_kode=$asesmen_kode&score_session_id=$score_session_id");
+            header("Location: lihat_skor.php?asesmen_kode=$asesmen_kode&score_session_id=$score_session_id");
             exit;
         }
     }
@@ -169,7 +169,7 @@ $incoming_forms_query = $conn->query("
                         </td>
                         <td>
                             <?php if ((int)$row['form_status'] === 3): ?>
-                                <a href="score_view.php?asesmen_kode=<?php echo urlencode($row['asesmen_kode']); ?>" class="btn btn-sm btn-success">Lihat Skor</a>
+                                <a href="lihat_skor.php?asesmen_kode=<?php echo urlencode($row['asesmen_kode']); ?>" class="btn btn-sm btn-success">Lihat Skor</a>
                             <?php else: ?>
                                 <a href="formulir_asesmen.php?asesmen_kode=<?php echo urlencode($row['asesmen_kode']); ?>" class="btn btn-sm btn-primary">
                                     <?php echo (int)$row['form_status'] === 2 ? 'Lanjutkan' : 'Mulai Mengisi'; ?>
