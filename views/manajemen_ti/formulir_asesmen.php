@@ -171,7 +171,7 @@ $incoming_forms_query = $conn->query("
                             <?php if ((int)$row['form_status'] === 3): ?>
                                 <a href="score_view.php?asesmen_kode=<?php echo urlencode($row['asesmen_kode']); ?>" class="btn btn-sm btn-success">Lihat Skor</a>
                             <?php else: ?>
-                                <a href="assessment_form.php?asesmen_kode=<?php echo urlencode($row['asesmen_kode']); ?>" class="btn btn-sm btn-primary">
+                                <a href="formulir_asesmen.php?asesmen_kode=<?php echo urlencode($row['asesmen_kode']); ?>" class="btn btn-sm btn-primary">
                                     <?php echo (int)$row['form_status'] === 2 ? 'Lanjutkan' : 'Mulai Mengisi'; ?>
                                 </a>
                             <?php endif; ?>
@@ -190,7 +190,7 @@ $incoming_forms_query = $conn->query("
 <!-- Form Self-Assessment -->
 <?php if ($asesmen_kode): ?>
     <div class="container mt-5">
-        <form method="POST" action="assessment_form.php?asesmen_kode=<?php echo htmlspecialchars($asesmen_kode); ?>">
+        <form method="POST" action="formulir_asesmen.php?asesmen_kode=<?php echo htmlspecialchars($asesmen_kode); ?>">
             <?php foreach ($lifecycle_stages as $stage): ?>
                 <h4 class="mt-4"><?php echo htmlspecialchars($stage); ?></h4>
                 <table class="table table-bordered">
