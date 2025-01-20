@@ -50,13 +50,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <select name="role" class="form-select" required>
                     <option value="" disabled selected>Pilih Role</option>
                     <option value="Manajemen TI">Manajemen TI</option>
-                    <option value="IT Auditor">IT Auditor</option>
                     <option value="Admin">Admin</option>
                     <option value="Tim Penilai">Tim Penilai</option>
                 </select>
             </div>
             <div class="mb-3">
-                <label for="company" class="form-label">Perusahaan</label>
+                <label for="company" class="form-label">Instansi</label>
                 <input type="text" name="company" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-primary w-100">Register</button>
