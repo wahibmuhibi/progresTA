@@ -23,7 +23,10 @@ function mapFormStatusToLabel($status, $role)
     return isset($status_map[$role][$status]) ? $status_map[$role][$status] : 'Tidak Diketahui';
 }
 
-// Inisialisasi variabel
+// Ambil user_id dari sesi login
+$user_id = $_SESSION['user_id'];
+
+// Ambil kode asesmen dari URL
 $asesmen_kode = isset($_GET['asesmen_kode']) ? $conn->real_escape_string($_GET['asesmen_kode']) : null;
 
 // Ambil data ITIL Service Lifecycle
@@ -40,7 +43,7 @@ if ($lifecycle_query && $lifecycle_query->num_rows > 0) {
     }
 }
 
-// Ambil pertanyaan berdasarkan ITIL Service Lifecycle
+// Ambil pertanyaan berdasarkan asesmen_kode, user_id, dan asesor_id
 $questions_by_lifecycle = [];
 if ($asesmen_kode) {
     foreach ($lifecycle_stages as $stage) {
@@ -50,12 +53,13 @@ if ($asesmen_kode) {
             JOIN asesi a ON a.asesmen_periode = q.asesmen_periode
             WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(q.kode_mapping, '_', 2), '_', -1) = '$stage'
             AND a.asesmen_kode = '$asesmen_kode'
+            AND a.user_id = $user_id
         ");
         $questions_by_lifecycle[$stage] = $questions_query ? $questions_query->fetch_all(MYSQLI_ASSOC) : [];
     }
 }
 
-// Ambil data kriteria dari tabel Manajemen Kriteria
+// Ambil data kriteria dari tabel maturity
 $maturity_query = $conn->query("SELECT kondisi, skor FROM maturity ORDER BY skor ASC");
 $maturity = [];
 if ($maturity_query && $maturity_query->num_rows > 0) {
@@ -68,7 +72,7 @@ if ($maturity_query && $maturity_query->num_rows > 0) {
 $existing_answers_query = $conn->query("
     SELECT question_id, jawaban, skor 
     FROM asesmen_jawaban 
-    WHERE asesmen_kode = '$asesmen_kode' AND user_id = {$_SESSION['user_id']}
+    WHERE asesmen_kode = '$asesmen_kode' AND user_id = $user_id
 ");
 $existing_answers = [];
 if ($existing_answers_query && $existing_answers_query->num_rows > 0) {
@@ -82,8 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$asesmen_kode) {
         $error = "Kode Asesmen tidak ditemukan.";
     } else {
-        // Ambil periode asesmen berdasarkan kode asesmen
-        $periode_query = $conn->query("SELECT asesmen_periode FROM asesi WHERE asesmen_kode = '$asesmen_kode'");
+        // Ambil periode asesmen
+        $periode_query = $conn->query("SELECT asesmen_periode FROM asesi WHERE asesmen_kode = '$asesmen_kode' AND user_id = $user_id");
         $asesmen_periode = $periode_query && $periode_query->num_rows > 0 ? $periode_query->fetch_assoc()['asesmen_periode'] : null;
 
         if (!$asesmen_periode) {
@@ -100,13 +104,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Simpan atau perbarui data ke database
                 $query = "
                     INSERT INTO asesmen_jawaban (user_id, question_id, asesmen_kode, jawaban, skor, periode_audit, score_session_id) 
-                    VALUES ({$_SESSION['user_id']}, $question_id, '$asesmen_kode', '$jawaban', $skor, '$asesmen_periode', $score_session_id)
+                    VALUES ($user_id, $question_id, '$asesmen_kode', '$jawaban', $skor, '$asesmen_periode', $score_session_id)
                     ON DUPLICATE KEY UPDATE jawaban = '$jawaban', skor = $skor, score_session_id = $score_session_id
                 ";
 
                 if (!$conn->query($query)) {
                     $error = "Query gagal untuk pertanyaan ID: $question_id. Kesalahan: " . $conn->error;
-                    echo "<pre>Query Debug: $query</pre>";
                 }
             }
 
@@ -119,20 +122,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Ambil daftar formulir masuk
 $incoming_forms_query = $conn->query("
-    SELECT a.asesmen_kode, a.asesmen_periode, a.form_status, COALESCE(q.source, 'Asesor') AS source, COUNT(q.id) AS total_questions
+    SELECT a.asesmen_kode, a.asesmen_periode, a.form_status, u.username AS asesor_name, COUNT(q.id) AS total_questions
     FROM asesi a
     JOIN asesmen_pertanyaan q ON a.asesmen_periode = q.asesmen_periode
-    WHERE a.user_id = {$_SESSION['user_id']}
-    GROUP BY a.asesmen_kode, a.asesmen_periode, q.source
+    JOIN users u ON a.asesor_id = u.id
+    WHERE a.user_id = $user_id
+    GROUP BY a.asesmen_kode, a.asesmen_periode, u.username
     ORDER BY a.asesmen_periode DESC
 ");
-?>
-
-<!-- Tampilkan Notifikasi -->
-<?php if (isset($error)): ?>
-    <div class="alert alert-danger"><?php echo $error; ?></div>
-<?php endif;
-
 ?>
 
 <!-- Tabel Formulir Masuk -->
@@ -155,7 +152,7 @@ $incoming_forms_query = $conn->query("
                 <?php while ($row = $incoming_forms_query->fetch_assoc()): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($row['asesmen_periode']); ?></td>
-                        <td><?php echo htmlspecialchars($row['source']); ?></td>
+                        <td><?php echo htmlspecialchars($row['asesor_name']); ?></td>
                         <td><?php echo htmlspecialchars($row['asesmen_kode']); ?></td>
                         <td><?php echo htmlspecialchars($row['total_questions']); ?></td>
                         <td>
