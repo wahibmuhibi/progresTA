@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 20, 2025 at 10:47 AM
+-- Generation Time: Jan 20, 2025 at 05:12 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 5.6.40
 
@@ -31,7 +31,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `asesi` (
   `id` int(11) NOT NULL,
   `asesmen_kode` varchar(50) DEFAULT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `asesor_id` int(11) DEFAULT NULL,
   `asesmen_periode` int(11) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `form_status` tinyint(1) NOT NULL DEFAULT '0'
@@ -41,14 +42,22 @@ CREATE TABLE `asesi` (
 -- Dumping data for table `asesi`
 --
 
-INSERT INTO `asesi` (`id`, `asesmen_kode`, `user_id`, `asesmen_periode`, `created_at`, `form_status`) VALUES
-(27, 'AUDIT-67895A8F32211', 6, 2025, '2025-01-16 19:14:23', 1),
-(28, 'AUDIT-678B58BED30CD', 6, 2025, '2025-01-18 07:31:10', 1),
-(31, 'AUDIT-678B8E207D7A0', 6, 2025, '2025-01-18 11:18:56', 0),
-(32, 'AUDIT-678B8FE23D23B', 6, 2025, '2025-01-18 11:26:26', 0),
-(33, 'AUDIT-678B9156A2267', 6, 2025, '2025-01-18 11:32:38', 0),
-(34, 'ASESMEN-678B919B15AA9', 6, 2025, '2025-01-18 11:33:47', 0),
-(35, 'ASESMEN-678B91E2C1D49', 6, 2025, '2025-01-18 11:34:58', 1);
+INSERT INTO `asesi` (`id`, `asesmen_kode`, `user_id`, `asesor_id`, `asesmen_periode`, `created_at`, `form_status`) VALUES
+(27, 'AUDIT-67895A8F32211', 6, NULL, 2025, '2025-01-16 19:14:23', 1),
+(28, 'AUDIT-678B58BED30CD', 6, NULL, 2025, '2025-01-18 07:31:10', 1),
+(31, 'AUDIT-678B8E207D7A0', 6, NULL, 2025, '2025-01-18 11:18:56', 0),
+(32, 'AUDIT-678B8FE23D23B', 6, NULL, 2025, '2025-01-18 11:26:26', 0),
+(33, 'AUDIT-678B9156A2267', 6, NULL, 2025, '2025-01-18 11:32:38', 1),
+(34, 'ASESMEN-678B919B15AA9', 6, NULL, 2025, '2025-01-18 11:33:47', 1),
+(35, 'ASESMEN-678B91E2C1D49', 6, NULL, 2025, '2025-01-18 11:34:58', 1),
+(36, 'ASESMEN-678E22B15EA8D', 6, NULL, 2025, '2025-01-20 10:17:21', 0),
+(37, 'ASESMEN-678E26C309799', 6, NULL, 2025, '2025-01-20 10:34:43', 0),
+(38, 'ASESMEN-678E318D275F5', 6, NULL, 2025, '2025-01-20 11:20:45', 0),
+(39, 'ASESMEN-678E3F7DA6736', 6, 0, 2025, '2025-01-20 12:20:13', 0),
+(40, 'ASESMEN-678E49F187A18', 6, 0, 2025, '2025-01-20 13:04:49', 0),
+(41, 'ASESMEN-678E4FB55F8E7', 6, 7, 2025, '2025-01-20 13:29:25', 0),
+(42, 'ASESMEN-678E4FBF2AC22', 6, 8, 2025, '2025-01-20 13:29:35', 0),
+(44, 'ASESMEN-678E60AEAF6D8', 6, 9, 2026, '2025-01-20 14:41:50', 0);
 
 -- --------------------------------------------------------
 
@@ -117,7 +126,27 @@ INSERT INTO `asesmen_hasil` (`id`, `asesmen_kode`, `score_session_id`, `aspek`, 
 (42, 'AUDIT-678B58BED30CD', 1737351416, 'Service Design', 1, 'VERIFY-678E0C6E6718B', '2025-01-20 09:42:22', 'Tes', '2025-01-20 05:37:02'),
 (43, 'AUDIT-678B58BED30CD', 1737351416, 'Service Transition', 1, 'VERIFY-678E0C6E6718B', '2025-01-20 09:42:22', 'Tes', '2025-01-20 05:37:02'),
 (44, 'AUDIT-678B58BED30CD', 1737351416, 'Service Operation', 1, 'VERIFY-678E0C6E6718B', '2025-01-20 09:42:22', 'Tes', '2025-01-20 05:37:02'),
-(45, 'AUDIT-678B58BED30CD', 1737351416, 'Continual Service Improvement', 1, 'VERIFY-678E0C6E6718B', '2025-01-20 09:42:22', 'Tes', '2025-01-20 05:37:02');
+(45, 'AUDIT-678B58BED30CD', 1737351416, 'Continual Service Improvement', 1, 'VERIFY-678E0C6E6718B', '2025-01-20 09:42:22', 'Tes', '2025-01-20 05:37:02'),
+(46, 'ASESMEN-678E60AEAF6D8', 1737385915, 'Service Strategy', 0, NULL, NULL, NULL, '2025-01-20 15:12:01'),
+(47, 'ASESMEN-678E60AEAF6D8', 1737385915, 'Service Design', 0, NULL, NULL, NULL, '2025-01-20 15:12:01'),
+(48, 'ASESMEN-678E60AEAF6D8', 1737385915, 'Service Transition', 0, NULL, NULL, NULL, '2025-01-20 15:12:01'),
+(49, 'ASESMEN-678E60AEAF6D8', 1737385915, 'Service Operation', 0, NULL, NULL, NULL, '2025-01-20 15:12:01'),
+(50, 'ASESMEN-678E60AEAF6D8', 1737385915, 'Continual Service Improvement', 4, NULL, NULL, NULL, '2025-01-20 15:12:01'),
+(51, 'ASESMEN-678E60AEAF6D8', 1737387395, 'Service Strategy', 0, NULL, NULL, NULL, '2025-01-20 15:39:12'),
+(52, 'ASESMEN-678E60AEAF6D8', 1737387395, 'Service Design', 0, NULL, NULL, NULL, '2025-01-20 15:39:12'),
+(53, 'ASESMEN-678E60AEAF6D8', 1737387395, 'Service Transition', 0, NULL, NULL, NULL, '2025-01-20 15:39:12'),
+(54, 'ASESMEN-678E60AEAF6D8', 1737387395, 'Service Operation', 0, NULL, NULL, NULL, '2025-01-20 15:39:12'),
+(55, 'ASESMEN-678E60AEAF6D8', 1737387395, 'Continual Service Improvement', 4, NULL, NULL, NULL, '2025-01-20 15:39:12'),
+(56, 'ASESMEN-678E60AEAF6D8', 1737387562, 'Service Strategy', 0, 'VERIFY-678E71BBAB1B3', '2025-01-20 16:54:35', 'Aman', '2025-01-20 15:39:26'),
+(57, 'ASESMEN-678E60AEAF6D8', 1737387562, 'Service Design', 0, 'VERIFY-678E71BBAB1B3', '2025-01-20 16:54:35', 'Aman', '2025-01-20 15:39:26'),
+(58, 'ASESMEN-678E60AEAF6D8', 1737387562, 'Service Transition', 0, 'VERIFY-678E71BBAB1B3', '2025-01-20 16:54:35', 'Aman', '2025-01-20 15:39:26'),
+(59, 'ASESMEN-678E60AEAF6D8', 1737387562, 'Service Operation', 0, 'VERIFY-678E71BBAB1B3', '2025-01-20 16:54:35', 'Aman', '2025-01-20 15:39:26'),
+(60, 'ASESMEN-678E60AEAF6D8', 1737387562, 'Continual Service Improvement', 4, 'VERIFY-678E71BBAB1B3', '2025-01-20 16:54:35', 'Aman', '2025-01-20 15:39:26'),
+(61, 'ASESMEN-678E4FB55F8E7', 1737388549, 'Service Strategy', 5, 'VERIFY-678E7220EA14D', '2025-01-20 16:56:16', 'Aman', '2025-01-20 15:55:54'),
+(62, 'ASESMEN-678E4FB55F8E7', 1737388549, 'Service Design', 5, 'VERIFY-678E7220EA14D', '2025-01-20 16:56:16', 'Aman', '2025-01-20 15:55:54'),
+(63, 'ASESMEN-678E4FB55F8E7', 1737388549, 'Service Transition', 5, 'VERIFY-678E7220EA14D', '2025-01-20 16:56:16', 'Aman', '2025-01-20 15:55:54'),
+(64, 'ASESMEN-678E4FB55F8E7', 1737388549, 'Service Operation', 5, 'VERIFY-678E7220EA14D', '2025-01-20 16:56:16', 'Aman', '2025-01-20 15:55:54'),
+(65, 'ASESMEN-678E4FB55F8E7', 1737388549, 'Continual Service Improvement', 5, 'VERIFY-678E7220EA14D', '2025-01-20 16:56:16', 'Aman', '2025-01-20 15:55:54');
 
 -- --------------------------------------------------------
 
@@ -127,14 +156,14 @@ INSERT INTO `asesmen_hasil` (`id`, `asesmen_kode`, `score_session_id`, `aspek`, 
 
 CREATE TABLE `asesmen_jawaban` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `question_id` int(11) NOT NULL,
   `asesmen_kode` varchar(50) DEFAULT NULL,
   `jawaban` text,
   `skor` int(11) DEFAULT NULL,
   `status` enum('draft','submitted') DEFAULT 'draft',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `source` varchar(50) DEFAULT NULL,
+  `asesor_id` int(11) DEFAULT NULL,
   `periode_audit` year(4) NOT NULL,
   `score_session_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -143,7 +172,7 @@ CREATE TABLE `asesmen_jawaban` (
 -- Dumping data for table `asesmen_jawaban`
 --
 
-INSERT INTO `asesmen_jawaban` (`id`, `user_id`, `question_id`, `asesmen_kode`, `jawaban`, `skor`, `status`, `created_at`, `source`, `periode_audit`, `score_session_id`) VALUES
+INSERT INTO `asesmen_jawaban` (`id`, `user_id`, `question_id`, `asesmen_kode`, `jawaban`, `skor`, `status`, `created_at`, `asesor_id`, `periode_audit`, `score_session_id`) VALUES
 (381, 6, 38, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
 (382, 6, 39, 'AUDIT-67895A8F32211', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
 (383, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, tanpa dokumentasi', 2, 'draft', '2025-01-16 19:15:04', NULL, 2025, NULL),
@@ -538,7 +567,7 @@ INSERT INTO `asesmen_jawaban` (`id`, `user_id`, `question_id`, `asesmen_kode`, `
 (772, 6, 49, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
 (773, 6, 50, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
 (774, 6, 52, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806);
-INSERT INTO `asesmen_jawaban` (`id`, `user_id`, `question_id`, `asesmen_kode`, `jawaban`, `skor`, `status`, `created_at`, `source`, `periode_audit`, `score_session_id`) VALUES
+INSERT INTO `asesmen_jawaban` (`id`, `user_id`, `question_id`, `asesmen_kode`, `jawaban`, `skor`, `status`, `created_at`, `asesor_id`, `periode_audit`, `score_session_id`) VALUES
 (775, 6, 53, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
 (776, 6, 54, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
 (777, 6, 55, 'AUDIT-678B58BED30CD', 'Belum Ada, masih di inisiasikan', 1, 'draft', '2025-01-18 12:53:26', NULL, 2025, 1737204806),
@@ -676,7 +705,54 @@ INSERT INTO `asesmen_jawaban` (`id`, `user_id`, `question_id`, `asesmen_kode`, `
 (909, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 08:20:52', NULL, 2025, 1737361252),
 (910, 6, 55, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 08:20:52', NULL, 2025, 1737361252),
 (911, 6, 56, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 08:20:52', NULL, 2025, 1737361252),
-(912, 6, 57, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 08:20:52', NULL, 2025, 1737361252);
+(912, 6, 57, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 08:20:52', NULL, 2025, 1737361252),
+(913, 6, 38, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(914, 6, 39, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(915, 6, 40, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(916, 6, 41, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(917, 6, 42, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(918, 6, 43, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(919, 6, 44, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(920, 6, 45, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(921, 6, 46, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(922, 6, 47, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(923, 6, 48, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(924, 6, 49, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(925, 6, 50, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(926, 6, 52, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(927, 6, 53, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(928, 6, 54, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(929, 6, 55, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(930, 6, 56, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(931, 6, 57, 'AUDIT-67895A8F32211', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 11:58:36', NULL, 2025, 1737374316),
+(932, 6, 60, 'ASESMEN-678E60AEAF6D8', 'Belum Terfikirkan', 0, 'draft', '2025-01-20 15:08:05', NULL, 2026, 1737385685),
+(933, 6, 60, 'ASESMEN-678E60AEAF6D8', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-20 15:08:15', NULL, 2026, 1737385695),
+(934, 6, 60, 'ASESMEN-678E60AEAF6D8', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-20 15:10:15', NULL, 2026, 1737385815),
+(935, 6, 60, 'ASESMEN-678E60AEAF6D8', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-20 15:11:55', NULL, 2026, 1737385915),
+(936, 6, 60, 'ASESMEN-678E60AEAF6D8', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-20 15:13:15', NULL, 2026, 1737385995),
+(937, 6, 60, 'ASESMEN-678E60AEAF6D8', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-20 15:28:57', 9, 2026, 1737386937),
+(938, 6, 60, 'ASESMEN-678E60AEAF6D8', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-20 15:36:35', 9, 2026, 1737387395),
+(939, 6, 60, 'ASESMEN-678E60AEAF6D8', 'Sudah Ada, terdokumentasi dan termonitoring', 4, 'draft', '2025-01-20 15:39:22', 9, 2026, 1737387562),
+(940, 6, 38, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(941, 6, 39, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(942, 6, 40, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(943, 6, 59, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(944, 6, 41, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(945, 6, 42, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(946, 6, 43, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(947, 6, 44, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(948, 6, 45, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(949, 6, 46, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(950, 6, 47, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(951, 6, 48, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(952, 6, 49, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(953, 6, 50, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(954, 6, 52, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(955, 6, 53, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(956, 6, 54, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(957, 6, 55, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(958, 6, 56, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549),
+(959, 6, 57, 'ASESMEN-678E4FB55F8E7', 'Sudah Ada, dan sudah Optimal', 5, 'draft', '2025-01-20 15:55:49', 7, 2025, 1737388549);
 
 --
 -- Triggers `asesmen_jawaban`
@@ -704,33 +780,35 @@ CREATE TABLE `asesmen_pertanyaan` (
   `asesmen_periode` int(11) DEFAULT NULL,
   `pertanyaan` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `source` varchar(255) DEFAULT NULL
+  `asesor_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `asesmen_pertanyaan`
 --
 
-INSERT INTO `asesmen_pertanyaan` (`id`, `kode_mapping`, `asesmen_periode`, `pertanyaan`, `created_at`, `source`) VALUES
-(38, '1_Continual Service Improvement_5', 2025, 'Apakah kejadian yang mungkin mengganggu proses bisnis telah diidentifikasi (contoh : kebakaran, banjir, gempa, dll)?', '2025-01-09 02:36:32', 'kominfojatim'),
-(39, '1_Continual Service Improvement_6', 2025, 'Apakah Strategy Plan dikembangkan berdasarkan hasil penilaian risiko ini untuk menentukan pendekatan menyeluruh dalam Business Continuity Plan?\r\n', '2025-01-09 02:36:45', 'kominfojatim'),
-(40, '1_Continual Service Improvement_7', 2025, 'Apakah terdapat proses yang mengatur pengembangan dan pembangunan keberlanjutan bisnis diseluruh organisasi?', '2025-01-09 02:37:01', 'kominfojatim'),
-(41, '1_Service Design_1', 2025, 'Apakah terdapat catatan inventaris aset penting yang berhubungan dengan sistem informasi?\r\n', '2025-01-09 02:37:17', 'kominfojatim'),
-(42, '1_Service Design_2', 2025, 'Apakah klasifikasi keamanan dan identifikasi keamanan lokasi aset telah didefinisikan?\r\n', '2025-01-09 02:37:26', 'kominfojatim'),
-(43, '1_Service Design_3', 2025, 'Apakah terdapat skema atau pedoman klasifikasi yang membantu dalam menentukan penanganan dan penjagaan informasi?\r\n', '2025-01-09 02:37:40', 'kominfojatim'),
-(44, '1_Service Design_4', 2025, 'Apakah terdapat prosedur labelling dan handling informasi berdasarkan skema klasifikasi informasi organisasi?\r\n', '2025-01-09 02:37:52', 'kominfojatim'),
-(45, '1_Service Operation_1', 2025, 'Apakah Kebijakan Keamanan telah mengidentifikasikan setiap prosedur operasional (contoh : back-up, pengecekan perlengkapan, proses pemeliharaan, dll) ?\r\n', '2025-01-09 02:38:16', 'kominfojatim'),
-(46, '1_Service Operation_2', 2025, 'Apakah semua program dalam sistem produksi tunduk dengan peraturan change control ?\r\n', '2025-01-09 02:38:24', 'kominfojatim'),
-(47, '1_Service Operation_3', 2025, 'Apakah audit log dilakukan untuk setiap perubahan dalam program produksi?\r\n', '2025-01-09 02:38:35', 'kominfojatim'),
-(48, '1_Service Operation_5', 2025, 'Apakah kapasitas ( contoh : Hard disk space, RAM, CPU, server) dimonitoring dan peramalan kebutuhan kapasitas dilakukan?\r\n', '2025-01-09 02:38:44', 'kominfojatim'),
-(49, '1_Service Strategy_1', 2025, 'Apakah terdapat dokumen Kebijakan Keamanan Informasi yang sudah disetujui oleh pihak manajemen dan telah dikomunikasikan kepada seluruh karyawan?\r\n', '2025-01-09 02:39:02', 'kominfojatim'),
-(50, '1_Service Strategy_2', 2025, 'Apakah dokumen Kebijakan Keamanan Informasi telah membahas komitmen pihak manajemen terhadap keamanan TI?\r\n', '2025-01-09 02:39:12', 'kominfojatim'),
-(52, '1_Service Strategy_3', 2025, 'Apakah terdapat penanggung jawab terhadap dokumen Kebijakan Keamanan Informasi, baik untuk melakukan perubahan maupun penilaian pencapain ?\r\n', '2025-01-09 02:39:31', 'kominfojatim'),
-(53, '1_Service Strategy_4', 2025, 'Apakah terdapat forum yang membahas keamanan informasi ?\r\n', '2025-01-09 02:39:47', 'kominfojatim'),
-(54, '1_Service Transition_1', 2025, 'Apakah kebutuhan akan keamanan merupakan bagian dari kebutuhan bisnis yang dinyatakan untuk sistem atau peningkatan sistem yang sudah ada sebelumnya?', '2025-01-09 02:40:41', 'kominfojatim'),
-(55, '1_Service Transition_2', 2025, 'Apakah identifikasi kebutuhan dan kontrol keamanan telah mencerminkan nilai bisnis dari aset informasi, termasuk konsekuensi akan kegagalan keamanan?\r\n', '2025-01-09 02:40:50', 'kominfojatim'),
-(56, '1_Service Transition_3', 2025, 'Apakah penilaian risiko telah selesai sebelum pengembangan sistem dilakukan?\r\n', '2025-01-09 02:41:00', 'kominfojatim'),
-(57, '1_Service Transition_4', 2025, 'Apakah data inputterhadap sistem aplikasi divalidasi untuk memastikan data yang dimasukkan adalah benar dan sesuai?\r\n', '2025-01-09 02:41:09', 'kominfojatim');
+INSERT INTO `asesmen_pertanyaan` (`id`, `kode_mapping`, `asesmen_periode`, `pertanyaan`, `created_at`, `asesor_id`) VALUES
+(38, '1_Continual Service Improvement_5', 2025, 'Apakah kejadian yang mungkin mengganggu proses bisnis telah diidentifikasi (contoh : kebakaran, banjir, gempa, dll)?', '2025-01-09 02:36:32', 7),
+(39, '1_Continual Service Improvement_6', 2025, 'Apakah Strategy Plan dikembangkan berdasarkan hasil penilaian risiko ini untuk menentukan pendekatan menyeluruh dalam Business Continuity Plan?\r\n', '2025-01-09 02:36:45', 7),
+(40, '1_Continual Service Improvement_7', 2025, 'Apakah terdapat proses yang mengatur pengembangan dan pembangunan keberlanjutan bisnis diseluruh organisasi?', '2025-01-09 02:37:01', 7),
+(41, '1_Service Design_1', 2025, 'Apakah terdapat catatan inventaris aset penting yang berhubungan dengan sistem informasi?\r\n', '2025-01-09 02:37:17', 7),
+(42, '1_Service Design_2', 2025, 'Apakah klasifikasi keamanan dan identifikasi keamanan lokasi aset telah didefinisikan?\r\n', '2025-01-09 02:37:26', 7),
+(43, '1_Service Design_3', 2025, 'Apakah terdapat skema atau pedoman klasifikasi yang membantu dalam menentukan penanganan dan penjagaan informasi?\r\n', '2025-01-09 02:37:40', 7),
+(44, '1_Service Design_4', 2025, 'Apakah terdapat prosedur labelling dan handling informasi berdasarkan skema klasifikasi informasi organisasi?\r\n', '2025-01-09 02:37:52', 7),
+(45, '1_Service Operation_1', 2025, 'Apakah Kebijakan Keamanan telah mengidentifikasikan setiap prosedur operasional (contoh : back-up, pengecekan perlengkapan, proses pemeliharaan, dll) ?\r\n', '2025-01-09 02:38:16', 7),
+(46, '1_Service Operation_2', 2025, 'Apakah semua program dalam sistem produksi tunduk dengan peraturan change control ?\r\n', '2025-01-09 02:38:24', 7),
+(47, '1_Service Operation_3', 2025, 'Apakah audit log dilakukan untuk setiap perubahan dalam program produksi?\r\n', '2025-01-09 02:38:35', 7),
+(48, '1_Service Operation_5', 2025, 'Apakah kapasitas ( contoh : Hard disk space, RAM, CPU, server) dimonitoring dan peramalan kebutuhan kapasitas dilakukan?\r\n', '2025-01-09 02:38:44', 7),
+(49, '1_Service Strategy_1', 2025, 'Apakah terdapat dokumen Kebijakan Keamanan Informasi yang sudah disetujui oleh pihak manajemen dan telah dikomunikasikan kepada seluruh karyawan?\r\n', '2025-01-09 02:39:02', 7),
+(50, '1_Service Strategy_2', 2025, 'Apakah dokumen Kebijakan Keamanan Informasi telah membahas komitmen pihak manajemen terhadap keamanan TI?\r\n', '2025-01-09 02:39:12', 7),
+(52, '1_Service Strategy_3', 2025, 'Apakah terdapat penanggung jawab terhadap dokumen Kebijakan Keamanan Informasi, baik untuk melakukan perubahan maupun penilaian pencapain ?\r\n', '2025-01-09 02:39:31', 7),
+(53, '1_Service Strategy_4', 2025, 'Apakah terdapat forum yang membahas keamanan informasi ?\r\n', '2025-01-09 02:39:47', 7),
+(54, '1_Service Transition_1', 2025, 'Apakah kebutuhan akan keamanan merupakan bagian dari kebutuhan bisnis yang dinyatakan untuk sistem atau peningkatan sistem yang sudah ada sebelumnya?', '2025-01-09 02:40:41', 7),
+(55, '1_Service Transition_2', 2025, 'Apakah identifikasi kebutuhan dan kontrol keamanan telah mencerminkan nilai bisnis dari aset informasi, termasuk konsekuensi akan kegagalan keamanan?\r\n', '2025-01-09 02:40:50', 7),
+(56, '1_Service Transition_3', 2025, 'Apakah penilaian risiko telah selesai sebelum pengembangan sistem dilakukan?\r\n', '2025-01-09 02:41:00', 7),
+(57, '1_Service Transition_4', 2025, 'Apakah data inputterhadap sistem aplikasi divalidasi untuk memastikan data yang dimasukkan adalah benar dan sesuai?\r\n', '2025-01-09 02:41:09', 7),
+(59, '1_Continual Service Improvement_6', 2025, 'Tes', '2025-01-20 14:24:15', 9),
+(60, '1_Continual Service Improvement_7', 2026, 'T', '2025-01-20 14:24:54', 9);
 
 -- --------------------------------------------------------
 
@@ -1454,7 +1532,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` enum('Manajemen TI','Admin','Tim Penilai','IT Auditor') NOT NULL,
+  `role` enum('Admin','Asesi','Asesor') NOT NULL,
   `institusi` varchar(255) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1465,8 +1543,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`, `institusi`, `created_at`) VALUES
 (1, 'admin', '0192023a7bbd73250516f069df18b500', 'Admin', 'Dinas Kominfo Provinsi Jawa Timur', '2025-01-05 07:45:08'),
-(6, 'it_kominfogresik', '202cb962ac59075b964b07152d234b70', 'Manajemen TI', 'Dinas Kominfo Kabupaten Gresik', '2025-01-07 16:37:23'),
-(8, 'kominfojatim', '202cb962ac59075b964b07152d234b70', 'Tim Penilai', 'Asesor Dinas Kominfo Provinsi Jawa Timur', '2025-01-07 16:38:54');
+(6, 'it_kominfogresik', '202cb962ac59075b964b07152d234b70', 'Asesi', 'Dinas Kominfo Kabupaten Gresik', '2025-01-07 16:37:23'),
+(7, 'kominfojatim', '202cb962ac59075b964b07152d234b70', 'Asesor', 'Dinas Kominfo Provinsi Jawa Timur', '2025-01-20 10:04:03'),
+(9, 'kominfojakarta', '202cb962ac59075b964b07152d234b70', 'Asesor', 'Dinas Kominfo Provinsi DKI Jakarta', '2025-01-20 13:54:51');
 
 --
 -- Indexes for dumped tables
@@ -1499,7 +1578,8 @@ ALTER TABLE `asesmen_jawaban`
 --
 ALTER TABLE `asesmen_pertanyaan`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `kode_mapping` (`kode_mapping`);
+  ADD KEY `kode_mapping` (`kode_mapping`),
+  ADD KEY `fk_asesor` (`asesor_id`);
 
 --
 -- Indexes for table `cobit`
@@ -1540,6 +1620,12 @@ ALTER TABLE `maturity`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -1547,25 +1633,41 @@ ALTER TABLE `maturity`
 -- AUTO_INCREMENT for table `asesi`
 --
 ALTER TABLE `asesi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `asesmen_hasil`
 --
 ALTER TABLE `asesmen_hasil`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `asesmen_jawaban`
 --
 ALTER TABLE `asesmen_jawaban`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=913;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=960;
 
 --
 -- AUTO_INCREMENT for table `asesmen_pertanyaan`
 --
 ALTER TABLE `asesmen_pertanyaan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `asesmen_pertanyaan`
+--
+ALTER TABLE `asesmen_pertanyaan`
+  ADD CONSTRAINT `fk_asesor` FOREIGN KEY (`asesor_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
