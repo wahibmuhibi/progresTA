@@ -129,38 +129,41 @@ $questions = $conn->query("
 
 <!-- Tabel Daftar Pertanyaan -->
 <h4 class="mt-5">Daftar Pertanyaan Asesmen</h4>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>Kode Mapping</th>
-            <th>Periode Asesmen</th>
-            <th>Pertanyaan</th>
-            <th>Asesor</th>
-            <th>Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if ($questions && $questions->num_rows > 0): ?>
-            <?php $no = 1; while ($row = $questions->fetch_assoc()): ?>
-                <tr>
-                    <td><?php echo $no++; ?></td>
-                    <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
-                    <td><?php echo htmlspecialchars($row['asesmen_periode']); ?></td>
-                    <td><?php echo htmlspecialchars($row['pertanyaan']); ?></td>
-                    <td><?php echo htmlspecialchars($row['asesor_username']); ?></td>
-                    <td>
-                        <a href="buat_asesmen.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="?delete_id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus pertanyaan ini?')">Hapus</a>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-        <?php else: ?>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
             <tr>
-                <td colspan="6" class="text-center">Belum ada pertanyaan asesmen.</td>
+                <th>No</th>
+                <th>Kode Mapping</th>
+                <th>Periode Asesmen</th>
+                <th>Pertanyaan</th>
+                <th>Asesor</th>
+                <th>Aksi</th>
             </tr>
-        <?php endif; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php if ($questions && $questions->num_rows > 0): ?>
+                <?php $no = 1; while ($row = $questions->fetch_assoc()): ?>
+                    <tr>
+                        <td><?php echo $no++; ?></td>
+                        <td><?php echo htmlspecialchars($row['kode_mapping']); ?></td>
+                        <td><?php echo htmlspecialchars($row['asesmen_periode']); ?></td>
+                        <td><?php echo htmlspecialchars($row['pertanyaan']); ?></td>
+                        <td><?php echo htmlspecialchars($row['asesor_username']); ?></td>
+                        <td>
+                            <a href="buat_asesmen.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="?delete_id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus pertanyaan ini?')">Hapus</a>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="6" class="text-center">Belum ada pertanyaan asesmen.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
 
 <?php include '../../includes/footer.php'; ?>
+
