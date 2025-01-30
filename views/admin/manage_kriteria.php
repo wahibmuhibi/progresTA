@@ -110,7 +110,7 @@ $mapped_data = $mapped_data_result ? $mapped_data_result->fetch_all(MYSQLI_ASSOC
     <div class="row mb-3">
         <div class="col-md-4">
             <label for="jenis" class="form-label">Jenis</label>
-            <input type="text" name="jenis" id="jenis" class="form-control" placeholder="Contoh: Skala Likert" required>
+            <input type="text" name="jenis" id="jenis" class="form-control" placeholder="Contoh: Maturity Cobit" required>
         </div>
         <div class="col-md-4">
             <label for="kondisi" class="form-label">Kondisi</label>
